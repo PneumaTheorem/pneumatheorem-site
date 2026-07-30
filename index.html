@@ -24,11 +24,16 @@
          圓外透明後，深色分頁列與淺色分頁列都不會出現白邊。
 
        ⚠ sizes 寫 512x512，瀏覽器會自己縮。
-       ⚠ logo.png 保留為備援 —— 新檔不存在時退回舊的。
+       ⚠⚠ 【不得再加 logo.png 作為備援】。
+         曾加過一行無 sizes 的 logo.png，
+         但 Safari 常取【最後宣告】的那一個，
+         而無 sizes 的會被當成通用預設 ——
+         結果是圓形版被蓋掉，白邊照舊。
+       ⚠ og:image 仍指向 logo.png，那是分享縮圖，
+         與 favicon 無關（它需要 1200×630，待做）。
        ⚠ apple-touch-icon 是 iOS 加到主畫面時用的，
          它【不支援透明】，會自動被補上黑底。 -->
   <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png">
-  <link rel="icon" type="image/png" href="assets/logo.png">
   <link rel="apple-touch-icon" href="assets/favicon-512.png">
   <!-- ⚠⚠ 2026-07-30：Google Fonts 連結已移除，字型改為自架。
        舊行會把訪客 IP 傳給第三方。見 style.css 檔頭。
