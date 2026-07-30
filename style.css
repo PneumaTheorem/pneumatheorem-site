@@ -181,8 +181,23 @@
   --chip-bg:       light-dark(#1c1c1c, #262626);
   --chip-bg-hover: light-dark(#2c2c2c, #363636);
   --chip-text:     #ffffff;
-  --chip-border:   rgba(184, 115, 85, 0.55);
+  /* ⚠⚠ 2026-07-31：青銅色細線拉成變數。
+     舊版同一組 rgba(184,115,85,0.55) 硬寫在三處：
+     .nav 的 border-bottom、.banner 的 border-bottom、
+     --chip-border。
+     而它是 --bronze 【淺色模式值】的半透明版，
+     不會跟著 light-dark() 走 —— 暗色模式下
+     --bronze 已變成 #c98a6a，這三條線卻還是舊的。
+     → 依【一個顏色只寫一行】的規則，拉出來。 */
+  --bronze-rule:   light-dark(rgba(184, 115, 85, 0.55), rgba(201, 138, 106, 0.50));
+  --chip-border:   var(--bronze-rule);
   /* ⚠ 2026-07-31：--side-veil 已刪除 —— 兩側底圖放棄。 */
+
+  /* ⚠⚠ 2026-07-31：圖紙的陰影顏色。
+     舊版硬寫 rgba(0,0,0,0.10) —— 在暗色底上
+     黑色陰影等於不存在，那一行是純粹的空轉。
+     → 暗色模式改為淡亮邊，讓白底圖紙浮起來。 */
+  --plan-ring:     light-dark(rgba(0, 0, 0, 0.10), rgba(255, 255, 255, 0.14));
   /* ⚠⚠ 2026-07-31：三種寬度，而非一種。
 
      【問題】舊版從 hero 到 Engagement 每一區塊都是同一個
@@ -296,7 +311,7 @@ a:hover { text-decoration: none; }
   background-size: cover;
   background-position: center;
   color: var(--banner-text);
-  border-bottom: 1px solid rgba(184, 115, 85, 0.55);
+  border-bottom: 1px solid var(--bronze-rule);
 }
 .banner-inner {
   max-width: var(--max-width);
@@ -364,7 +379,7 @@ a:hover { text-decoration: none; }
     url('assets/bg.webp');
   background-size: cover;
   background-position: center;
-  border-bottom: 1px solid rgba(184, 115, 85, 0.55);
+  border-bottom: 1px solid var(--bronze-rule);
 }
 .nav-inner {
   max-width: var(--max-width);
@@ -685,31 +700,43 @@ section h2 {
      ⚠⚠ 更要緊的理由：這張圖必須與【交付物裡的那張一致】。
        為了暗色模式重新配色會產生同一張圖的兩個版本，
        而圖例的顏色是【有語意的】（座位／避難節點／連結）。
-     → 兩種模式下都是白底圖紙，只改外框與陰影。
+     → 兩種模式下都是白底圖紙。
+     ⚠ 2026-07-31：陰影顏色已改為 --plan-ring，
+       暗色模式是淡亮邊而非黑色陰影（舊值在深底上等於空轉）。
 
    ⚠ 圖滿版寬（1080），而說明文字維持 720 ——
      與全站的兩種寬度一致。 */
-/* ⚠⚠ 2026-07-31（修正）：【直式圖不該用滿版寬】。
+/* ⚠⚠ 2026-07-31（二）：圖已改為【橫式】，寬度放回滿版。
 
-   【問題】viewBox 是 379.66 × 462.12，比例 0.82（直式）。
-     舊版跟著 main 走滿版 1020px，換算圖高約 1241px，
-     加內距接近 1280px。
-     而扣掉固定導覽列後，一般筆電的可視高度
-     大約 750–850px —— 【核心圖面沒有任何一個時刻
-     是完整可見的】。
-   【為何要緊】這張圖的工作就是「這就是我們從圖面
-     讀出來的東西」。讀者必須捲兩次才看得完，
-     說服力漏掉一大半。
-     且本檔自己的註解寫的是「它讀起來就是一張圖紙」——
-     一張紙的意象需要看得到四個邊。
-   【修正】580px：圖高約 707px，加內距約 743px ——
-     整張進得了一個畫面。
-   ⚠ figcaption 隨父元素縮到 580，圖與圖說同寬 ——
-     圖說比圖寬看起來很怪。
-   ⚠ .plan-points 不跟著縮，維持 1020px 三欄 ——
-     那是刻意的寬度變化。 */
+   【經過】舊版 379.66 × 462.12（直式，比例 0.82），
+     滿版 1020px 時圖高約 1241px ——
+     而扣掉導覽列後的可視高度約 750–850px，
+     核心圖面沒有任何一刻是完整可見的。
+     曾縮到 580px 救急，但那個寬度下標註只有 7–8px 高，
+     而且圖比內文（720）還窄，讀起來像插頁。
+
+   【根本解】修了 site_plan.tex：圖例由平面圖下方
+     兩欄改為右側單欄，比例尺上移。
+     新尺寸 553.98 × 397.58（橫式，比例 1.393）。
+     → 滿版 1020px 時圖高約 732px，加內距約 768px。
+       比舊版少了四成，且標註大得多。
+     ⚠ 交付 PDF 裡的那一張也一併改善了。
+
+   【寬度】920px（約為內容容器 1020 的 90%）。
+     ⚠⚠ 2026-07-31（三）：曾短暫回到滿版 1020，
+       但那樣圖與下方的卡片【寬度完全一樣】，
+       讀起來像另一張卡片而不像一張圖紙 ——
+       相等的寬度會抹掉層次。
+     → 縮 10% 並置中，圖紙就【浮】在內容寬度之上。
+     ⚠ 這確實引入了第三種寬度（720 / 920 / 1020），
+       是刻意的例外：圖紙是單一物件，
+       不屬於內文也不屬於卡片網格。
+     → 920px 時圖高約 660px，加內距約 696px ——
+       比滿版更容易進得了一個畫面。
+
+   ⚠ 【Open the drawing】連結是想細看時的出口。 */
 .plan-figure {
-  max-width: 580px;
+  max-width: 920px;
   margin: 34px auto 0 auto;
   padding: 0;
 }
@@ -735,7 +762,7 @@ section h2 {
   border: 1px solid var(--border);
   border-radius: 3px;
   padding: 18px;
-  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 2px 18px var(--plan-ring);
 }
 .plan-sheet::after {
   content: '';
@@ -750,30 +777,45 @@ section h2 {
 }
 /* ⚠⚠ 2026-07-31：圖需要 aspect-ratio，否則載入前
    瀏覽器留不住版位，整塊內容會在載入瞬間往下跳（CLS）。
-   數值取自 SVG 的 viewBox：379.66 × 462.12 pt。
-   ⚠ 換圖時【這兩個數字要跟著改】。 */
+   數值取自 SVG 的 viewBox：553.98 × 397.58 pt（橫式）。
+   ⚠⚠ 換圖時【這兩個數字必須跟著改】——
+     對不上的話，CLS 會反過來出現（預留了錯的版位）。 */
 .plan-sheet img {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 379.66 / 462.12;
+  aspect-ratio: 553.98 / 397.58;
   pointer-events: none;
   -webkit-user-drag: none;
   user-select: none;
 }
 /* ⚠ 佔位階段已結束（2026-07-31）：site_plan.svg 已就位。
    .plan-placeholder 的規則已移除。 */
-/* ⚠ 2026-07-31：圖說靠左，寬度隨父元素（580px）。
+/* ⚠ 2026-07-31：圖說靠左，寬度收到 720。
    四行的文字置中時每行起點都不同，
    眼睛要重新找行首 —— 比靠左費力。
-   ⚠ 不再給 max-width: 720 —— 圖已縮到 580，
-     圖說比圖寬會很怪。 */
+   ⚠ 圖已回到滿版 1020，而圖說是散文 ——
+     收到 720 保護行寬，與全站一致。 */
 .plan-figure figcaption {
+  max-width: var(--text-width);
   margin: 16px 0 0 0;
   font-size: 14px;
   line-height: 1.6;
   color: var(--text-muted);
   text-align: left;
+}
+
+/* ⚠ 看大圖的出口。
+   圖縮到 580px 後實際寬約 544px，
+   而圖上的標註在那個寬度下只有 7–8px 高。
+   而 pointer-events: none 把右鍵與點擊都關掉了 ——
+   沒有這一行，想細看的人沒有任何一條路。
+   ⚠ 這不削弱複製阻力 —— SVG 的網址本來就在
+     <img src> 裡，看原始碼就拿得到。
+     這一行改變的是【邀請】不是【防護】。 */
+.plan-open {
+  margin: 10px 0 0 0;
+  font-size: 14px;
 }
 
 /* 三個編號要點 —— 告訴讀者你在圖上做了什麼。 */

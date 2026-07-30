@@ -54,7 +54,7 @@
          數字一變，瀏覽器就當成新網址重拿。
        ⚠ index.html 與 privacy.html 的版號要一致，
          否則兩頁會拿到不同版本的 CSS。 -->
-  <link rel="stylesheet" href="style.css?v=27">
+  <link rel="stylesheet" href="style.css?v=30">
 </head>
 <body>
 
@@ -199,12 +199,20 @@
          不再壓到「Pitch access ×4」那一行 ——
          而那一行正是下方 03 要點引用的。
 
-       ⚠ 圖上的場地是【虛構】的（T01 案例，英國標準
-         場館尺寸）—— figcaption 必須寫明，
+       ⚠ 圖上的場地是【虛構】的（T01 案例，Meadowfield
+         Stadium，英國標準場館尺寸）—— figcaption 已寫明，
          否則有人會去找這個場館。
 
-       ⚠ 尚未加進導覽列。要加的話，nav 與本區的 id
-         【兩處要一起改】。
+       ⚠⚠ 【已辦：圖已改為橫式】2026-07-31。
+         site_plan.tex 的圖例由平面圖下方兩欄改為
+         右側單欄，比例尺上移。
+         379.66 × 462.12（直式 0.82）
+           → 553.98 × 397.58（橫式 1.393）
+         → 滿版 1020px 時圖高由 1241px 降到 732px，
+           少了四成，且標註大得多。
+         ⚠ 交付 PDF 裡的那一張也一併改善了。
+         ⚠⚠ 日後再改圖時，【style.css 的 aspect-ratio
+           必須跟著改】—— 對不上會預留錯的版位。
        ========================================================== -->
   <section class="overview" id="plan">
     <h2>What a complete assessment reads</h2>
@@ -250,6 +258,13 @@
         out of sale for production. The drawing defines the scope of an
         assessment: what is drawn is what is analysed.
       </figcaption>
+      <!-- ⚠ 看大圖的出口。圖上的標註在 544px 寬度下
+           只有 7–8px 高，而 pointer-events: none 把右鍵與
+           點擊都關掉了 —— 沒這一行就沒有路。
+           ⚠ 不削弱複製阻力：SVG 網址本來就在 <img src> 裡。 -->
+      <p class="plan-open">
+        <a href="assets/site_plan.svg" target="_blank" rel="noopener">Open the drawing</a>
+      </p>
     </figure>
 
     <ol class="plan-points">
