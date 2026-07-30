@@ -13,7 +13,23 @@
   <meta property="og:url" content="https://pneumatheorem.org">
   <meta property="og:image" content="https://pneumatheorem.org/assets/logo.png">
 
+  <!-- ⚠⚠ 2026-07-31：favicon。
+
+       【Safari 白邊的原因】logo.png 的背景是不透明的白，
+         而 Safari 把 favicon 原樣畫在分頁列上 ——
+         白底方形在深色分頁列上就是一塊白。
+         ⚠ CSS 改不了 —— 形狀必須在檔案裡。
+
+       【解法】favicon-512.png：圓形外為【透明】。
+         圓外透明後，深色分頁列與淺色分頁列都不會出現白邊。
+
+       ⚠ sizes 寫 512x512，瀏覽器會自己縮。
+       ⚠ logo.png 保留為備援 —— 新檔不存在時退回舊的。
+       ⚠ apple-touch-icon 是 iOS 加到主畫面時用的，
+         它【不支援透明】，會自動被補上黑底。 -->
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png">
   <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/favicon-512.png">
   <!-- ⚠⚠ 2026-07-30：Google Fonts 連結已移除，字型改為自架。
        舊行會把訪客 IP 傳給第三方。見 style.css 檔頭。
        ⚠ assets/fonts/ 的 woff2 須先就位，否則退回 Georgia。 -->
@@ -28,7 +44,7 @@
          數字一變，瀏覽器就當成新網址重拿。
        ⚠ index.html 與 privacy.html 的版號要一致，
          否則兩頁會拿到不同版本的 CSS。 -->
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 
@@ -124,33 +140,22 @@
 </nav>
 
 <!-- ============================================
-     TOP BANNER: bronze background, white text
+     TOP BANNER —— slim brand band
+     ⚠⚠ 2026-07-31 收乾淨。
+       舊版裝了 logo、email、創辦人姓名、公司註冊地 ——
+       後三項都是 footer 的內容，卻佔住首屏最上方。
+       → 聯絡資訊整組移到 footer；logo 已在導覽列左上，
+         本帶不再重複。
+     ⚠ <div> 改為 <header>：它語意上就是頁首。
      ============================================ -->
-<div class="banner" id="top">
+<header class="banner" id="top">
   <div class="banner-inner">
-
-    <div class="banner-left">
-      <img src="assets/logo.png" alt="PneumaTheorem logo" class="banner-logo">
-      <div class="banner-brand">
-        <div class="brand-name">PneumaTheorem</div>
-        <div class="brand-tagline">Physics-based crowd compression risk quantification</div>
-      </div>
+    <div class="banner-brand">
+      <div class="brand-name">PneumaTheorem</div>
+      <div class="brand-tagline">Physics-based crowd compression risk quantification</div>
     </div>
-
-    <div class="banner-right">
-      <div class="contact-row">
-        <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
-      </div>
-      <div class="contact-row contact-sub">
-        Kevin Tao, Founder &amp; CEO
-      </div>
-      <div class="contact-row contact-sub">
-        PneumaTheorem, Inc. &mdash; Delaware, 2026
-      </div>
-    </div>
-
   </div>
-</div>
+</header>
 
 <main>
 
@@ -410,8 +415,9 @@
     </p>
 
     <p>
-      Initial inquiry: written technical or commercial communication through
-      the email channel above. Responded to within five business days.
+      Initial inquiry: written technical or commercial communication to
+      <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>.
+      Responded to within five business days.
     </p>
   </section>
 
@@ -419,6 +425,14 @@
     <div class="footer-inner">
       <div class="footer-line">
         <strong>PneumaTheorem, Inc.</strong> &middot; Delaware C-Corporation, incorporated 2026
+      </div>
+      <!-- ⚠⚠ 2026-07-31：聯絡資訊自橫幅搬到這裡。
+           橫幅是講主張的地方，不是放名片的地方。
+           ⚠ Engagement 段原本寫「the email channel above」，
+             搬家後那句話會指錯方向 —— 已改成直接給位址。 -->
+      <div class="footer-line">
+        Kevin Tao, Founder &amp; CEO &middot;
+        <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
       </div>
       <div class="footer-line">
         ORCID: <a href="https://orcid.org/0009-0005-8136-3886" target="_blank" rel="noopener">0009-0005-8136-3886</a>

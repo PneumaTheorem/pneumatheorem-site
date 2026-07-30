@@ -112,13 +112,32 @@
   --bronze:        #B87355;   /* primary accent, matches logo */
   --bronze-deep:   #8a4f3a;   /* hover / deeper accent */
   --banner-bg:     #1a1614;   /* dark base behind the bronze image */
-  --banner-text:   #f3e4d8;   /* warm off-white on dark */
-  --banner-muted:  #c7a995;
+  /* ⚠⚠ 2026-07-31：橫幅文字改為純白。
+     舊值 #f3e4d8（暖白）與 #c7a995（褐粉）在深色底上
+     呈粉色。⚠ 白字只靠透明度區分主次，不靠色相。 */
+  --banner-text:   #ffffff;
+  --banner-muted:  rgba(255, 255, 255, 0.70);
   --text:          #1a1a1a;
   --text-muted:    #555;
   --bg:            #fdfdfc;
   --border:        #e0e0e0;
-  --max-width:     820px;
+  /* ⚠⚠ 2026-07-31：三種寬度，而非一種。
+
+     【問題】舊版從 hero 到 Engagement 每一區塊都是同一個
+       820px、同一個白底、同一個段距 —— 縱向節奏完全平坦，
+       讀了三千字視覺上像在讀同一張紙。
+
+     【解法】不是分欄（網頁沒有紙張高度，讀者得捲到底再
+       捲回來，而本站的段落是連續推進的論證），
+       而是【同一頁上出現兩種寬度】：
+         內文窄（720px）—— 保護行寬，約 70 字元
+         卡片與三格寬（1080px）—— 製造節奏
+
+     ⚠ 舊版 820px 扣掉 padding 約 760px，Georgia 17px
+       一行接近 90 字元，比理想的 65–75 長。
+       → 方向是【收窄內文】，不是拉寬或切開。 */
+  --max-width:     1080px;   /* nav / banner / cards */
+  --text-width:    720px;    /* prose only */
   --font-brand: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --font-body: Georgia, 'Times New Roman', serif;
   --font-accent: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
@@ -145,46 +164,44 @@ a {
 a:hover { color: var(--bronze-deep); text-decoration: none; }
 
 /* ========================================
-   TOP BANNER
+   TOP BANNER —— slim brand band
    ======================================== */
-/* ⚠⚠ 2026-07-30：背景圖由 .png 改為 .webp。
-     banner-bg.png（999 KB）已刪除，檔案不存在，
-     不改的話橫幅背景會是空的。
-   ⚠ 第一次轉檔曾產出 3.5 MB（無損模式），
-     重轉後為 272 KB —— 約為原 PNG 的四分之一。
-   ⚠ 若日後換圖，記得確認新檔確實比舊檔小再換 ——
-     無損 WebP 可能比 PNG 大。 */
+/* ⚠⚠ 2026-07-31 重做。三個問題：
+
+   【一、它本來是名片不是橫幅】舊版裝了 email、
+     創辦人姓名、公司註冊地 —— 那三項都是 footer 的內容，
+     卻佔住首屏最上方。訪客第一眼看到的是聯絡方式，
+     而不是這套框架在主張什麼。
+     → 聯絡資訊整組移到 footer。
+
+   【二、兩條深色帶疊在一起】nav 與 banner 的接縫處
+     紋理與亮度對不上。
+     → 3px 粗線改為 1px 半透明，不再像兩張貼紙黏著。
+     ⚠⚠ 2026-07-31（修正）：背景圖【改回 banner-bg.webp】。
+       曾短暫改用 nav 的 bg.webp 以求連續，
+       但 Kevin 要原圖 —— 連續感改由【點遮罩與邊線】達成，
+       不靠用同一張圖。
+
+   【三、品牌名與 h1 撞在一起】兩個大標題連續出現，
+     讀者不知道哪個是主張。
+     → 品牌名降到 26px，hero 的 h1 才是首屏的重音。
+
+   ⚠ logo 已在導覽列左上，本帶不再重複一個。 */
 .banner {
   background-color: var(--banner-bg);
   background-image:
-    linear-gradient(135deg, rgba(26,22,20,0.55) 0%, rgba(26,22,20,0.85) 100%),
+    linear-gradient(rgba(18, 14, 12, 0.58), rgba(18, 14, 12, 0.78)),
     url('assets/banner-bg.webp');
   background-size: cover;
   background-position: center;
   color: var(--banner-text);
-  border-bottom: 3px solid var(--bronze);
+  border-bottom: 1px solid rgba(184, 115, 85, 0.55);
 }
 .banner-inner {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 28px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 30px;
-  flex-wrap: wrap;
-}
-
-.banner-left {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-.banner-logo {
-  width: 56px;
-  height: 56px;
-  object-fit: contain;
-  flex-shrink: 0;
+  padding: 26px 30px 28px 30px;
+  text-align: center;
 }
 .banner-brand .brand-name {
   font-size: 24px;
@@ -197,8 +214,12 @@ a:hover { color: var(--bronze-deep); text-decoration: none; }
   font-size: 13px;
   font-style: italic;
   color: var(--banner-muted);
-  margin-top: 4px;
+  margin-top: 6px;
 }
+
+/* ⚠ 2026-07-31：.banner-right / .contact-row / .contact-sub 的
+   樣式保留但【HTML 已不再使用】—— 聯絡資訊搬到 footer。
+   不刪是因為若你想把它改回來，還原只要改 HTML。 */
 
 .banner-right {
   text-align: right;
@@ -266,8 +287,8 @@ a:hover { color: var(--bronze-deep); text-decoration: none; }
   height: 54px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  justify-content: center;
+  gap: 34px;
 }
 
 .nav-logo {
@@ -340,12 +361,31 @@ main {
   padding: 60px 30px 80px 30px;
 }
 
+/* ⚠⚠ 2026-07-31（修正）：散文欄 720px，【置中】。
+
+   【前一版的錯】欄寬收到 720 卻靠左對齊，
+     放在 1080 的容器裡 —— 文字全部貼左、右邊一片空，
+     點進來左右重量不均。
+   【修正】margin 左右 auto。欄寬不變，但在頁面上對稱。
+   ⚠ 代價是段落與卡片的左緣不齊（段落內縮約 180px）。
+     那比右邊一片空白好 —— 內縮是有意圖的，
+     貼左看起來像排版壞掉。 */
+section > h2,
+section > p,
+section > ul,
+.hero h1,
+.hero .lede {
+  max-width: var(--text-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
 section { margin-top: 60px; }
 section:first-child { margin-top: 0; }
 section h2 {
   font-size: 22px;
   font-weight: bold;
-  margin: 0 0 22px 0;
+  margin: 0 auto 22px auto;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
   color: var(--text);
@@ -355,8 +395,16 @@ section h2 {
   font-size: 36px;
   font-weight: bold;
   line-height: 1.25;
-  margin: 0 0 24px 0;
+  margin: 0 auto 24px auto;
   color: var(--bronze-deep);
+}
+/* ⚠ 2026-07-31：hero 的段落也要置中對齊，
+   否則 h1 與內文的左緣對不上。
+   ⚠ 文字本身【靠左】，只是欄位置中。 */
+.hero > p {
+  max-width: var(--text-width);
+  margin-left: auto;
+  margin-right: auto;
 }
 .hero .lede {
   font-size: 19px;
@@ -366,6 +414,26 @@ section h2 {
 .hero p { margin-bottom: 18px; }
 
 /* ----- Documents ----- */
+/* ⚠⚠ 2026-07-31：寬螢幕改為兩欄。
+
+   【理由】五張結構完全相同的卡片垂直堆疊，
+     高度相近、都是 label + h3 + sub + meta + 按鈕 ——
+     全站最單調的地方。
+   【做法】兩欄，而【最後一張（付費版）跨兩欄】——
+     跨欄本身就是強調，不需另外加樣式。
+   ⚠ h2 也要跨兩欄，否則標題會被擠到左半邊。 */
+@media (min-width: 900px) {
+  .documents {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  .documents > h2 { grid-column: 1 / -1; }
+  .documents > .doc-card { margin-bottom: 0; }
+  .documents > .doc-card:last-of-type { grid-column: 1 / -1; }
+}
+
 .doc-card {
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -448,6 +516,25 @@ section h2 {
 .engagement p { margin-bottom: 16px; }
 
 /* ========================================
+   SECTION ACCENT —— “Where the framework stops”
+   ======================================== */
+/* ⚠⚠ 2026-07-31 新增。
+
+   【為何只挑這一節】它是全站唯一在講【限制】的區塊。
+     視覺上獨立出來，在內容上反而顯得坦率 ——
+     而坦率正是這個框架在賣的東西。
+   【做法】box-shadow + clip-path 的 full-bleed 技巧：
+     底色向兩側滿出到視窗邊緣，而內容維持原寬度。
+     → 不需要改 HTML 結構。
+   ⚠ 若日後加了水平捲動的元素，clip-path 可能要重評。 */
+#limits {
+  background: #faf7f5;
+  padding: 46px 0 48px 0;
+  box-shadow: 0 0 0 100vmax #faf7f5;
+  clip-path: inset(0 -100vmax);
+}
+
+/* ========================================
    FOOTER
    ======================================== */
 footer {
@@ -455,9 +542,11 @@ footer {
   padding-top: 28px;
   border-top: 1px solid var(--border);
 }
+/* ⚠ 2026-07-31：頁尾置中，與橫幅、hero 同一個軸。 */
 .footer-inner {
   font-size: 14px;
   color: var(--text-muted);
+  text-align: center;
 }
 .footer-line {
   margin: 4px 0;
@@ -476,17 +565,23 @@ footer {
 @media (max-width: 700px) {
   /* ⚠ 導覽列在窄螢幕不換行，改為【橫向滑動】。
      換行會讓 fixed 導覽列變高，吃掉手機一大塊畫面，
-     而且 body 的 padding-top 會對不上。 */
+     而且 body 的 padding-top 會對不上。
+     ⚠⚠ 2026-07-31：右緣加一道漸層遮罩。
+       舊版沒有任何可滑動的提示，
+       使用者很可能不知道 Documents 與 Engagement 還在右邊。 */
   .nav-inner {
     padding: 0 18px;
     gap: 14px;
   }
   .nav-logo img { height: 24px; }
   .nav-links {
+    position: relative;
     gap: 18px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent 100%);
+    mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent 100%);
   }
   .nav-links::-webkit-scrollbar { display: none; }
   .nav-links a {
@@ -494,15 +589,11 @@ footer {
     letter-spacing: 1px;
   }
 
+  /* ⚠ 2026-07-31：banner 已改為單欄置中，
+     舊的 flex-direction / text-align 規則不再適用。 */
   .banner-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 18px;
-    padding: 22px 22px;
+    padding: 20px 22px 22px 22px;
   }
-  .banner-right { text-align: left; }
-  .banner-logo { width: 48px; height: 48px; }
-  .banner-brand .brand-name { font-size: 20px; }
 
   main { padding: 40px 22px 60px 22px; }
   .hero h1 { font-size: 28px; }
@@ -517,21 +608,23 @@ footer {
    ======================================== */
 
 /* Brand name: Pascal case (PneumaTheorem), no uppercase transform */
+/* ⚠⚠ 2026-07-31：字重 600→700，字距加寬，字級 30→26px。
+   【字重】Cormorant 是對比極高的 display serif，細筆畫本來就纖，
+     白字在深色底上還會有視覺變細（optical thinning），
+     600 在實際渲染時偏虛。
+   【字級】降到 26px，讓 hero 的 h1（40px）成為首屏唯一的重音。 */
 .banner-brand .brand-name,
 .brand-name {
   font-family: var(--font-brand);
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   text-transform: none;
-  font-size: 30px;
-  line-height: 1.1;
+  font-size: 26px;
+  line-height: 1.15;
 }
 
-/* Optional: emphasize the capital P and T slightly */
-.brand-name .cap {
-  font-size: 1.12em;
-  font-weight: 700;
-}
+/* ⚠ 2026-07-31：原有 .brand-name .cap 樣式已移除 ——
+   HTML 從未出現對應的 <span class="cap">，那是死碼。 */
 
 /* Tagline below brand name */
 .banner-brand .brand-tagline {
@@ -542,12 +635,22 @@ footer {
 }
 
 /* Main hero title + section headings: elegant serif */
+/* ⚠⚠ 2026-07-31：h1 與 h2 由 --bronze-deep 改為近黑。
+
+   【理由】舊版 h1、h2、h3、按鈕、連結全部是棕色，
+     色調單調，而且暖褐帶著古典、懷舊的聯想，
+     跟「壓迫致死風險量化」的主題有錯位。
+   【改後】標題近黑、bronze 只留給小 accent 與 CTA。
+     標題變黑之後，按鈕與小標籤的 bronze 反而更醒目。
+   ⚠ h3（.doc-card h3 / .grid-item h3）【保留 bronze-deep】，
+     否則全頁完全沒有色彩層次。 */
 .hero h1 {
   font-family: var(--font-brand);
   font-weight: 600;
   letter-spacing: 0;
   font-size: 40px;
   line-height: 1.2;
+  color: var(--text);
 }
 
 section h2 {
@@ -555,6 +658,7 @@ section h2 {
   font-weight: 600;
   letter-spacing: 0;
   font-size: 26px;
+  color: var(--text);
 }
 
 .doc-card h3,
@@ -565,11 +669,19 @@ section h2 {
 }
 
 /* Small accent labels — keep modern sans-serif for contrast */
+/* ⚠⚠ 2026-07-31：顏色由 --bronze 改為 --bronze-deep。
+   【無障礙】#B87355 在白底上的對比約 3.7:1，
+     未過 WCAG AA 的 4.5:1；而本元素是 12px 粗體，
+     小字級更需要對比。
+     #8a4f3a 約 6.2:1，過關。
+   ⚠ 連結（a）維持 --bronze：它有底線作為第二種識別，
+     不單靠顏色。 */
 .doc-label {
   font-family: var(--font-accent);
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
+  color: var(--bronze-deep);
 }
 
 /* Buttons — modern sans-serif for clear CTA */
@@ -585,7 +697,7 @@ section h2 {
 @media (max-width: 700px) {
   .banner-brand .brand-name,
   .brand-name {
-    font-size: 24px;
+    font-size: 22px;
   }
   .hero h1 {
     font-size: 30px;
@@ -596,6 +708,12 @@ section h2 {
 }
 
 /* Enable advanced typography: ligatures, kerning */
+/* ⚠⚠ dlig 【必須保留】（Kevin 2026-07-31）。
+   Cormorant 的 Th 連字是品牌識別的一部分，
+   不是渲染錯誤。
+   ⚠ 2026-07-31：text-rendering: optimizeLegibility 已移除 ——
+     部分瀏覽器有已知的渲染與效能問題，
+     而 feature settings 已經明確宣告了，那一行是冗餘的。 */
 .hero h1,
 section h2,
 .doc-card h3,
@@ -608,6 +726,5 @@ section h2,
     "dlig" 1,
     "kern" 1,
     "calt" 1;
-  text-rendering: optimizeLegibility;
   -webkit-font-feature-settings: "liga", "dlig", "kern";
 }
