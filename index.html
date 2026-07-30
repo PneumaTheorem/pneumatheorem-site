@@ -49,8 +49,28 @@
     assets/ 裡仍有 B01_P-index_v1.pdf，【不要連它】。
 
   【仍待決，故本頁留白】
-    - demo 目錄與標價（1,000 USD）：B 案尚未通過對外前審查。
     - Love Parade 回溯報告：可作為主要憑證，公開形式未定。
+
+  ============================================================
+  ⚠⚠ 2026-07-29 更新
+  ============================================================
+
+  【已解決】demo 目錄與標價
+    B 案（完整三軸，1K）已於 2026-07-28 通過對外前審查；
+    C 案（免費硬體 Demo，PTI-AGA-2026-003）已上站。
+
+  ⚠⚠ 【站上不寫金額】價格只寫在樣本 PDF §7。
+    理由（Kevin 2026-07-29）：需要這種服務的客戶，
+    價格通常不是優先考量；重點是服務流程、付費模式、
+    以及【要跑幾次請款】。故 Engagement 段講兩次請款，
+    不講金額。寫在兩處遲早會不一致。
+
+  ⚠ 【產品名稱待對】站上第一項仍叫
+    「Pre-event geometric assessment」（= B 案，PGA），
+    而新上的樣本是「Access Geometry Assessment」（= C 案，AGA）。
+    兩者是不同的東西（九格 vs 硬體列三格），
+    卡片已寫明「three cells of nine」。
+    → 但兩個名字很像，客戶可能混。命名軸統一待決。
   ============================================================
 -->
 
@@ -152,7 +172,7 @@
     <div class="grid">
       <div class="grid-item">
         <h3>Pre-event geometric assessment</h3>
-        <p>Closed form; no model is run. Load bounds, grouping and partition dimensions, and the three-state classification, from the drawing and a declared exertion &mdash; by arithmetic a reader can check by hand. A sample deliverable is available.</p>
+        <p>Closed form; no model is run. Load bounds, grouping and partition dimensions, and the three-state classification, from the drawing and a declared exertion &mdash; by arithmetic a reader can check by hand. A sample deliverable covering the built-form row is <a href="#documents">available below</a>.</p>
       </div>
       <div class="grid-item">
         <h3>Retrospective backtrack analysis</h3>
@@ -169,7 +189,34 @@
     </p>
   </section>
 
-  <section class="documents">
+  <!--
+    【文件區：2026-07-28 決定】
+      只放 B01 v5（PDF 下載 + Zenodo concept DOI）。
+      E01、W01、W02 先拿掉。
+      assets/ 裡仍有 B01_P-index_v1.pdf，【不要連它】。
+
+    ⚠⚠ 2026-07-29 更新：新增 Access Geometry Assessment 樣本。
+      它是【免費、開放散布】的，授權寫在 PDF 第 2 頁。
+      卡片上【必須】寫明是九格中的三格 ——
+      不寫的話讀者會以為樣本等於完整產品。
+
+    ⚠⚠ 2026-07-29：四張卡片，順序是理論 → 設計應用
+      → 歷史驗證 → 產品樣本。
+
+    ⚠ 兩個 PDF 尚未放進 assets/：
+        W04_ArchitecturalIntegration_v1.pdf
+        LPB_LoveParade_Backtrack_v1.pdf
+      【放進去之前不要 push】，否則是死連結。
+
+    ⚠⚠ LP 回溯：卡片先上、【標八月上架、不放下載連結】。
+      理由（Kevin 2026-07-29）：報告描述了 Still 的鑑定，
+      信已寄出讓他先看；但不等回覆 ——
+      他的回覆是【加分項不是前置條件】，而商業活動要開始了。
+      → 標八月同時做到兩件事：給了他時間、也不受制於他。
+      ⚠ 上架時要做三件：放 PDF、換回下載鈕、
+        把 doc-label 的「— August 2026」拿掉。
+  -->
+  <section class="documents" id="documents">
     <h2>Documents</h2>
 
     <div class="doc-card">
@@ -185,6 +232,34 @@
       </p>
     </div>
 
+    <div class="doc-card">
+      <div class="doc-label">White paper</div>
+      <h3>Architectural Integration</h3>
+      <p class="doc-sub">Reading the onset condition off the access geometry at design stage</p>
+      <p class="doc-meta">Written for architects, engineering consultancies, and landmark-project clients. What the framework asks of a drawing, and at what point in a design it can still be answered cheaply.</p>
+      <p>
+        <a class="btn" href="assets/W04_ArchitecturalIntegration_v1.pdf" target="_blank" rel="noopener">Download (PDF)</a>
+      </p>
+    </div>
+
+    <div class="doc-card">
+      <div class="doc-label">Retrospective analysis &mdash; August 2026</div>
+      <h3>Duisburg, 24 July 2010</h3>
+      <p class="doc-sub">The access route as a validation case</p>
+      <p class="doc-meta">A method worth trusting should give the right answer where the answer is already known. Reported as a lower bound rather than a fitted value, and it assigns responsibility to no person or body. Freely redistributable in full.</p>
+      <p><em>Publication August 2026.</em></p>
+    </div>
+
+    <div class="doc-card">
+      <div class="doc-label">Sample deliverable</div>
+      <h3>Access Geometry Assessment</h3>
+      <p class="doc-sub">Rivergate Yard &mdash; a fictional venue</p>
+      <p class="doc-meta">The built-form row of a nine-cell assessment: three cells of nine. The remaining six are named but not assessed, and the report says which. Freely redistributable in full.</p>
+      <p>
+        <a class="btn" href="assets/AGA_AccessGeometry_Rivergate_v1.pdf" target="_blank" rel="noopener">Download (PDF)</a>
+      </p>
+    </div>
+
   </section>
 
   <section class="engagement">
@@ -195,8 +270,39 @@
     <p>
       The design-stage form of the work &mdash; entering a live design process and being relied upon within it &mdash; is a capability of the framework rather than a service currently offered. The order is deliberate: the assessments above require no qualification to perform and carry the lower risk, and the design-stage engagement is taken up after that work has established a record.
     </p>
+    <!--
+      ⚠⚠ 2026-07-29 重寫費用段。
+
+      【舊寫法與樣本 PDF 直接衝突】
+        舊：「Scope and fee… Neither is quoted here, because the
+             quantities that determine them are the ones the
+             assessment itself establishes.」
+        而樣本 PDF §7 明列了前三階的固定價。
+        「not quoted here」字面仍成立（價格在 PDF 裡），
+        但 PDF 只有一個點擊的距離，讀起來像在迴避。
+
+      【而舊的理由只適用於後三項】
+        完整三軸、分區、跑模型 —— 工時取決於場地複雜度，
+        那確實是評估本身要建立的。
+        但前三階恰恰是【不需要看案子就能定價】的。
+
+      ⚠⚠ 【不寫數字，Kevin 2026-07-29】
+        需要這種服務的客戶，價格通常不是優先考量。
+        重點是【服務流程、付費模式、以及要跑幾次請款】。
+        大額客戶不比價，比的是這個案子要不要跑三次採購流程。
+        → 所以這一段要講的是【兩次請款】，不是金額。
+        → 金額只寫在樣本 PDF §7（單一來源）。
+          寫在兩處遲早會不一致，而且看價格要下載，
+          正好製造下載動機。
+    -->
     <p>
-      Scope and fee are set per configuration, against the extent of the region assessed and the number of scenarios carried. Neither is quoted here, because the quantities that determine them are the ones the assessment itself establishes.
+      The work is arranged so that it can be paid for twice. A first purchase covers the demonstration and the assessment of your own access geometry, and returns a quotation for the full assessment together with a list of any further material required. A second covers that assessment. Nothing between the two requires a separate authorisation.
+    </p>
+    <p>
+      Fees for the first stages are fixed and are stated in the sample deliverable, because they can be set without seeing the site: two of them are documents that already exist, and the third is read from drawings. Beyond that, scope and fee are set per configuration, against the extent of the region assessed and the number of scenarios carried &mdash; and the quantities that determine them are the ones the earlier stage establishes, which is why the quotation is delivered with it rather than before it.
+    </p>
+    <p>
+      A quotation carries no expiry, and neither does credit from an earlier stage. If the framework is revised substantially enough to change what a quotation rested on, the quotation is reissued and the difference is met here rather than by the client.
     </p>
     <p>
       Initial inquiry: written technical or commercial communication through the email channel above. Responded to within five business days.
