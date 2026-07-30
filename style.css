@@ -145,7 +145,18 @@
   --bg:            light-dark(#ffffff, #131313);
   --footer-bg:     light-dark(#eaeaea, #0e0e0e);
   --card-bg:       light-dark(#fdfcfc, #1c1a19);
-  --accent-band:   light-dark(#f7f6f5, #1a1918);
+  /* ⚠⚠ 2026-07-31（修正）：強調帶加深。
+     舊值 #f7f6f5 與 --bg 的 #ffffff 只差約 3% ——
+     在一般筆電、亮環境、或色偏偏冷的面板上
+     幾乎等於不存在，
+     那條 box-shadow + clip-path 的滿版技巧等於白做。
+     → 加深並帶一點暖調。依規則（--bg 純灰、
+       --accent-band 可帶色）這是合規的。
+     ⚠ 不要用 border-top / border-bottom 代替 ——
+       邊框屬於元素本身的 1020px 盒子，
+       而底色是靠 box-shadow 滿版出去的，
+       兩者寬度對不上，會出現兩條懸在半空的短線。 */
+  --accent-band:   light-dark(#f2eeea, #1e1c1a);
   --border:        light-dark(#e2e2e2, #333333);
 
   /* ⚠ 按鈕：暗色模式下底色提亮，白字對比會下降，
@@ -227,7 +238,11 @@ a {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-a:hover { color: var(--bronze); text-decoration: none; }
+/* ⚠⚠ 2026-07-31（修正）：hover 【不得降低對比】。
+   舊值 hover 時改成 --bronze，對比從 6.2:1 掉到 3.73:1 ——
+   hover 狀態一樣要過 AA。
+   → 顏色不變，只拿掉底線。那個反應已經夠了。 */
+a:hover { text-decoration: none; }
 
 /* ========================================
    PAGE SIDES —— 已放棄
@@ -674,8 +689,28 @@ section h2 {
 
    ⚠ 圖滿版寬（1080），而說明文字維持 720 ——
      與全站的兩種寬度一致。 */
+/* ⚠⚠ 2026-07-31（修正）：【直式圖不該用滿版寬】。
+
+   【問題】viewBox 是 379.66 × 462.12，比例 0.82（直式）。
+     舊版跟著 main 走滿版 1020px，換算圖高約 1241px，
+     加內距接近 1280px。
+     而扣掉固定導覽列後，一般筆電的可視高度
+     大約 750–850px —— 【核心圖面沒有任何一個時刻
+     是完整可見的】。
+   【為何要緊】這張圖的工作就是「這就是我們從圖面
+     讀出來的東西」。讀者必須捲兩次才看得完，
+     說服力漏掉一大半。
+     且本檔自己的註解寫的是「它讀起來就是一張圖紙」——
+     一張紙的意象需要看得到四個邊。
+   【修正】580px：圖高約 707px，加內距約 743px ——
+     整張進得了一個畫面。
+   ⚠ figcaption 隨父元素縮到 580，圖與圖說同寬 ——
+     圖說比圖寬看起來很怪。
+   ⚠ .plan-points 不跟著縮，維持 1020px 三欄 ——
+     那是刻意的寬度變化。 */
 .plan-figure {
-  margin: 34px 0 0 0;
+  max-width: 580px;
+  margin: 34px auto 0 auto;
   padding: 0;
 }
 /* ⚠⚠ 2026-07-31：圖紙加【浮水印】與最低限度的複製阻力。
@@ -728,13 +763,13 @@ section h2 {
 }
 /* ⚠ 佔位階段已結束（2026-07-31）：site_plan.svg 已就位。
    .plan-placeholder 的規則已移除。 */
-/* ⚠ 2026-07-31：圖說改靠左。
+/* ⚠ 2026-07-31：圖說靠左，寬度隨父元素（580px）。
    四行的文字置中時每行起點都不同，
    眼睛要重新找行首 —— 比靠左費力。
-   ⚠ 欄位仍然置中（margin auto），只是文字靠左。 */
+   ⚠ 不再給 max-width: 720 —— 圖已縮到 580，
+     圖說比圖寬會很怪。 */
 .plan-figure figcaption {
-  max-width: var(--text-width);
-  margin: 16px auto 0 auto;
+  margin: 16px 0 0 0;
   font-size: 14px;
   line-height: 1.6;
   color: var(--text-muted);
@@ -889,20 +924,37 @@ footer {
 }
 
 /* ========================================
-   MOBILE TWEAKS
+   NAV —— 窄螢幕橫向滑動
    ======================================== */
-@media (max-width: 700px) {
-  /* ⚠ 導覽列在窄螢幕不換行，改為【橫向滑動】。
-     換行會讓 fixed 導覽列變高，吃掉手機一大塊畫面，
-     而且 body 的 padding-top 會對不上。
-     ⚠⚠ 2026-07-31：右緣加一道漸層遮罩。
-       舊版沒有任何可滑動的提示，
-       使用者很可能不知道 Documents 與 Engagement 還在右邊。 */
+/* ⚠⚠ 2026-07-31（修正）：斷點由 700px 拉到 900px。
+
+   【問題】加了第七個項目（Plan）之後，
+     七個連結加字距約 490px、六個 26px 間隙 156px，
+     再加 logo 與 34px 間隙 —— 接近 780px。
+     扣掉 .nav-inner 左右各 30px 內距，
+     要到約 840px 的視窗才容得下。
+   【舊版的洞】橫向捲動那組規則掛在 max-width: 700px，
+     於是【701–860 這個區間兩邊都不管】：
+     nowrap 不換行、overflow-x 沒開，
+     內容直接撐出去，可能連帶讓整頁出現水平捲軸。
+     ⚠ 小尺寸 iPad 橫向、分割視窗、
+       以及沒全螢幕的桌機瀏覽器都落在這個區間。
+
+   ⚠⚠ 【不能直接把整個 700px 區塊改成 900】——
+     那裡還有手機字級與內距，
+     900px 就套用手機字級是錯的。
+     → 導覽規則單獨分出來。 */
+@media (max-width: 900px) {
   .nav-inner {
     padding: 0 18px;
     gap: 14px;
   }
   .nav-logo img { height: 24px; }
+  /* ⚠ 不換行，改為【橫向滑動】。
+     換行會讓 fixed 導覽列變高，
+     而 body 的 padding-top 會對不上。
+     ⚠ 右緣漸層遮罩是可滑動的提示 ——
+       沒有它，使用者不知道右邊還有項目。 */
   .nav-links {
     position: relative;
     gap: 18px;
@@ -917,6 +969,14 @@ footer {
     font-size: 10.5px;
     letter-spacing: 1px;
   }
+}
+
+/* ========================================
+   MOBILE TWEAKS
+   ======================================== */
+@media (max-width: 700px) {
+  /* ⚠ 2026-07-31：導覽規則已移至上方的 900px 區塊。
+     這裡只留真正屬於手機的字級與內距。 */
 
   /* ⚠ 2026-07-31：banner 已改為單欄置中，
      舊的 flex-direction / text-align 規則不再適用。 */
