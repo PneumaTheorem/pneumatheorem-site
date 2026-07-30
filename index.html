@@ -14,9 +14,9 @@
   <meta property="og:image" content="https://pneumatheorem.org/assets/logo.png">
 
   <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- ⚠⚠ 2026-07-30：Google Fonts 連結已移除，字型改為自架。
+       舊行會把訪客 IP 傳給第三方。見 style.css 檔頭。
+       ⚠ assets/fonts/ 的 woff2 須先就位，否則退回 Georgia。 -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -270,6 +270,34 @@
       </p>
     </div>
 
+    <!--
+      ⚠⚠ 2026-07-30：新增付費示範卡片。
+
+      【位置的理由】緊接在免費樣本之後。
+        讀者剛讀到「九格中的三格，其餘六格未評估」，
+        那正是想要其餘六格的時刻。
+
+      ⚠⚠ 【不寫金額】依 2026-07-29 的決定：站上不寫價格。
+        按鈕文字不帶數字，點進去才看到。
+        ⚠ 但那個決定已經部分失效 —— Terms of Sale 現在從
+          Engagement 段連出去，而它的 §1 有完整的價格表。
+          這一點值得重新決定：要嗎接受價格可見，
+          要嗎把價格從 Terms 拿掉。現狀是兩者中間。
+
+      ⚠ 支付連結是外部網址（buy.stripe.com）。
+        若日後重建連結，網址會變 —— 這裡與 Engagement 段
+        各有一份，【兩處要一起改】。
+    -->
+    <div class="doc-card">
+      <div class="doc-label">Full demonstration &mdash; purchase</div>
+      <h3>All Nine Cells</h3>
+      <p class="doc-sub">Rivergate Yard &mdash; the same fictional venue, assessed in full</p>
+      <p class="doc-meta">What the sample above covers in three cells, this covers in nine. It establishes what a complete assessment contains, so that the material required for your own venue can be judged before commissioning one. Issued by email within one business day, licensed to the organisation named at checkout. Half the fee is credited against any later stage, for any venue, with no expiry.</p>
+      <p>
+        <a class="btn" href="https://buy.stripe.com/eVqeV5fBP5aS0o458Z4c801" target="_blank" rel="noopener">Purchase the full demonstration</a>
+      </p>
+    </div>
+
   </section>
 
   <section class="engagement">
@@ -307,6 +335,14 @@
     -->
     <p>
       The work is arranged so that it can be paid for twice. A first purchase covers the demonstration and the assessment of your own access geometry, and returns a quotation for the full assessment together with a list of any further material required. A second covers that assessment. Nothing between the two requires a separate authorisation.
+    </p>
+    <!-- ⚠ 2026-07-30：新增支付連結。
+         ⚠⚠ 文件區的付費卡片也有一份。連結若重建，【兩處要一起改】。 -->
+    <p>
+      The first stage &mdash; the full nine-cell demonstration on a fictional
+      venue &mdash; can be
+      <a href="https://buy.stripe.com/eVqeV5fBP5aS0o458Z4c801" target="_blank" rel="noopener">purchased directly</a>.
+      It is issued by email within one business day.
     </p>
     <p>
       Fees for the first stages are fixed and are stated in the sample deliverable, because they can be set without seeing the site: two of them are documents that already exist, and the third is read from drawings. Beyond that, scope and fee are set per configuration, against the extent of the region assessed and the number of scenarios carried &mdash; and the quantities that determine them are the ones the earlier stage establishes, which is why the quotation is delivered with it rather than before it.
@@ -350,6 +386,13 @@
       </div>
       <div class="footer-line">
         ORCID: <a href="https://orcid.org/0009-0005-8136-3886" target="_blank" rel="noopener">0009-0005-8136-3886</a>
+      </div>
+      <!-- ⚠ 2026-07-30：新增條款與隱私連結。
+           隱私政策必須從首頁找得到 ——
+           Stripe 要的是一個 URL，讀者要的是一個連結。 -->
+      <div class="footer-line">
+        <a href="assets/terms.pdf" target="_blank" rel="noopener">Terms of Sale</a> &middot;
+        <a href="privacy.html">Privacy</a>
       </div>
       <div class="footer-copyright">
         &copy; 2026 PneumaTheorem, Inc. All rights reserved.

@@ -4,6 +4,110 @@
    Main body:  white, learned/clean
    ======================================== */
 
+/* ========================================
+   ⚠⚠ 2026-07-30：字型改為自架
+
+   【為何】舊版自 fonts.googleapis.com 載入字型，
+     而那會把訪客 IP 傳給第三方。德國曾有相關裁判，
+     而本站正要進英德法市場。
+     → 自架之後，privacy.html 的 cookie 段才能說
+       【無第三方請求】。在那之前不得那樣寫。
+
+   【字型檔】assets/fonts/ 下使用 Google 的原始檔名（轉 woff2）：
+     CormorantGaramond-Regular.woff2    → weight 400
+     CormorantGaramond-Medium.woff2     → weight 500
+     CormorantGaramond-SemiBold.woff2   → weight 600
+     CormorantGaramond-Bold.woff2       → weight 700
+     Montserrat-Regular.woff2           → weight 400
+     Montserrat-Medium.woff2            → weight 500
+     Montserrat-SemiBold.woff2          → weight 600
+     Montserrat-Bold.woff2              → weight 700
+
+   ⚠ 保留 Google 原名而非改成數字，因為原名自帶說明；
+     對應關係寫在這裡即可。
+   ⚠ Montserrat-Regular（400）舊 Google 請求中沒有，
+     但檔案已在，一併宣告 —— 若 CSS 某處用到正常字重的
+     Montserrat，不宣告會讓瀏覽器合成。
+   ⚠ 【不含斜體】—— 與舊的 Google 請求一致。
+     若日後需要斜體，須另下載 Italic 檔並新增 @font-face。
+
+   ⚠⚠ 【已子集化】2026-07-30：八個檔自 1.07 MB 降至 268 KB
+     （每個 28–40 KB）。以 pyftsubset 取 latin 子集。
+     → 比一般估的 15–30 KB 略高，因為
+       --layout-features='*' 保留了全部 OpenType 特性
+       （連字、舊體數字等）。
+     ⚠ 這個取捨是刻意的 —— 舊體數字一類的設定需要它們。
+       若日後要再壓，可改為只保留用得到的特性，
+       但需先確認哪些在用。
+
+   【latin 子集的範圍】德文與法文的重音字全在 U+0000-00FF 內
+     （ä ö ü ß é è à ç 都是），英德法市場夠用。
+     ⚠ 若日後要顯示波蘭、捷克、匈牙利的客戶名，
+       才需要 latin-ext。
+
+   ⚠ 字型檔未就位時會退回 Georgia 與 Helvetica Neue
+     （見下方 --font-* 的備援清單）—— 是合理的降級，
+     不是壞掉。
+   ======================================== */
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/CormorantGaramond-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/CormorantGaramond-Medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/CormorantGaramond-SemiBold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('assets/fonts/CormorantGaramond-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/Montserrat-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/Montserrat-Medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/Montserrat-SemiBold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('assets/fonts/Montserrat-Bold.woff2') format('woff2');
+}
+
 :root {
   --bronze:        #B87355;   /* primary accent, matches logo */
   --bronze-deep:   #8a4f3a;   /* hover / deeper accent */
@@ -43,11 +147,18 @@ a:hover { color: var(--bronze-deep); text-decoration: none; }
 /* ========================================
    TOP BANNER
    ======================================== */
+/* ⚠⚠ 2026-07-30：背景圖由 .png 改為 .webp。
+     banner-bg.png（999 KB）已刪除，檔案不存在，
+     不改的話橫幅背景會是空的。
+   ⚠ 第一次轉檔曾產出 3.5 MB（無損模式），
+     重轉後為 272 KB —— 約為原 PNG 的四分之一。
+   ⚠ 若日後換圖，記得確認新檔確實比舊檔小再換 ——
+     無損 WebP 可能比 PNG 大。 */
 .banner {
   background-color: var(--banner-bg);
   background-image:
     linear-gradient(135deg, rgba(26,22,20,0.55) 0%, rgba(26,22,20,0.85) 100%),
-    url('assets/banner-bg.png');
+    url('assets/banner-bg.webp');
   background-size: cover;
   background-position: center;
   color: var(--banner-text);
