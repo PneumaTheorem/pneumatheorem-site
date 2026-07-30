@@ -235,12 +235,13 @@ a:hover { color: var(--bronze-deep); text-decoration: none; }
      否則導覽列會蓋住 banner 頂端。
      兩個數值【綁在一起】，改高度就要改 padding。
 
-   【背景】Bg.webp（44 KB）加一層深色遮罩。
+   【背景】bg.webp（44 KB）加一層深色遮罩。
      遮罩是必要的 —— 導覽字是白的，
      背景圖若有亮部就讀不到。
 
-   ⚠ 檔名是【Bg.webp】大寫 B。macOS 不區分大小寫，
-     伺服器區分 —— 推上去之後要確認這一行。
+   ⚠ 檔名是【bg.webp】全小寫。2026-07-30 由 Bg.webp 改名。
+     macOS 不區分大小寫，伺服器區分 —— 全小寫比較不易出錯。
+     ⚠ 本檔是唯一引用處，HTML 沒有提到它。
 
    【按鈕】白字，選取時下方浮出一條細線（::after 的 scaleX）。
      不用 border-bottom 切換，因為那會讓文字位置跳動。 */
@@ -253,7 +254,7 @@ a:hover { color: var(--bronze-deep); text-decoration: none; }
   background-color: #0d0b0a;
   background-image:
     linear-gradient(rgba(10, 8, 7, 0.74), rgba(10, 8, 7, 0.74)),
-    url('assets/Bg.webp');
+    url('assets/bg.webp');
   background-size: cover;
   background-position: center;
   border-bottom: 1px solid rgba(184, 115, 85, 0.55);

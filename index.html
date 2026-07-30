@@ -17,7 +17,18 @@
   <!-- ⚠⚠ 2026-07-30：Google Fonts 連結已移除，字型改為自架。
        舊行會把訪客 IP 傳給第三方。見 style.css 檔頭。
        ⚠ assets/fonts/ 的 woff2 須先就位，否則退回 Georgia。 -->
-  <link rel="stylesheet" href="style.css">
+  <!-- ⚠⚠ 2026-07-31：加上 ?v= 版號（cache busting）。
+
+       【為何】瀏覽器與 CDN 會快取 style.css。
+         2026-07-30 實際發生過：HTML 已更新而 CSS 是舊的，
+         導致導覽列完全沒樣式（logo 撐滿畫面、連結是預設藍底線）。
+         而從 privacy.html 進來就正常 —— 因為那一次拿到的是新的。
+
+       【用法】【改完 CSS 就把 v 加一】，兩個 HTML 一起改。
+         數字一變，瀏覽器就當成新網址重拿。
+       ⚠ index.html 與 privacy.html 的版號要一致，
+         否則兩頁會拿到不同版本的 CSS。 -->
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
