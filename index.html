@@ -87,10 +87,35 @@
   ============================================================
 -->
 
+<!-- ⚠⚠ 2026-07-30（第二版）：固定導覽列。
+     左邊 logo-3.png（黑底白標），右邊白字連結，
+     選取時下方浮出一條青銅色細線。
+     ⚠ 連結目標的 id 寫在下方各 <section> 上，
+       【改 id 要兩處一起改】。
+     ⚠ privacy.html 有一份結構相同但連回 index.html 的版本。
+     ⚠ logo 點下去回首頁頂端 —— 固定導覽列的慣例。
+     ⚠ 置於 banner 【之前】：雖然 fixed 使視覺位置與 DOM 無關，
+       但鍵盤操作的 tab 順序跟 DOM 走 —— 導覽該先被碰到。 -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#top" aria-label="PneumaTheorem home">
+      <img src="assets/logo-3.png" alt="PneumaTheorem">
+    </a>
+    <div class="nav-links">
+      <a href="#framework">Framework</a>
+      <a href="#deliverables">Deliverables</a>
+      <a href="#limits">Limits</a>
+      <a href="#products">Products</a>
+      <a href="#documents">Documents</a>
+      <a href="#engagement">Engagement</a>
+    </div>
+  </div>
+</nav>
+
 <!-- ============================================
      TOP BANNER: bronze background, white text
      ============================================ -->
-<div class="banner">
+<div class="banner" id="top">
   <div class="banner-inner">
 
     <div class="banner-left">
@@ -131,7 +156,7 @@
     </p>
   </section>
 
-  <section class="overview">
+  <section class="overview" id="framework">
     <h2>Two kinds of safety, equivalent in verdict and not otherwise</h2>
 
     <p>
@@ -142,7 +167,7 @@
     </p>
   </section>
 
-  <section class="overview">
+  <section class="overview" id="deliverables">
     <h2>What an assessment delivers</h2>
 
     <div class="grid">
@@ -165,7 +190,7 @@
     </p>
   </section>
 
-  <section class="overview">
+  <section class="overview" id="limits">
     <h2>Where the framework stops</h2>
 
     <p>
@@ -179,7 +204,7 @@
     </p>
   </section>
 
-  <section class="overview">
+  <section class="overview" id="products">
     <h2>Assessment products</h2>
 
     <div class="grid">
@@ -300,7 +325,7 @@
 
   </section>
 
-  <section class="engagement">
+  <section class="engagement" id="engagement">
     <h2>Engagement</h2>
     <p>
       Two assessment products are in service, both closed-form. Each answers what a geometry permits, from the drawing and a declared exertion, by arithmetic that can be checked by hand rather than taken on trust.

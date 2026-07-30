@@ -224,6 +224,113 @@ a:hover { color: var(--bronze-deep); text-decoration: none; }
 }
 
 /* ========================================
+   NAV BAR —— fixed, minimal
+   ======================================== */
+/* ⚠⚠ 2026-07-30（第二版）：由 sticky 改為 fixed。
+
+   【行為】position: fixed —— 永遠在最上方，內容從下方滑過。
+     （第一版是 sticky，會先隨頁面捲走再吸附。）
+
+   ⚠⚠ fixed 脫離文件流，必須給 body 一個 padding-top，
+     否則導覽列會蓋住 banner 頂端。
+     兩個數值【綁在一起】，改高度就要改 padding。
+
+   【背景】Bg.webp（44 KB）加一層深色遮罩。
+     遮罩是必要的 —— 導覽字是白的，
+     背景圖若有亮部就讀不到。
+
+   ⚠ 檔名是【Bg.webp】大寫 B。macOS 不區分大小寫，
+     伺服器區分 —— 推上去之後要確認這一行。
+
+   【按鈕】白字，選取時下方浮出一條細線（::after 的 scaleX）。
+     不用 border-bottom 切換，因為那會讓文字位置跳動。 */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background-color: #0d0b0a;
+  background-image:
+    linear-gradient(rgba(10, 8, 7, 0.74), rgba(10, 8, 7, 0.74)),
+    url('assets/Bg.webp');
+  background-size: cover;
+  background-position: center;
+  border-bottom: 1px solid rgba(184, 115, 85, 0.55);
+}
+.nav-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 30px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.nav-logo img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  flex-wrap: nowrap;
+}
+.nav-links a {
+  position: relative;
+  display: inline-block;
+  padding: 6px 0;
+  font-family: var(--font-accent);
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #ffffff;
+  text-decoration: none;
+  opacity: 0.80;
+  transition: opacity 0.15s ease;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--bronze);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.18s ease;
+}
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  opacity: 1;
+}
+.nav-links a:hover::after,
+.nav-links a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ⚠⚠ fixed 導覽列的高度補償。與 .nav-inner 的 height 同步。 */
+body { padding-top: 54px; }
+
+/* 錨點跳轉時的上方預留。
+   ⚠ 須大於導覽列高度（54px）。 */
+section[id] { scroll-margin-top: 74px; }
+html { scroll-behavior: smooth; }
+
+/* ========================================
    MAIN CONTENT
    ======================================== */
 main {
@@ -366,6 +473,26 @@ footer {
    MOBILE TWEAKS
    ======================================== */
 @media (max-width: 700px) {
+  /* ⚠ 導覽列在窄螢幕不換行，改為【橫向滑動】。
+     換行會讓 fixed 導覽列變高，吃掉手機一大塊畫面，
+     而且 body 的 padding-top 會對不上。 */
+  .nav-inner {
+    padding: 0 18px;
+    gap: 14px;
+  }
+  .nav-logo img { height: 24px; }
+  .nav-links {
+    gap: 18px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a {
+    font-size: 10.5px;
+    letter-spacing: 1px;
+  }
+
   .banner-inner {
     flex-direction: column;
     align-items: flex-start;

@@ -49,6 +49,28 @@
   ============================================================
 -->
 
+<!-- ⚠⚠ 2026-07-30（第二版）：固定導覽列。
+     與 index.html 同一結構，但連結帶 index.html 前綴
+     （本頁不是首頁，錨點要跨頁）。
+     ⚠ 兩頁的導覽項目【要一起改】，
+       否則一個網站兩種導覽看起來像壞掉。
+     ⚠ 置於 banner 之前，tab 順序才對。 -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html" aria-label="PneumaTheorem home">
+      <img src="assets/logo-3.png" alt="PneumaTheorem">
+    </a>
+    <div class="nav-links">
+      <a href="index.html#framework">Framework</a>
+      <a href="index.html#deliverables">Deliverables</a>
+      <a href="index.html#limits">Limits</a>
+      <a href="index.html#products">Products</a>
+      <a href="index.html#documents">Documents</a>
+      <a href="index.html#engagement">Engagement</a>
+    </div>
+  </div>
+</nav>
+
 <div class="banner">
   <div class="banner-inner">
 
