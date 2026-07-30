@@ -150,8 +150,15 @@
 
   /* ⚠ 按鈕：暗色模式下底色提亮，白字對比會下降，
      故字色反過來用深色。 */
+  /* ⚠⚠ 2026-07-31：按鈕底色單獨一個變數。
+     【無障礙】白字在 #B87355 上只有約 3.5:1，
+       而按鈕是 13px 粗體（不算 large text），
+       需要 4.5:1。#8a4f3a 約 5.8:1，過關。
+     ⚠ 深淺兩模式的 hover 方向相反：
+       淺色時 hover 要更深，暗色時要更亮。 */
+  --btn-bg:        light-dark(#8a4f3a, #c98a6a);
   --btn-text:      light-dark(#ffffff, #151515);
-  --btn-hover:     light-dark(#8a4f3a, #e0b295);
+  --btn-hover:     light-dark(#6f3e2d, #e0b295);
   --footer-copy:   light-dark(#888888, #7c7c7c);
   /* ⚠ 頁尾的不透明色塊。它是【底】，故不帶色，
      與 --bg 同一條規則。定義已移到上方一組。 */
@@ -225,12 +232,18 @@ html, body {
    ⚠ 若日後有人把 background 加回 body，兩側背景就消失。 */
 html { background: var(--bg); }
 
+/* ⚠⚠ 2026-07-31：連結顏色由 --bronze 改為 --bronze-deep。
+   【無障礙】#B87355 在白底上約 3.73:1，未過 AA 的 4.5:1。
+     底線滿足的是 1.4.1（不單靠顏色傳達資訊），
+     而對比度是另一條 1.4.3，兩者不互相抵免。
+   ⚠ 暗色模式下 --bronze-deep 是較亮的 #d9a184，
+     方向相反但同樣過關。 */
 a {
-  color: var(--bronze);
+  color: var(--bronze-deep);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-a:hover { color: var(--bronze-deep); text-decoration: none; }
+a:hover { color: var(--bronze); text-decoration: none; }
 
 /* ========================================
    PAGE SIDES —— 兩側半透明背景
@@ -271,29 +284,45 @@ a:hover { color: var(--bronze-deep); text-decoration: none; }
      圖層才是 100vw —— 兩層的值不同，【順序不可對調】。
 
    ⚠ z-index: -1 與 pointer-events: none 都必要。
-     ⚠⚠ 且 body 【不得有不透明背景】（見上方 html 的註解）。 */
-body::before,
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  width: calc(50% - 540px);
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(var(--side-veil), var(--side-veil)),
-    url('assets/bg-2.webp');
-  background-repeat: no-repeat, no-repeat;
-  background-size: 100% 100%, 100vw 100%;
-}
-body::before {
-  left: 0;
-  background-position: left top, left center;
-}
-body::after {
-  right: 0;
-  background-position: right top, right center;
+     ⚠⚠ 且 body 【不得有不透明背景】（見上方 html 的註解）。
+
+   ⚠⚠ 2026-07-31（修正兩項）：
+     【一、內側硬切】面板在離中線 540px 處直接斷掉，
+       緊貼內容欄 —— 看起來像外掛上去的。
+       → mask-image 往內漸隱，變成【頁面從紋理裡浮出來】。
+     【二、邊界情況】1080–1140px 時面板寬只有 0–30px，
+       而圖是 100vw —— 那是一條被拉伸的隨機色帶。
+       → 整組改到 min-width: 1280px 才顯示。
+       ⚠ 1280 而非 1140：要留給面板足夠的寬度（每側≥100px），
+         否則漸隱遮罩沒有作用的空間。 */
+@media (min-width: 1280px) {
+  body::before,
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: calc(50% - 540px);
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--side-veil), var(--side-veil)),
+      url('assets/bg-2.webp');
+    background-repeat: no-repeat, no-repeat;
+    background-size: 100% 100%, 100vw 100%;
+  }
+  body::before {
+    left: 0;
+    background-position: left top, left center;
+    -webkit-mask-image: linear-gradient(to right, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 55%, transparent 100%);
+  }
+  body::after {
+    right: 0;
+    background-position: right top, right center;
+    -webkit-mask-image: linear-gradient(to left, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to left, #000 55%, transparent 100%);
+  }
 }
 
 /* ========================================
@@ -638,7 +667,7 @@ section h2 {
 
 .btn {
   display: inline-block;
-  background: var(--bronze);
+  background: var(--btn-bg);
   color: var(--btn-text) !important;
   text-decoration: none !important;
   padding: 11px 24px;
@@ -737,9 +766,10 @@ section h2 {
    ⚠ pointer-events: none 加在圖上 —— 右鍵選單拿不到它；
      同時也避免浮水印擋到選取。
 
-   ⚠⚠ 浮水印用 logo.png。若它的背景不是透明的，
-     在白底圖紙上會出現一塊方形 ——
-     那就換成 favicon-512.png（圓外透明）。 */
+   ⚠⚠ 浮水印用 favicon-512.png（圓外透明）。
+     舊版用 logo.png —— 它有白底，而圖紙底色恰好也是
+     #ffffff，所以看不出來。那是【剛好成立】而非
+     【設計成立】—— .plan-sheet 的底色一改就會冒出方塊。 */
 .plan-sheet {
   position: relative;
   background: #ffffff;
@@ -752,30 +782,39 @@ section h2 {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('assets/logo.png');
+  background-image: url('assets/favicon-512.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 34%;
   opacity: 0.07;
   pointer-events: none;
 }
+/* ⚠⚠ 2026-07-31：圖需要 aspect-ratio，否則載入前
+   瀏覽器留不住版位，整塊內容會在載入瞬間往下跳（CLS）。
+   數值取自 SVG 的 viewBox：379.66 × 462.12 pt。
+   ⚠ 換圖時【這兩個數字要跟著改】。 */
 .plan-sheet img {
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 379.66 / 462.12;
   pointer-events: none;
   -webkit-user-drag: none;
   user-select: none;
 }
 /* ⚠ 佔位階段已結束（2026-07-31）：site_plan.svg 已就位。
    .plan-placeholder 的規則已移除。 */
+/* ⚠ 2026-07-31：圖說改靠左。
+   四行的文字置中時每行起點都不同，
+   眼睛要重新找行首 —— 比靠左費力。
+   ⚠ 欄位仍然置中（margin auto），只是文字靠左。 */
 .plan-figure figcaption {
   max-width: var(--text-width);
   margin: 16px auto 0 auto;
   font-size: 14px;
   line-height: 1.6;
   color: var(--text-muted);
-  text-align: center;
+  text-align: left;
 }
 
 /* 三個編號要點 —— 告訴讀者你在圖上做了什麼。 */
@@ -917,7 +956,7 @@ footer {
 .footer-line {
   margin: 4px 0;
 }
-.footer-line a { color: var(--bronze); }
+.footer-line a { color: var(--bronze-deep); }
 .footer-copyright {
   margin-top: 22px;
   font-size: 12px;
