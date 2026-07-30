@@ -337,32 +337,9 @@ body::after {
   margin-top: 6px;
 }
 
-/* ⚠ 2026-07-31：.banner-right / .contact-row / .contact-sub 的
-   樣式保留但【HTML 已不再使用】—— 聯絡資訊搬到 footer。
-   不刪是因為若你想把它改回來，還原只要改 HTML。 */
-
-.banner-right {
-  text-align: right;
-  font-size: 14px;
-}
-.contact-row {
-  margin: 2px 0;
-}
-.contact-row a {
-  color: var(--banner-text);
-  font-weight: bold;
-  text-decoration: none;
-  border-bottom: 1px solid var(--bronze);
-}
-.contact-row a:hover {
-  color: var(--bronze);
-  border-bottom-color: var(--banner-text);
-}
-.contact-sub {
-  color: var(--banner-muted);
-  font-size: 13px;
-  font-style: italic;
-}
+/* ⚠ 2026-07-31：.banner-right / .contact-row / .contact-sub 已刪除。
+   聯絡資訊搬到 footer 之後，兩個 HTML 都不再使用它們 ——
+   保留只會讓下一個讀這份 CSS 的人以為還有那個結構。 */
 
 /* ========================================
    NAV BAR —— fixed, minimal
@@ -477,6 +454,26 @@ section[id] { scroll-margin-top: 74px; }
    → 給它 60px 的 scroll-margin，落點回到 0。 */
 #top { scroll-margin-top: 60px; }
 html { scroll-behavior: smooth; }
+
+/* ⚠⚠ 2026-07-31：尊重【減少動畫】的系統設定。
+
+   【為何】平滑捲動與過場動畫對前庭功能障礙者
+     可能引發暈眩與生理不適。
+     作業系統有一個【減少動態】開關，該尊重它。
+   ⚠ 不是全部關掉動畫，而是縮到實質為零 ——
+     transition 仍存在，只是瞬間完成，
+     這樣不會讓依賴 transitionend 的程式壞掉。 */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
 /* ========================================
    MAIN CONTENT

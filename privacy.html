@@ -16,7 +16,7 @@
        見 style.css 檔頭。本頁的 cookie 段措辭須與此同步。 -->
   <!-- ⚠⚠ 2026-07-31：版號須與 index.html 一致。
        改完 CSS 兩頁一起加一，否則兩頁拿到不同版本。 -->
-  <link rel="stylesheet" href="style.css?v=22">
+  <link rel="stylesheet" href="style.css?v=23">
 </head>
 <body>
 
@@ -280,6 +280,28 @@
     </div>
   </div>
 </footer>
+
+<!-- ⚠ 2026-07-31：工具座與 index.html 同步。
+     舊版只有首頁有切換鈕 —— 一個網站有一頁有、
+     一頁沒有，看起來像壞掉。
+     ⚠ 兩頁的工具座【要一起改】。
+     ⚠ 不寫 localStorage —— 理由見 index.html 的註解。 -->
+<div class="pt-dock">
+  <button id="pt-theme" type="button" class="chip" aria-label="Toggle colour scheme">AUTO</button>
+</div>
+<script>
+(function () {
+  var modes = ['light dark', 'light', 'dark'];
+  var names = ['AUTO', 'LIGHT', 'DARK'];
+  var i = 0;
+  var btn = document.getElementById('pt-theme');
+  btn.addEventListener('click', function () {
+    i = (i + 1) % modes.length;
+    document.documentElement.style.colorScheme = modes[i];
+    btn.textContent = names[i];
+  });
+})();
+</script>
 
 </body>
 </html>
