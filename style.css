@@ -171,20 +171,7 @@
   --chip-bg-hover: light-dark(#2c2c2c, #363636);
   --chip-text:     #ffffff;
   --chip-border:   rgba(184, 115, 85, 0.55);
-
-  /* ⚠⚠ 2026-07-31：兩側底圖的【遮罩】。
-
-     【為何不用 opacity】數學上兩者等價
-       （opacity 0.3 疊在底色 B 上 = B 色 70% 遮罩疊在圖上），
-       但 opacity 只能往【--bg 那個方向】淡，
-       而遮罩的顏色可以與底色不同。
-     【為何要這個自由度】bg-2.webp 同時有很亮的桃色
-       與接近純黑的區域 —— 深淺兩種模式下
-       該壓的方向不一樣，必須分開給值。
-
-     【調整】alpha 越高，圖越淡。
-       0.72 約等於圖顯示 28%。0.76 約 24%。 */
-  --side-veil:     light-dark(rgba(255, 255, 255, 0.72), rgba(19, 19, 19, 0.76));
+  /* ⚠ 2026-07-31：--side-veil 已刪除 —— 兩側底圖放棄。 */
   /* ⚠⚠ 2026-07-31：三種寬度，而非一種。
 
      【問題】舊版從 hero 到 Engagement 每一區塊都是同一個
@@ -223,13 +210,10 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ⚠⚠ 2026-07-31：底色【只給 html】，body 保持透明。
-
-   【為何】下方的 body::before / ::after（兩側背景）
-     用 z-index: -1。負值 z-index 的子元素會畫在
-     【父元素背景之後】，所以 body 若有不透明背景，
-     兩側背景會被完全蓋住 —— 看起來像根本沒生效。
-   ⚠ 若日後有人把 background 加回 body，兩側背景就消失。 */
+/* ⚠ 2026-07-31：底色只給 html。
+   舊的理由是兩側底圖的 body::before / ::after 用了
+   負值 z-index，需要 body 透明。那組元素已刪，
+   但這行留著也無害 —— html 的背景會傳遞到畫布。 */
 html { background: var(--bg); }
 
 /* ⚠⚠ 2026-07-31：連結顏色由 --bronze 改為 --bronze-deep。
@@ -246,84 +230,24 @@ a {
 a:hover { color: var(--bronze); text-decoration: none; }
 
 /* ========================================
-   PAGE SIDES —— 兩側半透明背景
+   PAGE SIDES —— 已放棄
    ======================================== */
-/* ⚠⚠ 2026-07-31（第六版）：斜線全部撤掉，
-   改用 bg-2.webp 半透明。
+/* ⚠⚠ 2026-07-31：兩側底圖整組刪除（Kevin）。
 
-   【為何】CSS 畫的斜線終究是幾何重複，
-     而背景圖本身就是對的語彙 —— 直接用它。
+   曾經試過六個版本：垂直尺寸線 → 等角斜線 →
+   不規則斜線 → 菱形網格 → 全畫面粗梁 →
+   bg-2.webp 半透明（含向內霧化遮罩）。
 
-   【一張圖，不是兩份】⚠⚠ 前一版給兩側各一份 cover，
-     右側再鏡像 —— 而原圖不對稱，結果看起來是
-     兩份複製。
-     【修正】background-size: 100vw —— 圖橫跨整個視窗，
-       左側面板取圖的左半（left center），
-       右側面板取右半（right center）。
-       讀起來就是【一張圖，中間被內容蓋住】。
-     → 鏡像（scaleX）已移除。
+   【結論】兩側留白不需要填。
+     內容區已經有兩種寬度、#limits 的強調帶、
+     圖面區、頁尾色塊 —— 縱向節奏已經夠了。
 
-   【只在兩側】寬度 calc(50% - 540px)，
-     恰好是內容容器（1080）外側。
-     ⚠ 不取 720（內文欄）—— 那會讓圖跑到卡片背後，
-       卡片間的縫隙會露出來，看起來雜亂。
-
-   【自動隱藏】視窗窄於 1080 時，calc 結果為負，
-     瀏覽器夾到 0 —— 不需要額外的 media query。
-
-   【透明度】⚠⚠ 2026-07-31：由 opacity 改為【遮罩】。
-     圖以完整不透明度畫出，上面疊一層半透明色塊。
-     數學上與 opacity 等價，但遮罩顏色可與底色不同，
-     且深淺兩種模式可各自給值 —— 見 --side-veil。
-     ⚠ 本圖同時有極亮與極暗的區域，
-       兩種模式該壓的方向不同，所以需要這個自由度。
-
-   ⚠ 100vw 而非 100% —— 後者指的是元素自己的寬度
-     （兩側面板很窄），那會把整張圖擠進窄條裡。
-   ⚠ 遮罩層的 background-size 是 100% 100%（填滿元素），
-     圖層才是 100vw —— 兩層的值不同，【順序不可對調】。
-
-   ⚠ z-index: -1 與 pointer-events: none 都必要。
-     ⚠⚠ 且 body 【不得有不透明背景】（見上方 html 的註解）。
-
-   ⚠⚠ 2026-07-31（修正兩項）：
-     【一、內側硬切】面板在離中線 540px 處直接斷掉，
-       緊貼內容欄 —— 看起來像外掛上去的。
-       → mask-image 往內漸隱，變成【頁面從紋理裡浮出來】。
-     【二、邊界情況】1080–1140px 時面板寬只有 0–30px，
-       而圖是 100vw —— 那是一條被拉伸的隨機色帶。
-       → 整組改到 min-width: 1280px 才顯示。
-       ⚠ 1280 而非 1140：要留給面板足夠的寬度（每側≥100px），
-         否則漸隱遮罩沒有作用的空間。 */
-@media (min-width: 1280px) {
-  body::before,
-  body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    width: calc(50% - 540px);
-    z-index: -1;
-    pointer-events: none;
-    background-image:
-      linear-gradient(var(--side-veil), var(--side-veil)),
-      url('assets/bg-2.webp');
-    background-repeat: no-repeat, no-repeat;
-    background-size: 100% 100%, 100vw 100%;
-  }
-  body::before {
-    left: 0;
-    background-position: left top, left center;
-    -webkit-mask-image: linear-gradient(to right, #000 55%, transparent 100%);
-    mask-image: linear-gradient(to right, #000 55%, transparent 100%);
-  }
-  body::after {
-    right: 0;
-    background-position: right top, right center;
-    -webkit-mask-image: linear-gradient(to left, #000 55%, transparent 100%);
-    mask-image: linear-gradient(to left, #000 55%, transparent 100%);
-  }
-}
+   ⚠ assets/bg-2.webp 不再被引用。不刪檔，
+     但若確定不用了，可以一併清掉。
+   ⚠ 若日後又想加回來，兩個已知的坑要記得：
+     （1）body 不得有不透明背景（負值 z-index）
+     （2）寬度小於約 100px 時，100vw 的圖會變成
+         一條被拉伸的隨機色帶 —— 需要 min-width 閘門。 */
 
 /* ========================================
    TOP BANNER —— slim brand band
