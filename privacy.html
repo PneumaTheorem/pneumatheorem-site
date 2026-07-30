@@ -16,7 +16,7 @@
        見 style.css 檔頭。本頁的 cookie 段措辭須與此同步。 -->
   <!-- ⚠⚠ 2026-07-31：版號須與 index.html 一致。
        改完 CSS 兩頁一起加一，否則兩頁拿到不同版本。 -->
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=22">
 </head>
 <body>
 
@@ -258,6 +258,8 @@
 
 </main>
 
+<!-- ⚠ 2026-07-31：本頁的 <footer> 本來就在 <main> 之外，
+     無需調整（index.html 則需要）。 -->
 <footer>
   <div class="footer-inner">
     <div class="footer-line">
@@ -268,9 +270,10 @@
       Kevin Tao, Founder &amp; CEO &middot;
       <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
     </div>
-    <div class="footer-line">
-      <a href="index.html">Home</a> &middot;
-      <a href="assets/terms.pdf" target="_blank" rel="noopener">Terms of Sale</a>
+    <!-- ⚠ 2026-07-31：與 index.html 同步 —— 改為 chip。 -->
+    <div class="footer-chips">
+      <a class="chip" href="index.html">Home</a>
+      <a class="chip" href="assets/terms.pdf" target="_blank" rel="noopener">Terms of Sale</a>
     </div>
     <div class="footer-copyright">
       &copy; 2026 PneumaTheorem, Inc. All rights reserved.

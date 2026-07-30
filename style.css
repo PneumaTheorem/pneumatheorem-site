@@ -109,18 +109,61 @@
 }
 
 :root {
-  --bronze:        #B87355;   /* primary accent, matches logo */
-  --bronze-deep:   #8a4f3a;   /* hover / deeper accent */
-  --banner-bg:     #1a1614;   /* dark base behind the bronze image */
-  /* ⚠⚠ 2026-07-31：橫幅文字改為純白。
-     舊值 #f3e4d8（暖白）與 #c7a995（褐粉）在深色底上
-     呈粉色。⚠ 白字只靠透明度區分主次，不靠色相。 */
+  /* ⚠⚠ 2026-07-31：暗色模式改用 light-dark()，單一來源。
+
+     【為何】舊版把暗色值寫在 @media (prefers-color-scheme)
+       裡，而 debug 切換按鈕需要手動覆寫 ——
+       那就要再複製一份暗色變數。兩份一定會漂。
+     【現行】light-dark(淺, 深) —— 每個顏色只寫一行，
+       跟隨 color-scheme。切換只要改 color-scheme 就好。
+     ⚠ light-dark() 需要 color-scheme 宣告才生效（見下方）。
+
+     【底色不帶彩度】（Kevin）底色純灰或純白；
+       顏色由【字與線】承擔。 */
+  color-scheme: light dark;
+
+  --bronze:        light-dark(#B87355, #c98a6a);
+  --bronze-deep:   light-dark(#8a4f3a, #d9a184);
+
+  /* 深色帶（導覽列、橫幅）兩種模式共用 ——
+     它們本來就是深的。 */
+  --banner-bg:     #161616;
   --banner-text:   #ffffff;
   --banner-muted:  rgba(255, 255, 255, 0.70);
-  --text:          #1a1a1a;
-  --text-muted:    #555;
-  --bg:            #fdfdfc;
-  --border:        #e0e0e0;
+
+  /* ⚠ 內文色：近黑，【帶一點橘紅】。
+     R 最高、B 最低，幅度極小 ——
+     大到看得出是棕色就過了。
+     不夠橘紅改 #241814，太明顯改 #1e1816。 */
+  --text:          light-dark(#201714, #ece5e1);
+  --text-muted:    light-dark(#57504d, #a09a97);
+  /* ⚠⚠ 2026-07-31（修正）：【只有最底層的底色不帶色】。
+     前一版把所有底色都去彩度，過頭了 ——
+     卡片與強調帶是【跳色】，帶一點暖調反而有層次。
+     【規則】--bg 與 --footer-bg 純灰（它們是底）；
+       --card-bg 與 --accent-band 可帶色。 */
+  --bg:            light-dark(#ffffff, #131313);
+  --footer-bg:     light-dark(#eaeaea, #0e0e0e);
+  --card-bg:       light-dark(#fdfcfc, #1c1a19);
+  --accent-band:   light-dark(#f7f6f5, #1a1918);
+  --border:        light-dark(#e2e2e2, #333333);
+
+  /* ⚠ 按鈕：暗色模式下底色提亮，白字對比會下降，
+     故字色反過來用深色。 */
+  --btn-text:      light-dark(#ffffff, #151515);
+  --btn-hover:     light-dark(#8a4f3a, #e0b295);
+  --footer-copy:   light-dark(#888888, #7c7c7c);
+  /* ⚠ 頁尾的不透明色塊。它是【底】，故不帶色，
+     與 --bg 同一條規則。定義已移到上方一組。 */
+
+  /* ⚠⚠ 2026-07-31：chip —— 小型深色按鈕。
+     工具座的切換鈕與頁尾的條款／隱私共用同一個樣式。
+     【兩種模式都是深底白字】—— 它是功能元件，
+     不參與內文的深淺切換，讓它在兩種模式下都是同一個東西。 */
+  --chip-bg:       light-dark(#1c1c1c, #262626);
+  --chip-bg-hover: light-dark(#2c2c2c, #363636);
+  --chip-text:     #ffffff;
+  --chip-border:   rgba(184, 115, 85, 0.55);
   /* ⚠⚠ 2026-07-31：三種寬度，而非一種。
 
      【問題】舊版從 hero 到 Engagement 每一區塊都是同一個
@@ -143,12 +186,15 @@
   --font-accent: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
 }
 
+/* ⚠⚠ 2026-07-31：原本的 @media (prefers-color-scheme: dark)
+   整塊已移除 —— 暗色值現在寫在上方的 light-dark() 裡。
+   【不得再加回來】：兩個來源一定會漂。 */
+
 * { box-sizing: border-box; }
 
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
   font-size: 17px;
@@ -156,12 +202,78 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* ⚠⚠ 2026-07-31：底色【只給 html】，body 保持透明。
+
+   【為何】下方的 body::before / ::after（兩側背景）
+     用 z-index: -1。負值 z-index 的子元素會畫在
+     【父元素背景之後】，所以 body 若有不透明背景，
+     兩側背景會被完全蓋住 —— 看起來像根本沒生效。
+   ⚠ 若日後有人把 background 加回 body，兩側背景就消失。 */
+html { background: var(--bg); }
+
 a {
   color: var(--bronze);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 a:hover { color: var(--bronze-deep); text-decoration: none; }
+
+/* ========================================
+   PAGE SIDES —— 兩側半透明背景
+   ======================================== */
+/* ⚠⚠ 2026-07-31（第六版）：斜線全部撤掉，
+   改用 bg-2.webp 半透明。
+
+   【為何】CSS 畫的斜線終究是幾何重複，
+     而背景圖本身就是對的語彙 —— 直接用它。
+
+   【一張圖，不是兩份】⚠⚠ 前一版給兩側各一份 cover，
+     右側再鏡像 —— 而原圖不對稱，結果看起來是
+     兩份複製。
+     【修正】background-size: 100vw —— 圖橫跨整個視窗，
+       左側面板取圖的左半（left center），
+       右側面板取右半（right center）。
+       讀起來就是【一張圖，中間被內容蓋住】。
+     → 鏡像（scaleX）已移除。
+
+   【只在兩側】寬度 calc(50% - 540px)，
+     恰好是內容容器（1080）外側。
+     ⚠ 不取 720（內文欄）—— 那會讓圖跑到卡片背後，
+       卡片間的縫隙會露出來，看起來雜亂。
+
+   【自動隱藏】視窗窄於 1080 時，calc 結果為負，
+     瀏覽器夾到 0 —— 不需要額外的 media query。
+
+   【透明度】0.30（Kevin）—— 有底圖質感但不過分。
+     ⚠ 若暗色模式下太重，改成 light-dark(0.30, 0.22)。
+
+   ⚠ 100vw 而非 100% —— 後者指的是元素自己的寬度
+     （兩側面板很窄），那會把整張圖擠進窄條裡。
+
+   ⚠ z-index: -1 與 pointer-events: none 都必要。
+     ⚠⚠ 且 body 【不得有不透明背景】（見上方 html 的註解）。 */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: calc(50% - 540px);
+  z-index: -1;
+  pointer-events: none;
+  background-image: url('assets/bg-2.webp');
+  background-repeat: no-repeat;
+  background-size: 100vw 100%;
+  opacity: 0.30;
+}
+body::before {
+  left: 0;
+  background-position: left center;
+}
+body::after {
+  right: 0;
+  background-position: right center;
+}
 
 /* ========================================
    TOP BANNER —— slim brand band
@@ -190,7 +302,7 @@ a:hover { color: var(--bronze-deep); text-decoration: none; }
 .banner {
   background-color: var(--banner-bg);
   background-image:
-    linear-gradient(rgba(18, 14, 12, 0.58), rgba(18, 14, 12, 0.78)),
+    linear-gradient(rgba(16, 16, 16, 0.58), rgba(16, 16, 16, 0.78)),
     url('assets/banner-bg.webp');
   background-size: cover;
   background-position: center;
@@ -203,16 +315,24 @@ a:hover { color: var(--bronze-deep); text-decoration: none; }
   padding: 26px 30px 28px 30px;
   text-align: center;
 }
+/* ⚠⚠ 2026-07-31：字型宣告已併回元件本身。
+   舊版在檔尾另有一段 FONT OVERRIDES 重複覆寫字級與顏色，
+   使這裡的宣告與註解都成了謊言 —— 已解散。
+   【規則】一個元素的字型、字級、顏色只寫在一處。 */
 .banner-brand .brand-name {
-  font-size: 24px;
-  font-weight: bold;
-  letter-spacing: 0.5px;
+  font-family: var(--font-brand);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: none;
   color: var(--banner-text);
-  line-height: 1.1;
+  line-height: 1.15;
 }
 .banner-brand .brand-tagline {
+  font-family: var(--font-body);
   font-size: 13px;
   font-style: italic;
+  letter-spacing: 0.02em;
   color: var(--banner-muted);
   margin-top: 6px;
 }
@@ -272,9 +392,9 @@ a:hover { color: var(--bronze-deep); text-decoration: none; }
   left: 0;
   right: 0;
   z-index: 200;
-  background-color: #0d0b0a;
+  background-color: #101010;
   background-image:
-    linear-gradient(rgba(10, 8, 7, 0.74), rgba(10, 8, 7, 0.74)),
+    linear-gradient(rgba(12, 12, 12, 0.74), rgba(12, 12, 12, 0.74)),
     url('assets/bg.webp');
   background-size: cover;
   background-position: center;
@@ -350,6 +470,12 @@ body { padding-top: 54px; }
 /* 錨點跳轉時的上方預留。
    ⚠ 須大於導覽列高度（54px）。 */
 section[id] { scroll-margin-top: 74px; }
+/* ⚠⚠ 2026-07-31：#top 是 <header> 不是 <section>，
+   不在上一條規則的選取器裡，所以沒有 scroll-margin。
+   而 body 有 padding-top: 54px，於是點 logo 跳到 #top
+   只捲到 54px 而不是頁首 —— 看起來像沒反應。
+   → 給它 60px 的 scroll-margin，落點回到 0。 */
+#top { scroll-margin-top: 60px; }
 html { scroll-behavior: smooth; }
 
 /* ========================================
@@ -382,21 +508,33 @@ section > ul,
 
 section { margin-top: 60px; }
 section:first-child { margin-top: 0; }
+/* ⚠ 字型、字級、顏色全部寫在這裡，不另設覆寫段。 */
 section h2 {
-  font-size: 22px;
-  font-weight: bold;
+  font-family: var(--font-brand);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0;
   margin: 0 auto 22px auto;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
   color: var(--text);
 }
 
+/* ⚠⚠ 2026-07-31：h1 與 h2 的顏色是【近黑】，不是 bronze。
+   舊版這裡寫 bronze-deep、檔尾又覆寫成 --text，
+   實際渲染是後者 —— 現已合併。
+   【理由】全頁全棕色單調，且暖褐帶古典聯想，
+     與主題錯位。bronze 只留給小 accent 與 CTA。
+   ⚠ h3（.doc-card / .grid-item）保留 bronze-deep，
+     否則全頁沒有色彩層次。 */
 .hero h1 {
-  font-size: 36px;
-  font-weight: bold;
-  line-height: 1.25;
+  font-family: var(--font-brand);
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.2;
   margin: 0 auto 24px auto;
-  color: var(--bronze-deep);
+  color: var(--text);
 }
 /* ⚠ 2026-07-31：hero 的段落也要置中對齊，
    否則 h1 與內文的左緣對不上。
@@ -439,18 +577,27 @@ section h2 {
   border-radius: 4px;
   padding: 22px 26px;
   margin-bottom: 20px;
-  background: #fff;
+  background: var(--card-bg);
 }
+/* ⚠ 小標籤：字型、字級、顏色全寫在這裡。
+   ⚠⚠ 顏色用 --bronze-deep 而非 --bronze：
+     #B87355 在白底上對比約 3.7:1，未過 WCAG AA 的 4.5:1，
+     而本元素是 12px 粗體，小字級更需要對比。
+     #8a4f3a 約 6.2:1，過關。 */
 .doc-label {
+  font-family: var(--font-accent);
   font-size: 12px;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: var(--bronze);
+  color: var(--bronze-deep);
   margin-bottom: 6px;
-  font-weight: bold;
 }
 .doc-card h3 {
+  font-family: var(--font-brand);
   font-size: 19px;
+  font-weight: 600;
+  letter-spacing: 0;
   margin: 0 0 4px 0;
   line-height: 1.3;
   color: var(--bronze-deep);
@@ -474,17 +621,19 @@ section h2 {
 .btn {
   display: inline-block;
   background: var(--bronze);
-  color: #fff !important;
+  color: var(--btn-text) !important;
   text-decoration: none !important;
   padding: 11px 24px;
   border-radius: 3px;
-  font-size: 15px;
-  font-family: Georgia, serif;
-  letter-spacing: 0.3px;
+  font-family: var(--font-accent);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
   transition: background 0.15s ease;
   border: none;
 }
-.btn:hover { background: var(--bronze-deep); }
+.btn:hover { background: var(--btn-hover); }
 
 /* ----- Three application domains ----- */
 .grid {
@@ -499,10 +648,13 @@ section h2 {
   border: 1px solid var(--border);
   border-radius: 4px;
   padding: 18px 20px;
-  background: #fff;
+  background: var(--card-bg);
 }
 .grid-item h3 {
+  font-family: var(--font-brand);
   font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0;
   margin: 0 0 10px 0;
   color: var(--bronze-deep);
 }
@@ -528,25 +680,221 @@ section h2 {
      → 不需要改 HTML 結構。
    ⚠ 若日後加了水平捲動的元素，clip-path 可能要重評。 */
 #limits {
-  background: #faf7f5;
+  background: var(--accent-band);
   padding: 46px 0 48px 0;
-  box-shadow: 0 0 0 100vmax #faf7f5;
+  box-shadow: 0 0 0 100vmax var(--accent-band);
   clip-path: inset(0 -100vmax);
+}
+
+/* ========================================
+   SITE PLAN —— 圖面區
+   ======================================== */
+/* ⚠⚠ 2026-07-31 新增（骨架，圖尚未就位）。
+
+   【為何放在 hero 之後】hero 講完「從圖面讀出答案」，
+     緊接著就給一張圖面。全站唯一的視覺焦點。
+
+   【白底不去背】技術圖面的白底本身是對的 ——
+     它讀起來就是一張圖紙。
+     ⚠⚠ 更要緊的理由：這張圖必須與【交付物裡的那張一致】。
+       為了暗色模式重新配色會產生同一張圖的兩個版本，
+       而圖例的顏色是【有語意的】（座位／避難節點／連結）。
+     → 兩種模式下都是白底圖紙，只改外框與陰影。
+
+   ⚠ 圖滿版寬（1080），而說明文字維持 720 ——
+     與全站的兩種寬度一致。 */
+.plan-figure {
+  margin: 34px 0 0 0;
+  padding: 0;
+}
+/* ⚠⚠ 2026-07-31：圖紙加【浮水印】與最低限度的複製阻力。
+
+   【防護的極限】這些只擋隨手右鍵存檔與截圖裁切。
+     會去解包的人照樣拿得到 SVG —— 那是既定事實，
+     不值得為它犧牲可用性。
+   【真正有用的是浮水印】它在圖上，截圖會一起帶走。
+
+   ⚠ ::after 而非插在 HTML 裡：浮水印是呈現層的事，
+     不應該進文件結構，也不應該被螢幕閱讀器念出來。
+   ⚠ pointer-events: none 加在圖上 —— 右鍵選單拿不到它；
+     同時也避免浮水印擋到選取。
+
+   ⚠⚠ 浮水印用 logo.png。若它的背景不是透明的，
+     在白底圖紙上會出現一塊方形 ——
+     那就換成 favicon-512.png（圓外透明）。 */
+.plan-sheet {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 18px;
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.10);
+}
+.plan-sheet::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/logo.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 34%;
+  opacity: 0.07;
+  pointer-events: none;
+}
+.plan-sheet img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+/* ⚠ 佔位階段已結束（2026-07-31）：site_plan.svg 已就位。
+   .plan-placeholder 的規則已移除。 */
+.plan-figure figcaption {
+  max-width: var(--text-width);
+  margin: 16px auto 0 auto;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* 三個編號要點 —— 告訴讀者你在圖上做了什麼。 */
+.plan-points {
+  list-style: none;
+  padding: 0;
+  margin: 30px 0 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+@media (min-width: 820px) {
+  .plan-points { grid-template-columns: repeat(3, 1fr); gap: 26px; }
+}
+.plan-points li {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.plan-points .num {
+  display: block;
+  font-family: var(--font-accent);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1.6px;
+  color: var(--bronze-deep);
+  margin-bottom: 6px;
+}
+
+/* ========================================
+   CHIP —— 小型深色按鈕
+   ======================================== */
+/* ⚠⚠ 2026-07-31 新增。
+   用於：右下角工具座的切換鈕、頁尾的條款與隱私。
+   【一致性】這些都是【功能入口】而非內文連結，
+     所以長相一樣、不隨深淺色改變。
+   ⚠ 舊版工具座的樣式寫在 inline，現已搬進這裡 ——
+     因為現在不只一個按鈕了。 */
+.chip {
+  display: inline-block;
+  padding: 8px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--font-accent);
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: var(--chip-bg);
+  color: var(--chip-text) !important;
+  border: 1px solid var(--chip-border);
+  text-decoration: none !important;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.chip:hover,
+.chip:focus-visible {
+  background: var(--chip-bg-hover);
+  border-color: var(--bronze);
+  color: var(--chip-text) !important;
+}
+
+/* 工具座（右下角）。日後加客服等按鈕就放進來。 */
+.pt-dock {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+/* 頁尾的兩顆 chip，置中並排 —— 左右對稱。 */
+.footer-chips {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0 6px 0;
+  flex-wrap: wrap;
 }
 
 /* ========================================
    FOOTER
    ======================================== */
+/* ⚠⚠ 2026-07-31：改為【不透明色塊】，並加底部留白。
+
+   【問題一】拉到底時頁尾完全貼地，沒有呼吸空間。
+     → padding-bottom 56px。
+
+   【問題二】頁尾透明，兩側的斜線會穿過去 ——
+     頁面沒有「結束了」的訊號。
+     → 給不透明底色，而且因為 <footer> 在 <main> 之外、
+       沒有 max-width，色塊自然滿版 —— 視覺上是一道地基。
+
+   ⚠ .footer-inner 才給 max-width，否則文字會拉到螢幕兩邊。
+   ⚠ 右下角的工具座按鈕會浮在頁尾上 —— 那是正常的，
+     它是 fixed。若遮到文字，加 padding-bottom 即可。 */
 footer {
-  margin-top: 70px;
-  padding-top: 28px;
+  margin-top: 90px;
+  padding: 36px 30px 56px 30px;
   border-top: 1px solid var(--border);
+  background: var(--footer-bg);
 }
 /* ⚠ 2026-07-31：頁尾置中，與橫幅、hero 同一個軸。 */
 .footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
   font-size: 14px;
   color: var(--text-muted);
   text-align: center;
+}
+
+/* ⚠⚠ 2026-07-31：公司法定名稱用【品牌字體】。
+
+   【問題】<strong> 預設是 Georgia 粗體，
+     而橫幅的品牌名是 Cormorant ——
+     同一個公司名在同一頁上兩種字體。
+     頁尾變成色塊之後就更明顯。
+
+   【依據】LaTeX 樹的 \PT 巨集是用 \brandfont
+     （Cormorant Garamond）渲染的。
+     【公司法定名稱永遠是品牌字體】——
+     網站與文件要一致。
+
+   ⚠ 需要 font-feature-settings，否則 Th 連字不會出現；
+     而 Th 連字是品牌識別的一部分。 */
+.footer-inner strong {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  font-feature-settings: "liga" 1, "dlig" 1, "kern" 1;
 }
 .footer-line {
   margin: 4px 0;
@@ -555,7 +903,7 @@ footer {
 .footer-copyright {
   margin-top: 22px;
   font-size: 12px;
-  color: #888;
+  color: var(--footer-copy);
   text-align: center;
 }
 
@@ -596,124 +944,36 @@ footer {
   }
 
   main { padding: 40px 22px 60px 22px; }
-  .hero h1 { font-size: 28px; }
+  /* ⚠⚠ 2026-07-31：手機字級已合併至此。
+     舊版這裡與檔尾各有一組（hero h1 寫 28px 與 30px，
+     section h2 寫 20px 與 22px），實際生效的是檔尾那組。
+     → 取實際生效的值，別處不再重複。 */
+  .banner-brand .brand-name { font-size: 22px; }
+  .hero h1 { font-size: 30px; }
+  section h2 { font-size: 22px; }
   .hero .lede { font-size: 17px; }
-  section h2 { font-size: 20px; }
   .doc-card { padding: 18px 20px; }
 }
 
 /* ========================================
-   FONT OVERRIDES — Cormorant Garamond for brand & headings
-                    Montserrat for accent labels & buttons
+   TYPOGRAPHY FEATURES
    ======================================== */
+/* ⚠⚠ 2026-07-31：原本的 FONT OVERRIDES 整段已解散。
 
-/* Brand name: Pascal case (PneumaTheorem), no uppercase transform */
-/* ⚠⚠ 2026-07-31：字重 600→700，字距加寬，字級 30→26px。
-   【字重】Cormorant 是對比極高的 display serif，細筆畫本來就纖，
-     白字在深色底上還會有視覺變細（optical thinning），
-     600 在實際渲染時偏虛。
-   【字級】降到 26px，讓 hero 的 h1（40px）成為首屏唯一的重音。 */
-.banner-brand .brand-name,
-.brand-name {
-  font-family: var(--font-brand);
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: none;
-  font-size: 26px;
-  line-height: 1.15;
-}
+   【為何】那一段本來只打算放 Google Fonts 相關的
+     font-family 覆寫，但後來連字級與顏色也寫進去，
+     於是上方各元件的宣告與註解全部失準 ——
+     改了上面沒反應，而原因在一百行之外。
+   【現行規則】一個元素的字型、字級、顏色只寫在一處：
+     它自己的區塊裡。
+   ⚠ 本段【只】處理 OpenType 特性，不得再放其他宣告。
 
-/* ⚠ 2026-07-31：原有 .brand-name .cap 樣式已移除 ——
-   HTML 從未出現對應的 <span class="cap">，那是死碼。 */
-
-/* Tagline below brand name */
-.banner-brand .brand-tagline {
-  font-family: var(--font-body);
-  font-style: italic;
-  font-size: 13px;
-  letter-spacing: 0.02em;
-}
-
-/* Main hero title + section headings: elegant serif */
-/* ⚠⚠ 2026-07-31：h1 與 h2 由 --bronze-deep 改為近黑。
-
-   【理由】舊版 h1、h2、h3、按鈕、連結全部是棕色，
-     色調單調，而且暖褐帶著古典、懷舊的聯想，
-     跟「壓迫致死風險量化」的主題有錯位。
-   【改後】標題近黑、bronze 只留給小 accent 與 CTA。
-     標題變黑之後，按鈕與小標籤的 bronze 反而更醒目。
-   ⚠ h3（.doc-card h3 / .grid-item h3）【保留 bronze-deep】，
-     否則全頁完全沒有色彩層次。 */
-.hero h1 {
-  font-family: var(--font-brand);
-  font-weight: 600;
-  letter-spacing: 0;
-  font-size: 40px;
-  line-height: 1.2;
-  color: var(--text);
-}
-
-section h2 {
-  font-family: var(--font-brand);
-  font-weight: 600;
-  letter-spacing: 0;
-  font-size: 26px;
-  color: var(--text);
-}
-
-.doc-card h3,
-.grid-item h3 {
-  font-family: var(--font-brand);
-  font-weight: 600;
-  letter-spacing: 0;
-}
-
-/* Small accent labels — keep modern sans-serif for contrast */
-/* ⚠⚠ 2026-07-31：顏色由 --bronze 改為 --bronze-deep。
-   【無障礙】#B87355 在白底上的對比約 3.7:1，
-     未過 WCAG AA 的 4.5:1；而本元素是 12px 粗體，
-     小字級更需要對比。
-     #8a4f3a 約 6.2:1，過關。
-   ⚠ 連結（a）維持 --bronze：它有底線作為第二種識別，
-     不單靠顏色。 */
-.doc-label {
-  font-family: var(--font-accent);
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--bronze-deep);
-}
-
-/* Buttons — modern sans-serif for clear CTA */
-.btn {
-  font-family: var(--font-accent);
-  font-weight: 600;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  font-size: 13px;
-}
-
-/* Mobile adjustments for new font sizes */
-@media (max-width: 700px) {
-  .banner-brand .brand-name,
-  .brand-name {
-    font-size: 22px;
-  }
-  .hero h1 {
-    font-size: 30px;
-  }
-  section h2 {
-    font-size: 22px;
-  }
-}
-
-/* Enable advanced typography: ligatures, kerning */
-/* ⚠⚠ dlig 【必須保留】（Kevin 2026-07-31）。
-   Cormorant 的 Th 連字是品牌識別的一部分，
-   不是渲染錯誤。
-   ⚠ 2026-07-31：text-rendering: optimizeLegibility 已移除 ——
+   ⚠⚠ dlig 【必須保留】（Kevin 2026-07-31）。
+     Cormorant 的 Th 連字是品牌識別的一部分，
+     不是渲染錯誤。
+   ⚠ text-rendering: optimizeLegibility 已移除 ——
      部分瀏覽器有已知的渲染與效能問題，
-     而 feature settings 已經明確宣告了，那一行是冗餘的。 */
+     而 feature settings 已明確宣告，那一行是冗餘的。 */
 .hero h1,
 section h2,
 .doc-card h3,

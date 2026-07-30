@@ -49,7 +49,7 @@
          數字一變，瀏覽器就當成新網址重拿。
        ⚠ index.html 與 privacy.html 的版號要一致，
          否則兩頁會拿到不同版本的 CSS。 -->
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=22">
 </head>
 <body>
 
@@ -175,6 +175,96 @@
     <p>
       It is how many directions of travel the region admits. A run bounded on both flanks supplies an alignment that an open region divides among several directions, and the difference is large enough to carry a crowd across the threshold at which load begins to accumulate &mdash; with no one exerting themselves any harder. That property is set by the built form and by nothing else.
     </p>
+  </section>
+
+  <!-- ==========================================================
+       圖面區（骨架）—— 2026-07-31
+       ==========================================================
+       ⚠⚠ 圖已就位（2026-07-31）：assets/site_plan.svg（79.6 KB）。
+         .plan-placeholder 已從 HTML 與 CSS 移除。
+
+       ⚠ alt 已實寫 —— 螢幕閱讀器與關掉圖片的人靠它。
+         它描述【圖上有什麼】，不做判定。
+
+       ⚠⚠ 【圖上的重疊已修】site_plan.tex 裡
+         South Terrace 的標註已由 y=-6 下移至 y=-12，
+         不再壓到「Pitch access ×4」那一行 ——
+         而那一行正是下方 03 要點引用的。
+
+       ⚠ 圖上的場地是【虛構】的（T01 案例，英國標準
+         場館尺寸）—— figcaption 必須寫明，
+         否則有人會去找這個場館。
+
+       ⚠ 尚未加進導覽列。要加的話，nav 與本區的 id
+         【兩處要一起改】。
+       ========================================================== -->
+  <section class="overview" id="plan">
+    <h2>What a complete assessment reads</h2>
+
+    <!-- ⚠⚠ 2026-07-31：商業定位。
+         這兩段要說的是【demo 是開放場館，
+         而這裡可以處理更複雜的】。
+         ⚠ 複雜度不是尺寸問題，是【元件種類數】問題 ——
+           那才是為什麼需要服務而不是範本。 -->
+    <p>
+      The demonstration is an open venue: one kind of surface, no seats, and
+      nothing that interrupts a run. Most venues are not like that.
+    </p>
+    <p>
+      This is a stadium in concert configuration &mdash; the same geometry
+      that holds a football fixture, rearranged so that a standing audience
+      occupies the pitch. It carries six kinds of element and they do not
+      behave alike. Seating partitions. An egress lane partitions only while
+      it is kept clear. A refuge node is checked against the population
+      routed to it and never added to another. Circulation moves people and
+      holds none. A link is neither. And four accesses appear whose form has
+      not been fixed.
+    </p>
+    <p>
+      Complexity here is not a matter of size. It is how many kinds of
+      element the geometry contains and how they interact, and that is what
+      separates a venue that needs an assessment from one that can be read
+      off a sample.
+    </p>
+
+    <figure class="plan-figure">
+      <div class="plan-sheet">
+        <img src="assets/site_plan.svg"
+             alt="Site plan of a fictional stadium in concert configuration. Three standing bands separated by egress lanes face a stage; seated stands enclose them on the east, west and south; a north terrace is held out of sale for production. Two refuge nodes, four concourses, a river-road footway link, and four pitch accesses whose form is recorded as undetermined.">
+      </div>
+      <!-- ⚠⚠ 圖說必須寫明【虛構】，
+           否則有人會去找這個場館。
+           數字取自 T01 的 venue_data.tex。 -->
+      <figcaption>
+        Meadowfield Stadium &mdash; a fictional venue, dimensioned to UK
+        stadium practice, shown in concert configuration: 15,041 seats sold,
+        a standing audience of 9,112 on the pitch, and a north terrace held
+        out of sale for production. The drawing defines the scope of an
+        assessment: what is drawn is what is analysed.
+      </figcaption>
+    </figure>
+
+    <ol class="plan-points">
+      <li>
+        <span class="num">01</span>
+        Seating is a partition. Each seat interrupts a connected run, which
+        is why a seated block and an open standing band of the same area do
+        not carry the same guarantee.
+      </li>
+      <li>
+        <span class="num">02</span>
+        Refuge is checked per node and never summed. Two nodes of a given
+        capacity are not one node of twice that capacity, and the drawing
+        records them separately for that reason.
+      </li>
+      <li>
+        <span class="num">03</span>
+        What is undetermined is recorded as undetermined. Four pitch accesses
+        appear on this drawing without a stated form, because the form has
+        not been fixed &mdash; and an assessment says so rather than assuming
+        one.
+      </li>
+    </ol>
   </section>
 
   <section class="overview" id="framework">
@@ -303,7 +393,7 @@
       <h3>Duisburg, 24 July 2010</h3>
       <p class="doc-sub">The access route as a validation case</p>
       <p class="doc-meta">A method worth trusting should give the right answer where the answer is already known. Reported as a lower bound rather than a fitted value, and it assigns responsibility to no person or body. Freely redistributable in full.</p>
-      <p><em>Publication August 2026.</em></p>
+      <p class="doc-pending"><em>Publication August 2026.</em></p>
     </div>
 
     <div class="doc-card">
@@ -426,36 +516,82 @@
     </p>
   </section>
 
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-line">
-        <strong>PneumaTheorem, Inc.</strong> &middot; Delaware C-Corporation, incorporated 2026
-      </div>
-      <!-- ⚠⚠ 2026-07-31：聯絡資訊自橫幅搬到這裡。
-           橫幅是講主張的地方，不是放名片的地方。
-           ⚠ Engagement 段原本寫「the email channel above」，
-             搬家後那句話會指錯方向 —— 已改成直接給位址。 -->
-      <div class="footer-line">
-        Kevin Tao, Founder &amp; CEO &middot;
-        <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
-      </div>
-      <div class="footer-line">
-        ORCID: <a href="https://orcid.org/0009-0005-8136-3886" target="_blank" rel="noopener">0009-0005-8136-3886</a>
-      </div>
-      <!-- ⚠ 2026-07-30：新增條款與隱私連結。
-           隱私政策必須從首頁找得到 ——
-           Stripe 要的是一個 URL，讀者要的是一個連結。 -->
-      <div class="footer-line">
-        <a href="assets/terms.pdf" target="_blank" rel="noopener">Terms of Sale</a> &middot;
-        <a href="privacy.html">Privacy</a>
-      </div>
-      <div class="footer-copyright">
-        &copy; 2026 PneumaTheorem, Inc. All rights reserved.
-      </div>
-    </div>
-  </footer>
-
 </main>
+
+<!-- ⚠⚠ 2026-07-31：<footer> 移出 <main>。
+     舊版 </main> 出現在 </footer> 之後，
+     使頁尾成為主內容的子元素 ——
+     語意上它應該是 <main> 的手足。 -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-line">
+      <strong>PneumaTheorem, Inc.</strong> &middot; Delaware C-Corporation, incorporated 2026
+    </div>
+    <!-- ⚠⚠ 2026-07-31：聯絡資訊自橫幅搬到這裡。
+         橫幅是講主張的地方，不是放名片的地方。
+         ⚠ Engagement 段原本寫「the email channel above」，
+           搬家後那句話會指錯方向 —— 已改成直接給位址。 -->
+    <div class="footer-line">
+      Kevin Tao, Founder &amp; CEO &middot;
+      <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
+    </div>
+    <div class="footer-line">
+      ORCID: <a href="https://orcid.org/0009-0005-8136-3886" target="_blank" rel="noopener">0009-0005-8136-3886</a>
+    </div>
+    <!-- ⚠⚠ 2026-07-31：條款與隱私改為 chip，與右下角
+         工具座的切換鈕同一個樣式 ——
+         它們都是【功能入口】而不是內文連結。
+         隱私政策必須從首頁找得到 ——
+         Stripe 要的是一個 URL，讀者要的是一個按鈕。 -->
+    <div class="footer-chips">
+      <a class="chip" href="assets/terms.pdf" target="_blank" rel="noopener">Terms of Sale</a>
+      <a class="chip" href="privacy.html">Privacy</a>
+    </div>
+    <div class="footer-copyright">
+      &copy; 2026 PneumaTheorem, Inc. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<!-- ==========================================================
+     工具座（右下角）
+     ==========================================================
+     【保留】Kevin 2026-07-31：不是 debug，是正式元件。
+       日後可能擴充為彈出清單（客服、語言等）。
+
+     【現行功能】深淺色切換：
+       AUTO（跟隨系統）→ LIGHT → DARK → AUTO
+
+     【實作】只改 documentElement 的 color-scheme，
+       CSS 的 light-dark() 會自己跟著變 ——
+       不需要任何額外的暗色變數。
+
+     ⚠⚠ 【不寫 localStorage】—— 重整回到 AUTO。
+       這是刻意的：privacy.html 寫著本站不儲存任何東西、
+       不設 cookie。加了儲存就要回去改那一段。
+       → 日後若真的要記住選擇，【兩者必須一起改】。
+
+     ⚠ 日後加客服或其他按鈕時，直接放進 .pt-dock 容器，
+       套上 class="chip" 即可 —— 樣式已在 style.css。
+     ⚠ 若日後加入外部客服服務（第三方腳本），
+       privacy.html 的「不作任何第三方請求」必須先改。
+     ========================================================== -->
+<div class="pt-dock">
+  <button id="pt-theme" type="button" class="chip" aria-label="Toggle colour scheme">AUTO</button>
+</div>
+<script>
+(function () {
+  var modes = ['light dark', 'light', 'dark'];
+  var names = ['AUTO', 'LIGHT', 'DARK'];
+  var i = 0;
+  var btn = document.getElementById('pt-theme');
+  btn.addEventListener('click', function () {
+    i = (i + 1) % modes.length;
+    document.documentElement.style.colorScheme = modes[i];
+    btn.textContent = names[i];
+  });
+})();
+</script>
 
 </body>
 </html>
