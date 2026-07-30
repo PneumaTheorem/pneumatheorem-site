@@ -164,6 +164,20 @@
   --chip-bg-hover: light-dark(#2c2c2c, #363636);
   --chip-text:     #ffffff;
   --chip-border:   rgba(184, 115, 85, 0.55);
+
+  /* ⚠⚠ 2026-07-31：兩側底圖的【遮罩】。
+
+     【為何不用 opacity】數學上兩者等價
+       （opacity 0.3 疊在底色 B 上 = B 色 70% 遮罩疊在圖上），
+       但 opacity 只能往【--bg 那個方向】淡，
+       而遮罩的顏色可以與底色不同。
+     【為何要這個自由度】bg-2.webp 同時有很亮的桃色
+       與接近純黑的區域 —— 深淺兩種模式下
+       該壓的方向不一樣，必須分開給值。
+
+     【調整】alpha 越高，圖越淡。
+       0.72 約等於圖顯示 28%。0.76 約 24%。 */
+  --side-veil:     light-dark(rgba(255, 255, 255, 0.72), rgba(19, 19, 19, 0.76));
   /* ⚠⚠ 2026-07-31：三種寬度，而非一種。
 
      【問題】舊版從 hero 到 Engagement 每一區塊都是同一個
@@ -244,11 +258,17 @@ a:hover { color: var(--bronze-deep); text-decoration: none; }
    【自動隱藏】視窗窄於 1080 時，calc 結果為負，
      瀏覽器夾到 0 —— 不需要額外的 media query。
 
-   【透明度】0.30（Kevin）—— 有底圖質感但不過分。
-     ⚠ 若暗色模式下太重，改成 light-dark(0.30, 0.22)。
+   【透明度】⚠⚠ 2026-07-31：由 opacity 改為【遮罩】。
+     圖以完整不透明度畫出，上面疊一層半透明色塊。
+     數學上與 opacity 等價，但遮罩顏色可與底色不同，
+     且深淺兩種模式可各自給值 —— 見 --side-veil。
+     ⚠ 本圖同時有極亮與極暗的區域，
+       兩種模式該壓的方向不同，所以需要這個自由度。
 
    ⚠ 100vw 而非 100% —— 後者指的是元素自己的寬度
      （兩側面板很窄），那會把整張圖擠進窄條裡。
+   ⚠ 遮罩層的 background-size 是 100% 100%（填滿元素），
+     圖層才是 100vw —— 兩層的值不同，【順序不可對調】。
 
    ⚠ z-index: -1 與 pointer-events: none 都必要。
      ⚠⚠ 且 body 【不得有不透明背景】（見上方 html 的註解）。 */
@@ -261,18 +281,19 @@ body::after {
   width: calc(50% - 540px);
   z-index: -1;
   pointer-events: none;
-  background-image: url('assets/bg-2.webp');
-  background-repeat: no-repeat;
-  background-size: 100vw 100%;
-  opacity: 0.30;
+  background-image:
+    linear-gradient(var(--side-veil), var(--side-veil)),
+    url('assets/bg-2.webp');
+  background-repeat: no-repeat, no-repeat;
+  background-size: 100% 100%, 100vw 100%;
 }
 body::before {
   left: 0;
-  background-position: left center;
+  background-position: left top, left center;
 }
 body::after {
   right: 0;
-  background-position: right center;
+  background-position: right top, right center;
 }
 
 /* ========================================
