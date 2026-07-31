@@ -13,22 +13,31 @@
 #   對首屏有感。
 #
 # ============================================================
-# ⚠⚠ 【順序很重要】
+# ⚠⚠ 【規則不得重疊】—— 2026-07-31 實測結論
 # ============================================================
-#   Cloudflare Pages 在多條規則同時命中時，
-#   同名 header 由【後面的規則覆寫前面的】。
-#   而 /assets/fonts/xxx.woff2 會同時命中
-#   /assets/* 與 /assets/fonts/*。
+#   第一版寫成：
+#       /assets/*        max-age=86400
+#       /assets/fonts/*  max-age=31536000
+#   而 /assets/fonts/x.woff2 【同時命中兩條】。
 #
-#   → 所以【範圍大的寫前面，範圍小的寫後面】。
-#     若把 /assets/* 放在 /assets/fonts/* 之後，
-#     字型會被降回一天，這條規則等於白寫。
+#   實測結果（curl）：
+#       cache-control: public, max-age=86400, public, max-age=31536000
 #
-#   ⚠ 這個優先順序【必須實測確認】：
-#       curl -sI https://pneumatheorem.org/assets/fonts/Montserrat-SemiBold.woff2 \
-#         | grep -i cache-control
-#     看到 max-age=31536000 才算成立；
-#     若看到 86400，就是順序假設錯了，把兩條對調。
+#   → Cloudflare Pages 是【附加】不是【覆寫】。
+#     結果是一個畸形 header，同一個 header 裡兩組指令；
+#     瀏覽器通常取【第一個出現】的 max-age，
+#     所以字型拿到的是 86400，一年快取沒生效。
+#
+#   ⚠⚠ 【對調順序解決不了】—— 對調只會變成
+#     31536000 在前、86400 在後，一樣是兩組。
+#   → 唯一的解法是【讓規則彼此不重疊】。
+#
+#   【現行做法】字型用 /assets/fonts/*（已驗證會命中），
+#     其餘用【副檔名】指定。字型是 .woff2，
+#     不會被那四條副檔名規則命中，所以不重疊。
+#
+#   ⚠ 日後在 /assets/ 下新增別種副檔名時，
+#     【要記得補一條】，否則那個檔會落回 max-age=0。
 # ============================================================
 
 /style.css
@@ -36,11 +45,6 @@
 
 /*.html
   Cache-Control: no-cache
-
-# 圖片、PDF、logo、site_plan.svg —— 一天。
-# 改圖後隔天生效，或到 Cloudflare 手動 purge。
-/assets/*
-  Cache-Control: public, max-age=86400
 
 # ⚠⚠ 字型 —— 一年。
 #   前提是【檔案內容不會變】。
@@ -50,3 +54,21 @@
 #     兩個 HTML 的 preload 都要跟著改（三處）。
 /assets/fonts/*
   Cache-Control: public, max-age=31536000
+
+# 圖片與 PDF —— 一天。改檔後隔天生效，或手動 purge。
+# ⚠ 以副檔名指定而非 /assets/*，是為了不與上面的字型規則重疊。
+/assets/*.svg
+  Cache-Control: public, max-age=86400
+
+/assets/*.png
+  Cache-Control: public, max-age=86400
+
+/assets/*.webp
+  Cache-Control: public, max-age=86400
+
+/assets/*.pdf
+  Cache-Control: public, max-age=86400
+
+# 根目錄的 favicon 備份（爬蟲與預覽工具會直接抓這個）。
+/favicon.png
+  Cache-Control: public, max-age=86400
