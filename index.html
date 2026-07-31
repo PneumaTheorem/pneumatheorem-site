@@ -40,23 +40,62 @@
          它【不支援透明】，會自動被補上黑底。 -->
   <link rel="icon" type="image/png" href="/assets/favicon-512.png">
   <link rel="apple-touch-icon" href="/assets/favicon-512.png">
+
+  <!-- ⚠⚠ 2026-07-31：canonical。
+       任何查詢字串（?bug=1、?s=2 …）都回 200 且內容完整，
+       等於【無限多個可索引的網址】。
+       canonical 告訴搜尋引擎哪一個才是正本。 -->
+  <link rel="canonical" href="https://pneumatheorem.org/">
+  <!-- 行動瀏覽器的介面色。與 --banner-bg 同值。 -->
+  <meta name="theme-color" content="#161616">
+
+  <!-- ⚠⚠ 2026-07-31：首屏用到的兩個字重 preload。
+       font-display: swap 代表首次繪製是 Georgia、
+       之後跳成 Cormorant —— h1 與品牌名會明顯位移一次。
+       ⚠⚠ crossorigin 【即使同源也必須寫】——
+         字型是以 CORS 模式取得的，漏了會變成載兩次。
+       ⚠ 只 preload 這兩個 —— preload 過多反而拖慢首屏。
+         Cormorant SemiBold（600）：h1 / h2 / h3
+         Montserrat SemiBold（600）：小標籤與按鈕 -->
+  <link rel="preload" href="/assets/fonts/CormorantGaramond-SemiBold.woff2"
+        as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/Montserrat-SemiBold.woff2"
+        as="font" type="font/woff2" crossorigin>
   <!-- ⚠⚠ 2026-07-30：Google Fonts 連結已移除，字型改為自架。
        舊行會把訪客 IP 傳給第三方。見 style.css 檔頭。
        ⚠ assets/fonts/ 的 woff2 須先就位，否則退回 Georgia。 -->
-  <!-- ⚠⚠ 2026-07-31：加上 ?v= 版號（cache busting）。
+  <!-- ⚠⚠ 2026-07-31：?v= 版號【已移除】，不得加回。
 
-       【為何】瀏覽器與 CDN 會快取 style.css。
-         2026-07-30 實際發生過：HTML 已更新而 CSS 是舊的，
-         導致導覽列完全沒樣式（logo 撐滿畫面、連結是預設藍底線）。
-         而從 privacy.html 進來就正常 —— 因為那一次拿到的是新的。
+       【7/30 事故的真因】不是沒有版號，而是 Cloudflare 的
+         Browser Cache TTL 被覆寫成四小時（max-age=14400），
+         把 Pages 原本的 must-revalidate 架空了。
+         （當時的症狀：HTML 已更新而 CSS 是舊的，
+           導覽列完全沒樣式；從 privacy.html 進來卻正常。）
 
-       【用法】【改完 CSS 就把 v 加一】，兩個 HTML 一起改。
-         數字一變，瀏覽器就當成新網址重拿。
-       ⚠ index.html 與 privacy.html 的版號要一致，
-         否則兩頁會拿到不同版本的 CSS。 -->
-  <link rel="stylesheet" href="style.css?v=30">
+       【已修】Caching → Configuration → Browser Cache TTL
+         改為 Respect Existing Headers。
+         現在 style.css 送的是
+         max-age=0, must-revalidate + ETag ——
+         每次造訪都會問一句，沒變就回 304。
+
+       ⚠⚠ 若日後又出現「HTML 新、CSS 舊」，
+         【先驗 header，不要急著加版號】：
+           curl -sI https://pneumatheorem.org/style.css | grep -i cache-control
+         看到 max-age 大於 0 就是 Cloudflare 又被設了規則。
+
+       ⚠ 快取策略現在寫在 repo 根目錄的 _headers。 -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- ⚠⚠ 2026-07-31：跳過導覽的連結。
+     固定導覽列有 logo 加七個連結 ——
+     鍵盤使用者每次進站要按八次 Tab 才碰得到內容。
+     ⚠ 必須是 <body> 的【第一個可聚焦元素】，
+       否則它自己就失去意義。
+     ⚠ 目標 #main 的 id 寫在下方的 <main id="main"> 上，
+       【兩處要一起改】。 -->
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!--
   ============================================================
@@ -170,7 +209,8 @@
   </div>
 </header>
 
-<main>
+<!-- ⚠ id="main" 是 skip-link 的目標，【兩處要一起改】。 -->
+<main id="main">
 
   <section class="hero">
     <h1>The P-index Framework</h1>
@@ -188,15 +228,16 @@
   <!-- ==========================================================
        圖面區（骨架）—— 2026-07-31
        ==========================================================
-       ⚠⚠ 圖已就位（2026-07-31）：assets/site_plan.svg（79.6 KB）。
+       ⚠⚠ 圖已就位（2026-07-31）：assets/site_plan.svg。
          .plan-placeholder 已從 HTML 與 CSS 移除。
 
        ⚠ alt 已實寫 —— 螢幕閱讀器與關掉圖片的人靠它。
          它描述【圖上有什麼】，不做判定。
 
        ⚠⚠ 【圖上的重疊已修】site_plan.tex 裡
-         South Terrace 的標註已由 y=-6 下移至 y=-12，
-         不再壓到「Pitch access ×4」那一行 ——
+         South Terrace 的標註已下移至 y=-15，
+         且「Pitch access ×4」那一行加了 text width 換行、
+         下移至 y=-7，不再壓到入口方格 ——
          而那一行正是下方 03 要點引用的。
 
        ⚠ 圖上的場地是【虛構】的（T01 案例，Meadowfield
@@ -258,16 +299,21 @@
         out of sale for production. The drawing defines the scope of an
         assessment: what is drawn is what is analysed.
       </figcaption>
-      <!-- ⚠ 看大圖的出口。圖上的標註在 544px 寬度下
-           只有 7–8px 高，而 pointer-events: none 把右鍵與
-           點擊都關掉了 —— 沒這一行就沒有路。
+      <!-- ⚠ 看大圖的出口。圖上的標註在這個寬度下仍然偏小，
+           而 pointer-events: none 把右鍵與點擊都關掉了 ——
+           沒這一行就沒有路。
            ⚠ 不削弱複製阻力：SVG 網址本來就在 <img src> 裡。 -->
       <p class="plan-open">
         <a href="assets/site_plan.svg" target="_blank" rel="noopener">Open the drawing</a>
       </p>
     </figure>
 
-    <ol class="plan-points">
+    <!-- ⚠⚠ 2026-07-31：role="list" 是必要的。
+         Safari 的 VoiceOver 在清單被移除項目符號
+         （list-style: none）時會把 list 語意一起拿掉，
+         讀者聽不到「共三項」。
+         ⚠ 這是公認的解法，不是冗餘宣告。 -->
+    <ol class="plan-points" role="list">
       <li>
         <span class="num">01</span>
         Seating is a partition. Each seat interrupts a connected run, which
@@ -601,8 +647,7 @@
      ========================================================== -->
 <div class="pt-dock">
   <button id="pt-theme" type="button" class="chip"
-          title="Colour scheme: automatic, light, or dark"
-          aria-label="Toggle colour scheme">AUTO</button>
+          title="Colour scheme: automatic, light, or dark">AUTO</button>
 </div>
 <script>
 (function () {
@@ -610,10 +655,19 @@
   var names = ['AUTO', 'LIGHT', 'DARK'];
   var i = 0;
   var btn = document.getElementById('pt-theme');
+  // ⚠⚠ 2026-07-31：aria-label 必須【包含可見文字】。
+  //   舊版固定寫 Toggle colour scheme，會覆蓋可見的 AUTO/DARK：
+  //   （1）螢幕閱讀器使用者永遠不知道目前是哪一個
+  //   （2）語音控制說「click AUTO」也對不上（WCAG 2.5.3）
+  function sync() {
+    btn.textContent = names[i];
+    btn.setAttribute('aria-label', names[i] + ' colour scheme, activate to change');
+  }
+  sync();
   btn.addEventListener('click', function () {
     i = (i + 1) % modes.length;
     document.documentElement.style.colorScheme = modes[i];
-    btn.textContent = names[i];
+    sync();
   });
 })();
 </script>

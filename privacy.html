@@ -13,13 +13,29 @@
        ⚠ 路徑為根目錄絕對，sizes 已拿掉。 -->
   <link rel="icon" type="image/png" href="/assets/favicon-512.png">
   <link rel="apple-touch-icon" href="/assets/favicon-512.png">
+
+  <!-- ⚠ 2026-07-31：與 index.html 同步 —— canonical、
+       theme-color、字型 preload。見該檔註解。
+       ⚠⚠ canonical 指向【本頁】而非首頁。 -->
+  <link rel="canonical" href="https://pneumatheorem.org/privacy.html">
+  <meta name="theme-color" content="#161616">
+  <link rel="preload" href="/assets/fonts/CormorantGaramond-SemiBold.woff2"
+        as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/Montserrat-SemiBold.woff2"
+        as="font" type="font/woff2" crossorigin>
   <!-- ⚠⚠ 2026-07-30：Google Fonts 連結已移除，字型改為自架。
        見 style.css 檔頭。本頁的 cookie 段措辭須與此同步。 -->
-  <!-- ⚠⚠ 2026-07-31：版號須與 index.html 一致。
-       改完 CSS 兩頁一起加一，否則兩頁拿到不同版本。 -->
-  <link rel="stylesheet" href="style.css?v=30">
+  <!-- ⚠⚠ 2026-07-31：?v= 版號【已移除】，不得加回。
+       7/30 事故的真因是 Cloudflare 的 Browser Cache TTL
+       被覆寫，不是沒有版號。詳見 index.html 的註解。
+       ⚠ 兩頁不再需要同步版號 —— 這個手續消失了。 -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- ⚠ 2026-07-31：跳過導覽的連結，與 index.html 同步。
+     ⚠ 必須是 <body> 的【第一個可聚焦元素】。 -->
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!--
   ============================================================
@@ -91,7 +107,8 @@
   </div>
 </header>
 
-<main>
+<!-- ⚠ id="main" 是 skip-link 的目標，【兩處要一起改】。 -->
+<main id="main">
 
   <section class="hero">
     <h1>Privacy</h1>
@@ -291,8 +308,7 @@
      ⚠ 不寫 localStorage —— 理由見 index.html 的註解。 -->
 <div class="pt-dock">
   <button id="pt-theme" type="button" class="chip"
-          title="Colour scheme: automatic, light, or dark"
-          aria-label="Toggle colour scheme">AUTO</button>
+          title="Colour scheme: automatic, light, or dark">AUTO</button>
 </div>
 <script>
 (function () {
@@ -300,10 +316,17 @@
   var names = ['AUTO', 'LIGHT', 'DARK'];
   var i = 0;
   var btn = document.getElementById('pt-theme');
+  // ⚠⚠ aria-label 必須包含可見文字（WCAG 2.5.3）。
+  //   詳見 index.html 的註解。
+  function sync() {
+    btn.textContent = names[i];
+    btn.setAttribute('aria-label', names[i] + ' colour scheme, activate to change');
+  }
+  sync();
   btn.addEventListener('click', function () {
     i = (i + 1) % modes.length;
     document.documentElement.style.colorScheme = modes[i];
-    btn.textContent = names[i];
+    sync();
   });
 })();
 </script>

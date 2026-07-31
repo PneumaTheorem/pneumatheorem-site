@@ -109,21 +109,39 @@
 }
 
 :root {
-  /* ⚠⚠ 2026-07-31：暗色模式改用 light-dark()，單一來源。
+  /* ⚠⚠ 2026-07-31（修正）：【本區塊是淺色值，也是舊瀏覽器的退路】。
 
-     【為何】舊版把暗色值寫在 @media (prefers-color-scheme)
-       裡，而 debug 切換按鈕需要手動覆寫 ——
-       那就要再複製一份暗色變數。兩份一定會漂。
-     【現行】light-dark(淺, 深) —— 每個顏色只寫一行，
-       跟隨 color-scheme。切換只要改 color-scheme 就好。
-     ⚠ light-dark() 需要 color-scheme 宣告才生效（見下方）。
+     【問題】light-dark() 是 2024 年才進 Baseline
+       （Chrome 123 / Safari 17.5 / Firefox 120）。
+       在更舊的瀏覽器上，--btn-bg: light-dark(...)
+       這個宣告本身合法（自訂屬性接受任意 token），
+       壞的是使用端：background: var(--btn-bg) 展開成
+       background: light-dark(...)，對 background 是無效值，
+       整條宣告在 computed-value 階段失效。
+     【實際後果】--bg 失效 → 背景透明；--border 失效 →
+       border 簡寫整條失效，border-style 回到 none，
+       【卡片邊框整組消失】；最要命的是 .btn 底色變透明、
+       字色也失效而繼承深色 ——
+       【通往 Stripe 與 PDF 的按鈕會看起來像壞掉的連結】。
+       ⚠ iOS 16 的 Safari 就落在這個範圍，
+         企業裡的舊 iPad 不少。
+
+     ⚠⚠ 【寫兩行不管用】—— 自訂屬性在解析期一律合法，
+       所以後宣告的一定覆蓋前者，舊瀏覽器照樣拿到
+       light-dark()。正確的工具是 @supports（見下方）。
+
+     ⚠ 這違反了【一個顏色只寫一行】的原則，
+       但重複被關在一個 @supports 區塊裡、上下相鄰，
+       漂移風險遠低於之前踩過的
+       @media (prefers-color-scheme) 兩地分離。
+     ⚠⚠ 【改顏色時兩個區塊都要改】。
 
      【底色不帶彩度】（Kevin）底色純灰或純白；
        顏色由【字與線】承擔。 */
   color-scheme: light dark;
 
-  --bronze:        light-dark(#B87355, #c98a6a);
-  --bronze-deep:   light-dark(#8a4f3a, #d9a184);
+  --bronze:        #B87355;
+  --bronze-deep:   #8a4f3a;
 
   /* 深色帶（導覽列、橫幅）兩種模式共用 ——
      它們本來就是深的。 */
@@ -135,16 +153,16 @@
      R 最高、B 最低，幅度極小 ——
      大到看得出是棕色就過了。
      不夠橘紅改 #241814，太明顯改 #1e1816。 */
-  --text:          light-dark(#201714, #ece5e1);
-  --text-muted:    light-dark(#57504d, #a09a97);
+  --text:          #201714;
+  --text-muted:    #57504d;
   /* ⚠⚠ 2026-07-31（修正）：【只有最底層的底色不帶色】。
      前一版把所有底色都去彩度，過頭了 ——
      卡片與強調帶是【跳色】，帶一點暖調反而有層次。
      【規則】--bg 與 --footer-bg 純灰（它們是底）；
        --card-bg 與 --accent-band 可帶色。 */
-  --bg:            light-dark(#ffffff, #131313);
-  --footer-bg:     light-dark(#eaeaea, #0e0e0e);
-  --card-bg:       light-dark(#fdfcfc, #1c1a19);
+  --bg:            #ffffff;
+  --footer-bg:     #eaeaea;
+  --card-bg:       #fdfcfc;
   /* ⚠⚠ 2026-07-31（修正）：強調帶加深。
      舊值 #f7f6f5 與 --bg 的 #ffffff 只差約 3% ——
      在一般筆電、亮環境、或色偏偏冷的面板上
@@ -156,8 +174,8 @@
        邊框屬於元素本身的 1020px 盒子，
        而底色是靠 box-shadow 滿版出去的，
        兩者寬度對不上，會出現兩條懸在半空的短線。 */
-  --accent-band:   light-dark(#f2eeea, #1e1c1a);
-  --border:        light-dark(#e2e2e2, #333333);
+  --accent-band:   #f2eeea;
+  --border:        #e2e2e2;
 
   /* ⚠ 按鈕：暗色模式下底色提亮，白字對比會下降，
      故字色反過來用深色。 */
@@ -167,10 +185,10 @@
        需要 4.5:1。#8a4f3a 約 5.8:1，過關。
      ⚠ 深淺兩模式的 hover 方向相反：
        淺色時 hover 要更深，暗色時要更亮。 */
-  --btn-bg:        light-dark(#8a4f3a, #c98a6a);
-  --btn-text:      light-dark(#ffffff, #151515);
-  --btn-hover:     light-dark(#6f3e2d, #e0b295);
-  --footer-copy:   light-dark(#888888, #7c7c7c);
+  --btn-bg:        #8a4f3a;
+  --btn-text:      #ffffff;
+  --btn-hover:     #6f3e2d;
+  --footer-copy:   #888888;
   /* ⚠ 頁尾的不透明色塊。它是【底】，故不帶色，
      與 --bg 同一條規則。定義已移到上方一組。 */
 
@@ -178,8 +196,8 @@
      工具座的切換鈕與頁尾的條款／隱私共用同一個樣式。
      【兩種模式都是深底白字】—— 它是功能元件，
      不參與內文的深淺切換，讓它在兩種模式下都是同一個東西。 */
-  --chip-bg:       light-dark(#1c1c1c, #262626);
-  --chip-bg-hover: light-dark(#2c2c2c, #363636);
+  --chip-bg:       #1c1c1c;
+  --chip-bg-hover: #2c2c2c;
   --chip-text:     #ffffff;
   /* ⚠⚠ 2026-07-31：青銅色細線拉成變數。
      舊版同一組 rgba(184,115,85,0.55) 硬寫在三處：
@@ -189,7 +207,7 @@
      不會跟著 light-dark() 走 —— 暗色模式下
      --bronze 已變成 #c98a6a，這三條線卻還是舊的。
      → 依【一個顏色只寫一行】的規則，拉出來。 */
-  --bronze-rule:   light-dark(rgba(184, 115, 85, 0.55), rgba(201, 138, 106, 0.50));
+  --bronze-rule:   rgba(184, 115, 85, 0.55);
   --chip-border:   var(--bronze-rule);
   /* ⚠ 2026-07-31：--side-veil 已刪除 —— 兩側底圖放棄。 */
 
@@ -197,7 +215,7 @@
      舊版硬寫 rgba(0,0,0,0.10) —— 在暗色底上
      黑色陰影等於不存在，那一行是純粹的空轉。
      → 暗色模式改為淡亮邊，讓白底圖紙浮起來。 */
-  --plan-ring:     light-dark(rgba(0, 0, 0, 0.10), rgba(255, 255, 255, 0.14));
+  --plan-ring:     rgba(0, 0, 0, 0.10);
   /* ⚠⚠ 2026-07-31：三種寬度，而非一種。
 
      【問題】舊版從 hero 到 Engagement 每一區塊都是同一個
@@ -220,9 +238,51 @@
   --font-accent: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
 }
 
+/* ========================================
+   深淺色 —— 只在支援 light-dark() 的瀏覽器上生效
+   ======================================== */
+/* ⚠⚠ 2026-07-31：本區塊是【暗色值的唯一位置】。
+
+   上方 :root 的是淺色值（也是舊瀏覽器的退路），
+   這裡完整覆寫成 light-dark()。
+
+   【為何用 @supports 而不是寫兩行】
+     自訂屬性在解析期一律合法，
+     兩行都會被接受而後者永遠贏 ——
+     舊瀏覽器照樣拿到 light-dark()。
+     @supports 是唯一能真正分支的工具。
+
+   ⚠⚠ 【改任何顏色時，上下兩個區塊都要改】。
+     它們上下相鄰是刻意的 ——
+     之前踩過 @media (prefers-color-scheme) 兩地分離的坑。
+
+   ⚠ --banner-* 與 --chip-text 不在這裡 ——
+     它們兩種模式共用同一個值。 */
+@supports (color: light-dark(#000, #fff)) {
+  :root {
+    --bronze:        light-dark(#B87355, #c98a6a);
+    --bronze-deep:   light-dark(#8a4f3a, #d9a184);
+    --text:          light-dark(#201714, #ece5e1);
+    --text-muted:    light-dark(#57504d, #a09a97);
+    --bg:            light-dark(#ffffff, #131313);
+    --footer-bg:     light-dark(#eaeaea, #0e0e0e);
+    --card-bg:       light-dark(#fdfcfc, #1c1a19);
+    --accent-band:   light-dark(#f2eeea, #1e1c1a);
+    --border:        light-dark(#e2e2e2, #333333);
+    --btn-bg:        light-dark(#8a4f3a, #c98a6a);
+    --btn-text:      light-dark(#ffffff, #151515);
+    --btn-hover:     light-dark(#6f3e2d, #e0b295);
+    --footer-copy:   light-dark(#888888, #7c7c7c);
+    --chip-bg:       light-dark(#1c1c1c, #262626);
+    --chip-bg-hover: light-dark(#2c2c2c, #363636);
+    --bronze-rule:   light-dark(rgba(184, 115, 85, 0.55), rgba(201, 138, 106, 0.50));
+    --plan-ring:     light-dark(rgba(0, 0, 0, 0.10), rgba(255, 255, 255, 0.14));
+  }
+}
+
 /* ⚠⚠ 2026-07-31：原本的 @media (prefers-color-scheme: dark)
-   整塊已移除 —— 暗色值現在寫在上方的 light-dark() 裡。
-   【不得再加回來】：兩個來源一定會漂。 */
+   整塊已移除。【不得再加回來】：
+   暗色值只得寫在上方的 @supports 區塊裡。 */
 
 * { box-sizing: border-box; }
 
@@ -231,10 +291,25 @@ html, body {
   padding: 0;
   color: var(--text);
   font-family: var(--font-body);
-  font-size: 17px;
   line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
 }
+
+/* ⚠⚠ 2026-07-31（修正）：字級由 17px 改為 106.25%。
+
+   【為何】px 不影響縮放，但會【忽略使用者在瀏覽器裡
+     設定的預設字級】。百分比以那個設定為基準，
+     16px 預設時等效 17px，而使用者調大時會跟著變。
+   ⚠ 本站沒有用 rem，所以這個改動不會連鎖影響別處。
+   ⚠ 歐洲採購的無障礙問卷有時會問到這一項。 */
+html { font-size: 106.25%; }
+
+/* ⚠⚠ 2026-07-31：-webkit-font-smoothing: antialiased 已移除。
+   它會讓 macOS 上的文字變細 ——
+   而前面正是為了 Cormorant 在深底上【視覺變細】
+   才把字重從 600 提到 700。
+   兩個設定在互相拉扯 —— 拿掉這一行，
+   讓系統自己做平滑，襯線內文通常更好讀。
+   ⚠ 這是視覺判斷 —— 兩邊各截一張圖比較再定。 */
 
 /* ⚠ 2026-07-31：底色只給 html。
    舊的理由是兩側底圖的 body::before / ::after 用了
@@ -242,22 +317,68 @@ html, body {
    但這行留著也無害 —— html 的背景會傳遞到畫布。 */
 html { background: var(--bg); }
 
-/* ⚠⚠ 2026-07-31：連結顏色由 --bronze 改為 --bronze-deep。
-   【無障礙】#B87355 在白底上約 3.73:1，未過 AA 的 4.5:1。
+/* ⚠⚠ 2026-07-31（修正）：選取器加上 :not([class])。
+
+   【為何】舊版的全域 a 規則會碰到 .btn 與 .chip，
+     於是那兩個元件各用了兩個 !important 來打贏它 ——
+     四個 !important 全部是這條規則造成的。
+   【修正】讓全域規則一開始就不要碰到元件。
+   ⚠ 代價：以後【任何帶 class 的連結都要自己管顏色】。
+     對元件很少的本站是劃算的，
+     而且它會逼人在加新元件時想清楚樣式歸屬。
+
+   【無障礙】連結顏色用 --bronze-deep 而非 --bronze：
+     #B87355 在白底上約 3.73:1，未過 AA 的 4.5:1。
      底線滿足的是 1.4.1（不單靠顏色傳達資訊），
-     而對比度是另一條 1.4.3，兩者不互相抵免。
-   ⚠ 暗色模式下 --bronze-deep 是較亮的 #d9a184，
-     方向相反但同樣過關。 */
-a {
+     而對比度是另一條 1.4.3，兩者不互相抵免。 */
+a:not([class]) {
   color: var(--bronze-deep);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-/* ⚠⚠ 2026-07-31（修正）：hover 【不得降低對比】。
-   舊值 hover 時改成 --bronze，對比從 6.2:1 掉到 3.73:1 ——
-   hover 狀態一樣要過 AA。
-   → 顏色不變，只拿掉底線。那個反應已經夠了。 */
-a:hover { text-decoration: none; }
+/* ⚠⚠ hover 【不得降低對比】—— 舊值 hover 改成 --bronze，
+   對比從 6.2:1 掉到 3.73:1。只拿掉底線就夠了。 */
+a:not([class]):hover { text-decoration: none; }
+
+/* ⚠⚠ 2026-07-31：全域焦點樣式。
+
+   【問題】舊版只有 .nav-links a 與 .chip 做了 :focus-visible，
+     而 .btn（border: none）與內文連結都靠瀏覽器預設外框。
+   ⚠ scroll-margin-top 是為了 WCAG 2.4.11：
+     固定導覽列會遮住剛取得焦點的元件。
+   ⚠ :where() 的專一性為零 ——
+     不會蓋掉元件自己的焦點樣式。 */
+:where(a, button):focus-visible {
+  outline: 2px solid var(--bronze-deep);
+  outline-offset: 2px;
+  scroll-margin-top: 74px;
+}
+
+/* ⚠⚠ 2026-07-31：跳過導覽的連結。
+   固定導覽列有 logo 加七個連結 ——
+   鍵盤使用者每次進站要按八次 Tab 才碰得到內容。
+   平常隱藏，取得焦點時才出現。
+   ⚠ 不用 display: none 或 visibility: hidden ——
+     那兩者會讓它從 tab 順序裡消失。 */
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -60px;
+  z-index: 1000;
+  padding: 10px 16px;
+  background: var(--chip-bg);
+  color: var(--chip-text);
+  font-family: var(--font-accent);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 8px;
+}
 
 /* ========================================
    PAGE SIDES —— 已放棄
@@ -570,7 +691,13 @@ section h2 {
   }
   .documents > h2 { grid-column: 1 / -1; }
   .documents > .doc-card { margin-bottom: 0; }
-  .documents > .doc-card:last-of-type { grid-column: 1 / -1; }
+  /* ⚠⚠ 2026-07-31：:last-of-type → :last-child。
+     舊值比對的是【最後一個 div 兄弟】—— 現在剛好成立，
+     但哪天在卡片後面加一個 <div class="note">，
+     跨欄就會跳到那個 note 上（而它沒有 .doc-card，
+     於是付費卡片失去跨欄）。
+     這與浮水印那個【剛好成立而非設計成立】是同一類問題。 */
+  .documents > .doc-card:last-child { grid-column: 1 / -1; }
 }
 
 .doc-card {
@@ -622,8 +749,8 @@ section h2 {
 .btn {
   display: inline-block;
   background: var(--btn-bg);
-  color: var(--btn-text) !important;
-  text-decoration: none !important;
+  color: var(--btn-text);
+  text-decoration: none;
   padding: 11px 24px;
   border-radius: 3px;
   font-family: var(--font-accent);
@@ -787,7 +914,6 @@ section h2 {
   aspect-ratio: 553.98 / 397.58;
   pointer-events: none;
   -webkit-user-drag: none;
-  user-select: none;
 }
 /* ⚠ 佔位階段已結束（2026-07-31）：site_plan.svg 已就位。
    .plan-placeholder 的規則已移除。 */
@@ -868,16 +994,16 @@ section h2 {
   text-transform: uppercase;
   white-space: nowrap;
   background: var(--chip-bg);
-  color: var(--chip-text) !important;
+  color: var(--chip-text);
   border: 1px solid var(--chip-border);
-  text-decoration: none !important;
+  text-decoration: none;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 .chip:hover,
 .chip:focus-visible {
   background: var(--chip-bg-hover);
   border-color: var(--bronze);
-  color: var(--chip-text) !important;
+  color: var(--chip-text);
 }
 
 /* 工具座（右下角）。日後加客服等按鈕就放進來。 */
@@ -957,7 +1083,11 @@ footer {
 .footer-line {
   margin: 4px 0;
 }
+/* ⚠ .footer-line 裡的 a 本身沒有 class，
+   所以 a:not([class]) 也會碰到它 ——
+   兩者專一性相同（0,1,1），本規則在後面所以贏。 */
 .footer-line a { color: var(--bronze-deep); }
+
 .footer-copyright {
   margin-top: 22px;
   font-size: 12px;
