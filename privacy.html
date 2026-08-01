@@ -9,15 +9,14 @@
   <meta name="robots" content="index, follow">
 
   <!-- ⚠ 2026-07-31：favicon 與 index.html 同步。見該檔註解。
-       ⚠⚠ 2026-08-01：新增 SVG favicon。
-         順序是刻意的 —— SVG 在後，Safari 取最後宣告的那一個。
-         PNG 邊緣是點陣抗鋸齒，16 px 下讀成一圈白邊；
-         SVG 的圓是向量，任何尺寸都是乾淨的。
-       ⚠⚠ 【不得加 logo.png 作為備援】—— 會蓋掉圓形版。
-       ⚠ apple-touch-icon 維持 PNG：iOS 不支援 SVG。
+       ⚠⚠ 2026-08-01（已退回）：曾改用 SVG，目的是消除白邊。
+         【無效】—— 白底是 Safari 在深色模式下對
+         對比不足的圖示自行補上的，與格式無關。
+         完整記錄見 index.html。
+       ⚠⚠ 【不要再試】—— 兩行 rel="icon" 賭順序、
+         只宣告 SVG，二者都失敗過。
        ⚠ 兩頁【要一起改】。 -->
   <link rel="icon" type="image/png" href="/assets/favicon-512.png">
-  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/favicon-512.png">
 
   <!-- ⚠ 2026-07-31：與 index.html 同步 —— canonical、

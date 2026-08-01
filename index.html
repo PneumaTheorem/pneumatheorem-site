@@ -27,31 +27,29 @@
          出了名地挑剔，少一個變數少一個出錯點。
        ⚠ 路徑改為【根目錄絕對】（/assets/...）——
          若日後有頁面放進子資料夾，相對路徑會失效。
-       ⚠⚠ 2026-08-01：新增 SVG favicon。
+       ⚠⚠ 2026-08-01（已退回）：曾改用 SVG favicon，目的是消除
+         分頁列的白邊。【無效】，已還原為 PNG。
 
-       【為何】favicon-512.png 是 3D 算圖，圓外雖然透明，
-         但它的邊緣是點陣抗鋸齒 —— Safari 分頁列縮到
-         16 px 時那圈半透明像素會讀成一圈白邊。
-         SVG 的圓是【向量】，任何尺寸都是乾淨的邊。
+         【真正的原因】白底不是檔案的問題 ——
+           Safari 在【深色模式】下，若判斷圖示與背景
+           對比不足，會【自己補上一層白底】。
+           本標誌是黑圓，分頁列也是深色 —— 必然觸發。
+         ⚠ 那是 Apple 的設計決定，與格式無關。
+           換 PNG、換 SVG、換尺寸都一樣。
 
-       ⚠⚠ 【順序是刻意的：SVG 放最後】
-         本檔舊註解記過：Safari 常取【最後宣告】的那一個。
-         → SVG 在後 → Safari 拿 SVG（這正是要解的問題）；
-           不支援 SVG 的瀏覽器載入失敗，退回前一行的 PNG。
-         ⚠ 若日後發現 Safari 反而拿 PNG，就把兩行對調 ——
-           【只能在線上驗】，file:// 下瀏覽器通常不載 favicon。
+         【唯一可能的解】把圖示本身提亮 —— 例如拿掉黑圓底、
+           只留銅色標記（透明背景）。
+           ⚠ 但那就不是現在這個圓形標誌了 ——
+             是【換一個設計】，不是【修一個錯誤】。
+           ⚠ 未驗證。Safari 的對比度門檻未公開。
 
-       ⚠ apple-touch-icon 【必須維持 PNG】——
-         iOS 加到主畫面的圖示不支援 SVG。
+       ⚠⚠ 【不要再花時間在這上面】—— 2026-08-01 已試過：
+         兩行 rel="icon" 賭宣告順序（失敗）、
+         只宣告 SVG（失敗）。成因在 Safari 那邊。
 
-       ⚠ SVG 版是【重建的】，不是描邊：圓底、X 形金屬光澤、
-         3D 投影、P 直筆上的直溝全部是向量元件。
-         來源與可編輯版在 01_Brand/。
-       ⚠⚠ 【不得再加 logo.png 作為備援】——
-         曾加過一行無 sizes 的 logo.png，
-         而 Safari 取了它，圓形版被蓋掉，白邊照舊。 -->
+       ⚠ assets/favicon.svg 【保留】—— 圖紙浮水印與
+         日後大尺寸用途仍需要它。只是不再當 favicon。 -->
   <link rel="icon" type="image/png" href="/assets/favicon-512.png">
-  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/favicon-512.png">
 
   <!-- ⚠⚠ 2026-07-31：canonical。
