@@ -177,7 +177,14 @@
 <nav class="nav">
   <div class="nav-inner">
     <a class="nav-logo" href="#top" aria-label="PneumaTheorem home">
-      <img src="assets/logo-3.png" alt="PneumaTheorem">
+      <!-- ⚠⚠ 2026-08-01：logo-3.png 已刪，改用 ptlogo.svg。
+           SVG 是純黑的，由 CSS 的
+           filter: brightness(0) invert(1) 翻成白。
+
+           ⚠ 曾經改成 <span> + CSS mask，但那在 file:// 下
+             【完全不顯示】且不報錯 —— 已回退。
+           ⚠ 本檔與 privacy.html 各有一份，【兩處要一起改】。 -->
+      <img src="assets/ptlogo.svg" alt="PneumaTheorem">
     </a>
     <div class="nav-links">
       <a href="#plan">Plan</a>
@@ -492,14 +499,43 @@
       ⚠ 支付連結是外部網址（buy.stripe.com）。
         若日後重建連結，網址會變 —— 這裡與 Engagement 段
         各有一份，【兩處要一起改】。
+      ⚠⚠ 2026-07-31：連結已更新。
+        舊：...4c801｜新：...4c802
+        【為何重建】要開【自動收集稅號】，
+        而那個選項在現有連結上改不了，必須新建。
+        ⚠ 稅號收集不只是便利 —— B2B 逆向收費需要
+          【舉證客戶是企業】，而 VAT 號碼就是那個證據。
+          （具體義務待會計師確認。）
     -->
     <div class="doc-card">
       <div class="doc-label">Full demonstration &mdash; purchase</div>
       <h3>All Nine Cells</h3>
       <p class="doc-sub">Rivergate Yard &mdash; the same fictional venue, assessed in full</p>
-      <p class="doc-meta">What the sample above covers in three cells, this covers in nine. It establishes what a complete assessment contains, so that the material required for your own venue can be judged before commissioning one. Issued by email within one business day, licensed to the organisation named at checkout. Half the fee is credited against any later stage, for any venue, with no expiry.</p>
+      <p class="doc-meta">What the sample above covers in three cells, this covers in nine. It establishes what a complete assessment contains, so that the material required for your own venue can be judged before commissioning one. Half the fee is credited against any later stage, for any venue, with no expiry.</p>
+      <!-- ⚠⚠ 2026-08-01：交付與授權單獨一段。
+
+           【為何拆出來】舊版把「issued by email、licensed to the
+             organisation named at checkout」埋在一大段介紹的尾巴。
+             那兩件事是【買家在結帳前必須知道的】，
+             而不是介紹的一部分。
+
+           【新增兩句，各有實際後果】
+             「appears in the footer of every page」
+               —— 舊版只說 licensed to，沒說名字會【印出來】。
+                  印出來才是嚇阻：轉發追得到。
+             「to the address you give at checkout」
+               —— 2026-08-01 實測發現：Apple Pay 會自動帶入
+                  Apple ID 的信箱，買家根本沒意識到
+                  那就是交付信箱。不說就寄丟。
+
+           ⚠ 不同步改就會漂：Stripe 結帳頁現在有兩個必填欄位
+             （Organisation to be named on the report、
+               Email address for delivery），
+             這一段就是它們在網站上的對應說明。
+             【改其一就要檢查另一個】。 -->
+      <p class="doc-meta">Each copy is licensed to an organisation you name at checkout, and that name appears in the footer of every page. It is issued by email to the address you give at checkout &mdash; not to the address on your payment method.</p>
       <p>
-        <a class="btn" href="https://buy.stripe.com/eVqeV5fBP5aS0o458Z4c801" target="_blank" rel="noopener">Purchase the full demonstration</a>
+        <a class="btn" href="https://buy.stripe.com/9B600bgFTbzggn21WN4c802" target="_blank" rel="noopener">Purchase the full demonstration</a>
       </p>
     </div>
 
@@ -542,11 +578,12 @@
       The work is arranged so that it can be paid for twice. A first purchase covers the demonstration and the assessment of your own access geometry, and returns a quotation for the full assessment together with a list of any further material required. A second covers that assessment. Nothing between the two requires a separate authorisation.
     </p>
     <!-- ⚠ 2026-07-30：新增支付連結。
-         ⚠⚠ 文件區的付費卡片也有一份。連結若重建，【兩處要一起改】。 -->
+         ⚠⚠ 文件區的付費卡片也有一份。連結若重建，【兩處要一起改】。
+         ⚠ 2026-07-31：已更新為 ...4c802（開稅號收集而重建）。 -->
     <p>
       The first stage &mdash; the full nine-cell demonstration on a fictional
       venue &mdash; can be
-      <a href="https://buy.stripe.com/eVqeV5fBP5aS0o458Z4c801" target="_blank" rel="noopener">purchased directly</a>.
+      <a href="https://buy.stripe.com/9B600bgFTbzggn21WN4c802" target="_blank" rel="noopener">purchased directly</a>.
       It is issued by email within one business day.
     </p>
     <p>

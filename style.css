@@ -518,10 +518,43 @@ a:not([class]):hover { text-decoration: none; }
   align-items: center;
   flex-shrink: 0;
 }
+
+/* ========================================
+   ⚠⚠ 2026-08-01：logo 改為 SVG + filter
+   ======================================== */
+/* 【舊狀】.nav-logo img 指向 assets/logo-3.png（黑底白標），
+     而那個檔已於 2026-08-01 刪除 —— 死連結。
+
+   【問題】ptlogo.svg 是【純黑】的。深色導覽列上看不見。
+
+   【曾經用過 mask，已放棄】
+     -webkit-mask: url('assets/ptlogo.svg') …
+     ⚠⚠ 在 file:// 下【完全不顯示】——
+       Chrome 與 Safari 把 file:// 的 CSS mask 外部 SVG
+       當成跨來源擋掉，而且【不報錯】。
+       2026-08-01 實際發生過：導覽列 logo 一片空白。
+     ⚠ 上線後（https）mask 會正常 ——
+       但【本機看不到的東西不能用】。
+
+   【現行】<img> 加 filter：
+     brightness(0) 先把所有非透明像素壓成黑，
+     invert(1) 再翻成白。alpha 不受影響。
+     → 【不管原圖是什麼顏色，結果都是純白】。
+
+   ⚠ 好處一：file:// 下正常，支援度遠大於 mask。
+   ⚠ 好處二：<img> 有 alt，無障礙比 <span> 好。
+   ⚠ 代價：只能給白（或黑），給不了青銅色。
+     導覽列只需要白的，所以不是問題。
+     ⚠ 若日後真的要青銅色 logo，那時再回來看 mask，
+       而且要在【已上線的網址】上驗，不是本機。 */
 .nav-logo img {
   height: 28px;
   width: auto;
   display: block;
+  /* ⚠⚠ 導覽列的 logo 【永遠是白的】。
+     導覽列本身兩種模式都是深的（#101010 加遮罩），
+     所以標誌不參與深淺色切換。 */
+  filter: brightness(0) invert(1);
 }
 
 .nav-links {
@@ -895,7 +928,7 @@ section h2 {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('assets/favicon-512.png');
+  background-image: url('assets/ptlogo.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 34%;
@@ -1121,6 +1154,7 @@ footer {
     padding: 0 18px;
     gap: 14px;
   }
+  /* ⚠ 2026-08-01：回到 <img>（mask 在 file:// 下不顯示）。 */
   .nav-logo img { height: 24px; }
   /* ⚠ 不換行，改為【橫向滑動】。
      換行會讓 fixed 導覽列變高，
