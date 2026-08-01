@@ -27,18 +27,31 @@
          出了名地挑剔，少一個變數少一個出錯點。
        ⚠ 路徑改為【根目錄絕對】（/assets/...）——
          若日後有頁面放進子資料夾，相對路徑會失效。
-       ⚠⚠ 【不得再加 logo.png 作為備援】。
+       ⚠⚠ 2026-08-01：新增 SVG favicon。
+
+       【為何】favicon-512.png 是 3D 算圖，圓外雖然透明，
+         但它的邊緣是點陣抗鋸齒 —— Safari 分頁列縮到
+         16 px 時那圈半透明像素會讀成一圈白邊。
+         SVG 的圓是【向量】，任何尺寸都是乾淨的邊。
+
+       ⚠⚠ 【順序是刻意的：SVG 放最後】
+         本檔舊註解記過：Safari 常取【最後宣告】的那一個。
+         → SVG 在後 → Safari 拿 SVG（這正是要解的問題）；
+           不支援 SVG 的瀏覽器載入失敗，退回前一行的 PNG。
+         ⚠ 若日後發現 Safari 反而拿 PNG，就把兩行對調 ——
+           【只能在線上驗】，file:// 下瀏覽器通常不載 favicon。
+
+       ⚠ apple-touch-icon 【必須維持 PNG】——
+         iOS 加到主畫面的圖示不支援 SVG。
+
+       ⚠ SVG 版是【重建的】，不是描邊：圓底、X 形金屬光澤、
+         3D 投影、P 直筆上的直溝全部是向量元件。
+         來源與可編輯版在 01_Brand/。
+       ⚠⚠ 【不得再加 logo.png 作為備援】——
          曾加過一行無 sizes 的 logo.png，
-         但 Safari 常取【最後宣告】的那一個，
-         結果是圓形版被蓋掉，白邊照舊。
-       ⚠⚠ 【驗證只能在線上做】file:// 協定下瀏覽器通常
-         不載入 favicon，Safari 尤其如此。
-         本機看到的很可能是舊快取。
-       ⚠ og:image 仍指向 logo.png，那是分享縮圖，
-         與 favicon 無關（它需要 1200×630，待做）。
-       ⚠ apple-touch-icon 是 iOS 加到主畫面時用的，
-         它【不支援透明】，會自動被補上黑底。 -->
+         而 Safari 取了它，圓形版被蓋掉，白邊照舊。 -->
   <link rel="icon" type="image/png" href="/assets/favicon-512.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/favicon-512.png">
 
   <!-- ⚠⚠ 2026-07-31：canonical。
