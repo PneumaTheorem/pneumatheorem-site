@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>使用許諾（EULA）— PneumaTheorem</title>
+<meta name="description" content="LADE のエンドユーザー使用許諾契約は準備中です。">
+<link rel="canonical" href="https://pneumatheorem.org/ja/legal/eula/">
+<link rel="alternate" hreflang="en" href="https://pneumatheorem.org/legal/eula/">
+<link rel="alternate" hreflang="zh-Hant" href="https://pneumatheorem.org/zh/legal/eula/">
+<link rel="alternate" hreflang="ja" href="https://pneumatheorem.org/ja/legal/eula/">
+<link rel="alternate" hreflang="x-default" href="https://pneumatheorem.org/legal/eula/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PneumaTheorem">
+<meta property="og:title" content="使用許諾（EULA）— PneumaTheorem">
+<meta property="og:description" content="LADE のエンドユーザー使用許諾契約は準備中です。">
+<meta property="og:url" content="https://pneumatheorem.org/ja/legal/eula/">
+<meta property="og:image" content="https://pneumatheorem.org/assets/img/og-1200x630.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0c0d12">
+<link rel="icon" type="image/png" href="/assets/favicon-512.png">
+<link rel="apple-touch-icon" href="/assets/favicon-512.png">
+<link rel="preload" href="/assets/fonts/Cinzel-Variable-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">本文へ移動</a>
+<nav class="nav" aria-label="PneumaTheorem">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/ja/"><img src="/assets/img/ptlogo.svg" alt="" width="26" height="28"><span>PneumaTheorem</span></a>
+    <div class="nav-links"><a href="/ja/lade/">LADE</a><a href="/ja/#studio">スタジオ</a><a href="/ja/legal/" aria-current="page">規約</a></div>
+    <div class="nav-lang" aria-label="言語"><a href="/legal/eula/" hreflang="en" lang="en">EN</a><a href="/zh/legal/eula/" hreflang="zh-Hant" lang="zh-Hant">中文</a><a href="/ja/legal/eula/" hreflang="ja" lang="ja" aria-current="true">日本語</a></div>
+  </div>
+</nav>
+
+<main id="main">
+  <header class="page-head">
+    <p class="eyebrow"><a href="/ja/legal/" style="color:inherit;text-decoration:none">規約</a></p>
+    <h1>使用許諾（EULA）</h1>
+  </header>
+  <div class="doc"><div class="doc-body">
+    <p class="notice"><strong>準備中。</strong>LADE のエンドユーザー使用許諾契約は書き直し中で、発売前にここで公開します（英語版が正本）。それまでは、スクリーンショットと動画については<a href="/ja/legal/streaming/">配信と動画</a>をご覧ください。</p>
+    <h2>含まれる予定の内容</h2><ul><li>LADE と追加コンテンツは、販売ではなく個人利用のための使用許諾です。</li><li>キャラクター、画像、音声、文章の権利は PneumaTheorem, Inc. またはそのライセンサーにあります。</li><li>LADE の素材を抜き出したり、再配布・販売したり、他の製品や NFT を作ったり、AI の学習に使ったりすることはできません。</li><li>スクリーンショット、録画、配信は歓迎します。収益化したチャンネルでも構いません。</li><li>ご自身で追加した画像は Mac の中だけで扱われ、その権利はご自身の責任です。</li><li>天気などのオンライン情報は第三者が提供するもので、参考情報です。</li><li>サードパーティのコンポーネントは、それぞれのライセンスに従います。</li></ul>
+  </div></div>
+</main>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-head">PneumaTheorem</p>
+      <strong>PneumaTheorem, Inc.</strong><br>
+      デラウェア州法人 · 台湾で運営<br>
+      Kevin Tao（創業者） · <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
+      <p class="copyright">© 2026 PneumaTheorem, Inc. All rights reserved.</p>
+    </div>
+    <div>
+      <p class="footer-head">製品</p>
+      <ul>
+        <li><a href="/ja/lade/">LADE</a></li>
+        <li><a href="/ja/lade/install/">インストール方法</a></li>
+        <li><a href="https://x.com/PneumaTheorem" rel="noopener">X</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-head">規約</p>
+      <ul>
+        <li><a href="/ja/legal/privacy/">プライバシー</a></li>
+        <li><a href="/ja/legal/eula/">使用許諾（EULA）</a></li>
+        <li><a href="/ja/legal/streaming/">配信と動画</a></li>
+        <li><a href="/ja/legal/licenses/">サードパーティのライセンス</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="pt-dock"><button id="pt-theme" type="button" class="chip">自動</button></div>
+<script src="/assets/js/hero.js" defer></script>
+<script>
+/* 日夜：自動（跟系統）→ 白天（淺色、白天的圖）→ 夜（深色、夜的圖）。
+   不寫 localStorage（隱私頁寫了本站不存任何東西），重新整理回到自動。 */
+(function () {
+  var names = ["自動", "昼", "夜"], aria = "時間帯：{name}（クリックで切り替え）", modes = ['', 'light', 'dark'], i = 0;
+  var media = { '': '(prefers-color-scheme: dark)', light: 'not all', dark: 'all' };
+  var btn = document.getElementById('pt-theme');
+  function sync() { btn.textContent = names[i]; btn.setAttribute('aria-label', aria.replace('{name}', names[i])); }
+  sync();
+  btn.addEventListener('click', function () {
+    i = (i + 1) % 3;
+    if (modes[i]) document.documentElement.setAttribute('data-theme', modes[i]);
+    else document.documentElement.removeAttribute('data-theme');
+    var ss = document.querySelectorAll('picture.dn source[media]');
+    for (var k = 0; k < ss.length; k++) ss[k].setAttribute('media', media[modes[i]]);
+    sync();
+  });
+})();
+</script>
+</body>
+</html>

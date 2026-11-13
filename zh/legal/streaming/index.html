@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>直播與影片 — PneumaTheorem</title>
+<meta name="description" content="可以直播、錄影與發布 LADE 的畫面，營利頻道也可以。">
+<link rel="canonical" href="https://pneumatheorem.org/zh/legal/streaming/">
+<link rel="alternate" hreflang="en" href="https://pneumatheorem.org/legal/streaming/">
+<link rel="alternate" hreflang="zh-Hant" href="https://pneumatheorem.org/zh/legal/streaming/">
+<link rel="alternate" hreflang="ja" href="https://pneumatheorem.org/ja/legal/streaming/">
+<link rel="alternate" hreflang="x-default" href="https://pneumatheorem.org/legal/streaming/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PneumaTheorem">
+<meta property="og:title" content="直播與影片 — PneumaTheorem">
+<meta property="og:description" content="可以直播、錄影與發布 LADE 的畫面，營利頻道也可以。">
+<meta property="og:url" content="https://pneumatheorem.org/zh/legal/streaming/">
+<meta property="og:image" content="https://pneumatheorem.org/assets/img/og-1200x630.jpg">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0c0d12">
+<link rel="icon" type="image/png" href="/assets/favicon-512.png">
+<link rel="apple-touch-icon" href="/assets/favicon-512.png">
+<link rel="preload" href="/assets/fonts/Cinzel-Variable-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">跳到內容</a>
+<nav class="nav" aria-label="PneumaTheorem">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/zh/"><img src="/assets/img/ptlogo.svg" alt="" width="26" height="28"><span>PneumaTheorem</span></a>
+    <div class="nav-links"><a href="/zh/lade/">LADE</a><a href="/zh/#studio">工作室</a><a href="/zh/legal/" aria-current="page">條款</a></div>
+    <div class="nav-lang" aria-label="語言"><a href="/legal/streaming/" hreflang="en" lang="en">EN</a><a href="/zh/legal/streaming/" hreflang="zh-Hant" lang="zh-Hant" aria-current="true">中文</a><a href="/ja/legal/streaming/" hreflang="ja" lang="ja">日本語</a></div>
+  </div>
+</nav>
+
+<main id="main">
+  <header class="page-head">
+    <p class="eyebrow"><a href="/zh/legal/" style="color:inherit;text-decoration:none">條款</a></p>
+    <h1>直播與影片</h1>
+  </header>
+  <div class="doc"><div class="doc-body">
+    <p class="notice"><strong>摘要。</strong><a href="/zh/legal/eula/">使用授權</a>公布之後以它為準；這一頁會保留作為白話版。</p>
+    <h2>可以</h2><ul><li>在 LADE 運作時截圖、錄影與直播。</li><li>發布到任何地方，包括有營利的 YouTube、Twitch 等頻道。</li><li>展示、評論、介紹角色、服裝與場景。</li></ul><h2>請不要</h2><ul><li>單獨散布 LADE 的圖、聲音或其他檔案——例如從 App 拆出來的圖。</li><li>拿它們做其他產品或 NFT，或拿去訓練 AI。</li><li>暗示 PneumaTheorem 為你或你的頻道背書。</li></ul><h2>音樂</h2><p>她跟著唱的歌屬於各自的權利人。你的直播要遵守的是他們的規則，不是我們的。</p><p>標示出處我們會很感謝，但不是必要的——放一個本站或商店頁的連結，對小工作室幫助很大。</p>
+  </div></div>
+</main>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-head">PneumaTheorem</p>
+      <strong>PneumaTheorem, Inc.</strong><br>
+      德拉瓦州 C 型公司 · 在台灣營運<br>
+      Kevin Tao，創辦人 · <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
+      <p class="copyright">© 2026 PneumaTheorem, Inc. 保留所有權利。</p>
+    </div>
+    <div>
+      <p class="footer-head">產品</p>
+      <ul>
+        <li><a href="/zh/lade/">LADE</a></li>
+        <li><a href="/zh/lade/install/">安裝說明</a></li>
+        <li><a href="https://x.com/PneumaTheorem" rel="noopener">X</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-head">條款</p>
+      <ul>
+        <li><a href="/zh/legal/privacy/">隱私權</a></li>
+        <li><a href="/zh/legal/eula/">使用授權（EULA）</a></li>
+        <li><a href="/zh/legal/streaming/">直播與影片</a></li>
+        <li><a href="/zh/legal/licenses/">第三方授權</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="pt-dock"><button id="pt-theme" type="button" class="chip">自動</button></div>
+<script src="/assets/js/hero.js" defer></script>
+<script>
+/* 日夜：自動（跟系統）→ 白天（淺色、白天的圖）→ 夜（深色、夜的圖）。
+   不寫 localStorage（隱私頁寫了本站不存任何東西），重新整理回到自動。 */
+(function () {
+  var names = ["自動", "白天", "夜晚"], aria = "時辰：{name}，按一下切換", modes = ['', 'light', 'dark'], i = 0;
+  var media = { '': '(prefers-color-scheme: dark)', light: 'not all', dark: 'all' };
+  var btn = document.getElementById('pt-theme');
+  function sync() { btn.textContent = names[i]; btn.setAttribute('aria-label', aria.replace('{name}', names[i])); }
+  sync();
+  btn.addEventListener('click', function () {
+    i = (i + 1) % 3;
+    if (modes[i]) document.documentElement.setAttribute('data-theme', modes[i]);
+    else document.documentElement.removeAttribute('data-theme');
+    var ss = document.querySelectorAll('picture.dn source[media]');
+    for (var k = 0; k < ss.length; k++) ss[k].setAttribute('media', media[modes[i]]);
+    sync();
+  });
+})();
+</script>
+</body>
+</html>

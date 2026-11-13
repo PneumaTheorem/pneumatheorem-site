@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Installing LADE Aquarium — PneumaTheorem</title>
+<meta name="description" content="How to open LADE Aquarium on macOS while early-access builds are not yet notarized by Apple.">
+<link rel="canonical" href="https://pneumatheorem.org/lade/install/">
+<link rel="alternate" hreflang="en" href="https://pneumatheorem.org/lade/install/">
+<link rel="alternate" hreflang="zh-Hant" href="https://pneumatheorem.org/zh/lade/install/">
+<link rel="alternate" hreflang="ja" href="https://pneumatheorem.org/ja/lade/install/">
+<link rel="alternate" hreflang="x-default" href="https://pneumatheorem.org/lade/install/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PneumaTheorem">
+<meta property="og:title" content="Installing LADE Aquarium — PneumaTheorem">
+<meta property="og:description" content="How to open LADE Aquarium on macOS while early-access builds are not yet notarized by Apple.">
+<meta property="og:url" content="https://pneumatheorem.org/lade/install/">
+<meta property="og:image" content="https://pneumatheorem.org/assets/img/og-1200x630.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0c0d12">
+<link rel="icon" type="image/png" href="/assets/favicon-512.png">
+<link rel="apple-touch-icon" href="/assets/favicon-512.png">
+<link rel="preload" href="/assets/fonts/Cinzel-Variable-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="nav" aria-label="PneumaTheorem">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/"><img src="/assets/img/ptlogo.svg" alt="" width="26" height="28"><span>PneumaTheorem</span></a>
+    <div class="nav-links"><a href="/lade/" aria-current="page">LADE</a><a href="/#studio">Studio</a><a href="/legal/">Legal</a></div>
+    <div class="nav-lang" aria-label="Language"><a href="/lade/install/" hreflang="en" lang="en" aria-current="true">EN</a><a href="/zh/lade/install/" hreflang="zh-Hant" lang="zh-Hant">中文</a><a href="/ja/lade/install/" hreflang="ja" lang="ja">日本語</a></div>
+  </div>
+</nav>
+
+<main id="main">
+  <header class="page-head">
+    <p class="eyebrow">LADE</p>
+    <h1>Installing LADE Aquarium</h1>
+    <p class="lede">Early-access builds are not yet notarized by Apple, so macOS asks you to confirm the first launch. It takes a minute, and you only do it once.</p>
+  </header>
+  <div class="doc"><div class="doc-body">
+    <p class="notice"><strong>Why the warning?</strong> Notarization requires an Apple Developer membership — the first LADE milestone. Once it is in place, you will not need this page.</p>
+    <h2>macOS 15 Sequoia and later</h2>
+    <ol class="steps-big"><li><h3>Move LADE Aquarium to Applications</h3><p>Unzip the download and drag LADE Aquarium into your Applications folder.</p></li><li><h3>Open it once</h3><p>macOS says it cannot verify the developer. Click <span class="ui">Done</span> — not Move to Trash.</p></li><li><h3>Allow it in System Settings</h3><p>Open <span class="ui">System Settings</span> → <span class="ui">Privacy &amp; Security</span>, scroll down to Security, and click <span class="ui">Open Anyway</span> next to LADE Aquarium. Confirm with your password or Touch ID.</p></li><li><h3>Open LADE Aquarium again</h3><p>Click <span class="ui">Open</span> in the dialog that follows. From now on, LADE Aquarium opens normally.</p></li></ol>
+    <h2>macOS 13 Ventura or 14 Sonoma</h2>
+    <p>Control-click LADE Aquarium in Applications, choose <span class="ui">Open</span>, then click <span class="ui">Open</span> again in the dialog. The System Settings route above works too.</p>
+    <h2>Permissions LADE Aquarium may ask for</h2>
+    <ul><li><strong>Calendars</strong> — To show your next event on the desktop. Events are read on your Mac only.</li><li><strong>Screen &amp; System Audio Recording</strong> — So the music ring can react to what you play. Only the sound level is analysed, in real time — nothing is recorded, stored or sent.</li></ul>
+    <p>Both are optional; LADE Aquarium works without them.</p>
+    <h2>Uninstalling</h2>
+    <p>Quit LADE Aquarium, move it to the Trash, and delete the folder <code>~/Library/Application Support/Aquarium</code> to remove its settings.</p>
+  </div></div>
+</main>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-head">PneumaTheorem</p>
+      <strong>PneumaTheorem, Inc.</strong><br>
+      Delaware C-Corporation · operated from Taiwan<br>
+      Kevin Tao, Founder · <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
+      <p class="copyright">© 2026 PneumaTheorem, Inc. All rights reserved.</p>
+    </div>
+    <div>
+      <p class="footer-head">Product</p>
+      <ul>
+        <li><a href="/lade/">LADE</a></li>
+        <li><a href="/lade/install/">How to install</a></li>
+        <li><a href="https://x.com/PneumaTheorem" rel="noopener">X</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-head">Legal</p>
+      <ul>
+        <li><a href="/legal/privacy/">Privacy</a></li>
+        <li><a href="/legal/eula/">License (EULA)</a></li>
+        <li><a href="/legal/streaming/">Streaming &amp; videos</a></li>
+        <li><a href="/legal/licenses/">Third-party licences</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="pt-dock"><button id="pt-theme" type="button" class="chip">AUTO</button></div>
+<script src="/assets/js/hero.js" defer></script>
+<script>
+/* 日夜：自動（跟系統）→ 白天（淺色、白天的圖）→ 夜（深色、夜的圖）。
+   不寫 localStorage（隱私頁寫了本站不存任何東西），重新整理回到自動。 */
+(function () {
+  var names = ["AUTO", "DAY", "NIGHT"], aria = "Time of day: {name}. Activate to change", modes = ['', 'light', 'dark'], i = 0;
+  var media = { '': '(prefers-color-scheme: dark)', light: 'not all', dark: 'all' };
+  var btn = document.getElementById('pt-theme');
+  function sync() { btn.textContent = names[i]; btn.setAttribute('aria-label', aria.replace('{name}', names[i])); }
+  sync();
+  btn.addEventListener('click', function () {
+    i = (i + 1) % 3;
+    if (modes[i]) document.documentElement.setAttribute('data-theme', modes[i]);
+    else document.documentElement.removeAttribute('data-theme');
+    var ss = document.querySelectorAll('picture.dn source[media]');
+    for (var k = 0; k < ss.length; k++) ss[k].setAttribute('media', media[modes[i]]);
+    sync();
+  });
+})();
+</script>
+</body>
+</html>

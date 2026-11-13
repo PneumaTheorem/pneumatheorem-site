@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第三方授權 — PneumaTheorem</title>
+<meta name="description" content="LADE 與本網站使用的字型、軟體、音效與資料來源。">
+<link rel="canonical" href="https://pneumatheorem.org/zh/legal/licenses/">
+<link rel="alternate" hreflang="en" href="https://pneumatheorem.org/legal/licenses/">
+<link rel="alternate" hreflang="zh-Hant" href="https://pneumatheorem.org/zh/legal/licenses/">
+<link rel="alternate" hreflang="ja" href="https://pneumatheorem.org/ja/legal/licenses/">
+<link rel="alternate" hreflang="x-default" href="https://pneumatheorem.org/legal/licenses/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PneumaTheorem">
+<meta property="og:title" content="第三方授權 — PneumaTheorem">
+<meta property="og:description" content="LADE 與本網站使用的字型、軟體、音效與資料來源。">
+<meta property="og:url" content="https://pneumatheorem.org/zh/legal/licenses/">
+<meta property="og:image" content="https://pneumatheorem.org/assets/img/og-1200x630.jpg">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0c0d12">
+<link rel="icon" type="image/png" href="/assets/favicon-512.png">
+<link rel="apple-touch-icon" href="/assets/favicon-512.png">
+<link rel="preload" href="/assets/fonts/Cinzel-Variable-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">跳到內容</a>
+<nav class="nav" aria-label="PneumaTheorem">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/zh/"><img src="/assets/img/ptlogo.svg" alt="" width="26" height="28"><span>PneumaTheorem</span></a>
+    <div class="nav-links"><a href="/zh/lade/">LADE</a><a href="/zh/#studio">工作室</a><a href="/zh/legal/" aria-current="page">條款</a></div>
+    <div class="nav-lang" aria-label="語言"><a href="/legal/licenses/" hreflang="en" lang="en">EN</a><a href="/zh/legal/licenses/" hreflang="zh-Hant" lang="zh-Hant" aria-current="true">中文</a><a href="/ja/legal/licenses/" hreflang="ja" lang="ja">日本語</a></div>
+  </div>
+</nav>
+
+<main id="main">
+  <header class="page-head">
+    <p class="eyebrow"><a href="/zh/legal/" style="color:inherit;text-decoration:none">條款</a></p>
+    <h1>第三方授權</h1>
+  </header>
+  <div class="doc"><div class="doc-body">
+    
+    <h2>字型</h2><p>依 <a href="/assets/fonts/OFL.txt">SIL Open Font License 1.1</a>：Cinzel 與 Cinzel Decorative（The Cinzel Project Authors；Natanael Gama）、Cormorant Garamond（The Cormorant Project Authors）、Quicksand（Andrew Paglinawan）、Sorts Mill Goudy（Barry Schwartz）。本網站使用 Cinzel 與 Cormorant Garamond。</p><h2>軟體</h2><p>mediaremote-adapter — © 2025 Jonas van den Berg and contributors，BSD 3-Clause 授權。只有附帶它的版本才包含。</p><h2>音效</h2><p>介面音效來自 Kenney（kenney.nl），以 CC0 1.0 釋出。</p><h2>資料來源</h2><ul><li>MET Norway（挪威氣象研究所）— CC BY 4.0。</li><li>ipwho.is — 沒有設定地點時，從 IP 位址估計大概的位置。</li><li>你輸入的地名，由 macOS 內建的地名查詢換成座標。</li><li>LRCLIB — 社群維護的歌詞資料庫；歌詞屬於各自的權利人。</li></ul><p>以上提供者都沒有為 LADE 背書。完整的授權全文在 App 裡的 <code>THIRD_PARTY_LICENSES.txt</code>。</p>
+  </div></div>
+</main>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-head">PneumaTheorem</p>
+      <strong>PneumaTheorem, Inc.</strong><br>
+      德拉瓦州 C 型公司 · 在台灣營運<br>
+      Kevin Tao，創辦人 · <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
+      <p class="copyright">© 2026 PneumaTheorem, Inc. 保留所有權利。</p>
+    </div>
+    <div>
+      <p class="footer-head">產品</p>
+      <ul>
+        <li><a href="/zh/lade/">LADE</a></li>
+        <li><a href="/zh/lade/install/">安裝說明</a></li>
+        <li><a href="https://x.com/PneumaTheorem" rel="noopener">X</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-head">條款</p>
+      <ul>
+        <li><a href="/zh/legal/privacy/">隱私權</a></li>
+        <li><a href="/zh/legal/eula/">使用授權（EULA）</a></li>
+        <li><a href="/zh/legal/streaming/">直播與影片</a></li>
+        <li><a href="/zh/legal/licenses/">第三方授權</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="pt-dock"><button id="pt-theme" type="button" class="chip">自動</button></div>
+<script src="/assets/js/hero.js" defer></script>
+<script>
+/* 日夜：自動（跟系統）→ 白天（淺色、白天的圖）→ 夜（深色、夜的圖）。
+   不寫 localStorage（隱私頁寫了本站不存任何東西），重新整理回到自動。 */
+(function () {
+  var names = ["自動", "白天", "夜晚"], aria = "時辰：{name}，按一下切換", modes = ['', 'light', 'dark'], i = 0;
+  var media = { '': '(prefers-color-scheme: dark)', light: 'not all', dark: 'all' };
+  var btn = document.getElementById('pt-theme');
+  function sync() { btn.textContent = names[i]; btn.setAttribute('aria-label', aria.replace('{name}', names[i])); }
+  sync();
+  btn.addEventListener('click', function () {
+    i = (i + 1) % 3;
+    if (modes[i]) document.documentElement.setAttribute('data-theme', modes[i]);
+    else document.documentElement.removeAttribute('data-theme');
+    var ss = document.querySelectorAll('picture.dn source[media]');
+    for (var k = 0; k < ss.length; k++) ss[k].setAttribute('media', media[modes[i]]);
+    sync();
+  });
+})();
+</script>
+</body>
+</html>

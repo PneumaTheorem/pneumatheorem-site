@@ -1,736 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PneumaTheorem — The P-index Framework</title>
-  <meta name="description" content="A physics-based framework for crowd compression risk. What a geometry permits, read from the drawing.">
-  <meta name="author" content="Kevin Tao, PneumaTheorem Inc.">
-
-  <meta property="og:title" content="PneumaTheorem — The P-index Framework">
-  <meta property="og:description" content="What a geometry permits, read from the drawing.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://pneumatheorem.org">
-  <meta property="og:image" content="https://pneumatheorem.org/assets/logo.png">
-
-  <!-- ⚠⚠ 2026-07-31：favicon。
-
-       【Safari 白邊的原因】logo.png 的背景是不透明的白，
-         而 Safari 把 favicon 原樣畫在分頁列上 ——
-         白底方形在深色分頁列上就是一塊白。
-         ⚠ CSS 改不了 —— 形狀必須在檔案裡。
-
-       【解法】favicon-512.png：圓形外為【透明】。
-         圓外透明後，深色分頁列與淺色分頁列都不會出現白邊。
-
-       ⚠ sizes 已拿掉（2026-07-31）—— Safari 的圖示選取邏輯
-         出了名地挑剔，少一個變數少一個出錯點。
-       ⚠ 路徑改為【根目錄絕對】（/assets/...）——
-         若日後有頁面放進子資料夾，相對路徑會失效。
-       ⚠⚠ 2026-08-01（已退回）：曾改用 SVG favicon，目的是消除
-         分頁列的白邊。【無效】，已還原為 PNG。
-
-         【真正的原因】白底不是檔案的問題 ——
-           Safari 在【深色模式】下，若判斷圖示與背景
-           對比不足，會【自己補上一層白底】。
-           本標誌是黑圓，分頁列也是深色 —— 必然觸發。
-         ⚠ 那是 Apple 的設計決定，與格式無關。
-           換 PNG、換 SVG、換尺寸都一樣。
-
-         【唯一可能的解】把圖示本身提亮 —— 例如拿掉黑圓底、
-           只留銅色標記（透明背景）。
-           ⚠ 但那就不是現在這個圓形標誌了 ——
-             是【換一個設計】，不是【修一個錯誤】。
-           ⚠ 未驗證。Safari 的對比度門檻未公開。
-
-       ⚠⚠ 【不要再花時間在這上面】—— 2026-08-01 已試過：
-         兩行 rel="icon" 賭宣告順序（失敗）、
-         只宣告 SVG（失敗）。成因在 Safari 那邊。
-
-       ⚠ assets/favicon.svg 【保留】—— 圖紙浮水印與
-         日後大尺寸用途仍需要它。只是不再當 favicon。 -->
-  <link rel="icon" type="image/png" href="/assets/favicon-512.png">
-  <link rel="apple-touch-icon" href="/assets/favicon-512.png">
-
-  <!-- ⚠⚠ 2026-07-31：canonical。
-       任何查詢字串（?bug=1、?s=2 …）都回 200 且內容完整，
-       等於【無限多個可索引的網址】。
-       canonical 告訴搜尋引擎哪一個才是正本。 -->
-  <link rel="canonical" href="https://pneumatheorem.org/">
-  <!-- 行動瀏覽器的介面色。與 --banner-bg 同值。 -->
-  <meta name="theme-color" content="#161616">
-
-  <!-- ⚠⚠ 2026-07-31：首屏用到的兩個字重 preload。
-       font-display: swap 代表首次繪製是 Georgia、
-       之後跳成 Cormorant —— h1 與品牌名會明顯位移一次。
-       ⚠⚠ crossorigin 【即使同源也必須寫】——
-         字型是以 CORS 模式取得的，漏了會變成載兩次。
-       ⚠ 只 preload 這兩個 —— preload 過多反而拖慢首屏。
-         Cormorant SemiBold（600）：h1 / h2 / h3
-         Montserrat SemiBold（600）：小標籤與按鈕 -->
-  <link rel="preload" href="/assets/fonts/CormorantGaramond-SemiBold.woff2"
-        as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/assets/fonts/Montserrat-SemiBold.woff2"
-        as="font" type="font/woff2" crossorigin>
-  <!-- ⚠⚠ 2026-07-30：Google Fonts 連結已移除，字型改為自架。
-       舊行會把訪客 IP 傳給第三方。見 style.css 檔頭。
-       ⚠ assets/fonts/ 的 woff2 須先就位，否則退回 Georgia。 -->
-  <!-- ⚠⚠ 2026-07-31：?v= 版號【已移除】，不得加回。
-
-       【7/30 事故的真因】不是沒有版號，而是 Cloudflare 的
-         Browser Cache TTL 被覆寫成四小時（max-age=14400），
-         把 Pages 原本的 must-revalidate 架空了。
-         （當時的症狀：HTML 已更新而 CSS 是舊的，
-           導覽列完全沒樣式；從 privacy.html 進來卻正常。）
-
-       【已修】Caching → Configuration → Browser Cache TTL
-         改為 Respect Existing Headers。
-         現在 style.css 送的是
-         max-age=0, must-revalidate + ETag ——
-         每次造訪都會問一句，沒變就回 304。
-
-       ⚠⚠ 若日後又出現「HTML 新、CSS 舊」，
-         【先驗 header，不要急著加版號】：
-           curl -sI https://pneumatheorem.org/style.css | grep -i cache-control
-         看到 max-age 大於 0 就是 Cloudflare 又被設了規則。
-
-       ⚠ 快取策略現在寫在 repo 根目錄的 _headers。 -->
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PneumaTheorem — an independent studio</title>
+<meta name="description" content="PneumaTheorem is an independent studio in Taiwan. Our first release is LADE, a living wallpaper for macOS; games set in the same world come next.">
+<link rel="canonical" href="https://pneumatheorem.org/">
+<link rel="alternate" hreflang="en" href="https://pneumatheorem.org/">
+<link rel="alternate" hreflang="zh-Hant" href="https://pneumatheorem.org/zh/">
+<link rel="alternate" hreflang="ja" href="https://pneumatheorem.org/ja/">
+<link rel="alternate" hreflang="x-default" href="https://pneumatheorem.org/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PneumaTheorem">
+<meta property="og:title" content="PneumaTheorem — an independent studio">
+<meta property="og:description" content="PneumaTheorem is an independent studio in Taiwan. Our first release is LADE, a living wallpaper for macOS; games set in the same world come next.">
+<meta property="og:url" content="https://pneumatheorem.org/">
+<meta property="og:image" content="https://pneumatheorem.org/assets/img/og-1200x630.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0c0d12">
+<link rel="icon" type="image/png" href="/assets/favicon-512.png">
+<link rel="apple-touch-icon" href="/assets/favicon-512.png">
+<link rel="preload" href="/assets/fonts/Cinzel-Variable-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
 </head>
 <body>
-
-<!-- ⚠⚠ 2026-07-31：跳過導覽的連結。
-     固定導覽列有 logo 加七個連結 ——
-     鍵盤使用者每次進站要按八次 Tab 才碰得到內容。
-     ⚠ 必須是 <body> 的【第一個可聚焦元素】，
-       否則它自己就失去意義。
-     ⚠ 目標 #main 的 id 寫在下方的 <main id="main"> 上，
-       【兩處要一起改】。 -->
 <a class="skip-link" href="#main">Skip to content</a>
-
-<!--
-  ============================================================
-  2026-07-28 重寫。依 W04（Architectural Integration）與
-  B01 v5 為準，移除舊站與 v5 抵觸的內容。
-
-  【已移除，且不得寫回】
-    - N_max 作為監理容量上限
-        -> v5 下該量不成立：壓迫關係不含人頭數（W04 §2.4）
-    - 子區域 P 熱圖、即時風險監測、設計期迭代評估
-        -> P 不是設計期指標，只在重建時取正值（W04 §2.1）
-    - 「biomechanical lethality envelope」「lethal ones」
-        -> 門檻全面外部化，框架不背書任何值（B01 v5）
-    - 「Supplements or replaces per-person area rules under
-       NFPA 101 / ISO 16730 / Eurocode」
-        -> commercial_scope_INTERNAL §8 禁止合規判定用語
-    - EP 曲線／Solvency II 對齊／RMS・Verisk・KatRisk 相容性
-        -> 樹裡查無依據，且 EP 曲線需要框架明文拒絕供給的速率
-    - 「licensing through to full acquisition」
-        -> 定位已改為兩個封閉形式評估產品（服務定義草案 §六）
-
-  【文件區：2026-07-30 現況】
-    站上三份可下載：B01 v5、W04、AGA 樣本。
-    （舊決定為 2026-07-28：只放 B01 v5，E01、W01、W02 先拿掉。）
-
-    ⚠⚠ E01：舊理由【已消失】。舊決定寫「E01 的雙分結構
-      已被三軸矩陣取代」—— 而 2026-07-30 E01 本身已改寫為
-      三軸結構，它就是現在的來源。
-      → Zenodo 新版上傳後，應重新考慮加回 E01 卡片。
-      ⚠ 上傳【之前】不得加：DOI 目前解析出來仍是雙分版，
-        卡片所述會與讀者實際拿到的不符。
-
-    ⚠ W01／W02：維持不列，但理由已更新 —— 不是「未確認
-      是否對齊 v5」，而是 2026-07-30 裁定：W01 不再對外、
-      W02 已撤回。兩者與 W03 同樣位於 11_Research 且不再維護。
-      （W04 的系列脈絡頁與 further reading 節已同日一併移除三者。）
-
-    ⚠ assets/archive/ 已清空（2026-07-30）。
-      舊警語「裡面仍有 B01_P-index_v1.pdf，不要連它」已不適用。
-
-  【仍待決，故本頁留白】
-    - Love Parade 回溯報告：可作為主要憑證，公開形式未定。
-      ⚠ 2026-07-30：報告已寄給 Still。卡片仍標八月、不放連結。
-
-  ============================================================
-  ⚠⚠ 2026-07-29 更新
-  ============================================================
-
-  【已解決】demo 目錄與標價
-    B 案（完整三軸，1K）已於 2026-07-28 通過對外前審查；
-    C 案（免費硬體 Demo，PTI-AGA-2026-003）已上站。
-
-  ⚠⚠ 【站上不寫金額】價格只寫在樣本 PDF §7。
-    理由（Kevin 2026-07-29）：需要這種服務的客戶，
-    價格通常不是優先考量；重點是服務流程、付費模式、
-    以及【要跑幾次請款】。故 Engagement 段講兩次請款，
-    不講金額。寫在兩處遲早會不一致。
-
-  ⚠ 【產品名稱待對】站上第一項仍叫
-    「Pre-event geometric assessment」（= B 案，PGA），
-    而新上的樣本是「Access Geometry Assessment」（= C 案，AGA）。
-    兩者是不同的東西（九格 vs 硬體列三格），
-    卡片已寫明「three cells of nine」。
-    → 但兩個名字很像，客戶可能混。命名軸統一待決。
-  ============================================================
--->
-
-<!-- ⚠⚠ 2026-07-30（第二版）：固定導覽列。
-     左邊 logo-3.png（黑底白標），右邊白字連結，
-     選取時下方浮出一條青銅色細線。
-     ⚠ 2026-07-31：曾改為 logo-2.png（彩色），已還原為素色。
-       導覽列是深色的，黑底白標才融得進去。
-     ⚠ 連結目標的 id 寫在下方各 <section> 上，
-       【改 id 要兩處一起改】。
-     ⚠ privacy.html 有一份結構相同但連回 index.html 的版本。
-     ⚠ logo 點下去回首頁頂端 —— 固定導覽列的慣例。
-     ⚠ 置於 banner 【之前】：雖然 fixed 使視覺位置與 DOM 無關，
-       但鍵盤操作的 tab 順序跟 DOM 走 —— 導覽該先被碰到。 -->
-<nav class="nav">
+<nav class="nav" aria-label="PneumaTheorem">
   <div class="nav-inner">
-    <a class="nav-logo" href="#top" aria-label="PneumaTheorem home">
-      <!-- ⚠⚠ 2026-08-01：logo-3.png 已刪，改用 ptlogo.svg。
-           SVG 是純黑的，由 CSS 的
-           filter: brightness(0) invert(1) 翻成白。
-
-           ⚠ 曾經改成 <span> + CSS mask，但那在 file:// 下
-             【完全不顯示】且不報錯 —— 已回退。
-           ⚠ 本檔與 privacy.html 各有一份，【兩處要一起改】。 -->
-      <img src="assets/ptlogo.svg" alt="PneumaTheorem">
-    </a>
-    <div class="nav-links">
-      <a href="#plan">Plan</a>
-      <a href="#framework">Framework</a>
-      <a href="#deliverables">Deliverables</a>
-      <a href="#limits">Limits</a>
-      <a href="#products">Products</a>
-      <a href="#documents">Documents</a>
-      <a href="#engagement">Engagement</a>
-    </div>
+    <a class="nav-logo" href="/"><img src="/assets/img/ptlogo.svg" alt="" width="26" height="28"><span>PneumaTheorem</span></a>
+    <div class="nav-links"><a href="/lade/">LADE</a><a href="/#studio">Studio</a><a href="/legal/">Legal</a></div>
+    <div class="nav-lang" aria-label="Language"><a href="/" hreflang="en" lang="en" aria-current="true">EN</a><a href="/zh/" hreflang="zh-Hant" lang="zh-Hant">中文</a><a href="/ja/" hreflang="ja" lang="ja">日本語</a></div>
   </div>
 </nav>
 
-<!-- ============================================
-     TOP BANNER —— slim brand band
-     ⚠⚠ 2026-07-31 收乾淨。
-       舊版裝了 logo、email、創辦人姓名、公司註冊地 ——
-       後三項都是 footer 的內容，卻佔住首屏最上方。
-       → 聯絡資訊整組移到 footer；logo 已在導覽列左上，
-         本帶不再重複。
-     ⚠ <div> 改為 <header>：它語意上就是頁首。
-     ============================================ -->
-<header class="banner" id="top">
-  <div class="banner-inner">
-    <div class="banner-brand">
-      <div class="brand-name">PneumaTheorem</div>
-      <div class="brand-tagline">Physics-based crowd compression risk quantification</div>
+<header class="hero">
+  <div class="hero-art" data-parallax><div class="layer layer-bg"><picture class="dn"><source type="image/webp" media="(prefers-color-scheme: dark)" srcset="/assets/img/keyart-bg-night-1200.webp 1200w, /assets/img/keyart-bg-night-2400.webp 2400w" sizes="100vw"><source type="image/webp" srcset="/assets/img/keyart-bg-day-1200.webp 1200w, /assets/img/keyart-bg-day-2400.webp 2400w" sizes="100vw"><img src="/assets/img/keyart-bg-day-1200.webp" alt="" width="2400" height="1350" fetchpriority="high"></picture></div><div class="layer layer-char"><picture class="dn"><source type="image/webp" media="(prefers-color-scheme: dark)" srcset="/assets/img/keyart-right-char-night-1200.webp 1200w, /assets/img/keyart-right-char-night-2400.webp 2400w" sizes="100vw"><source type="image/webp" srcset="/assets/img/keyart-right-char-day-1200.webp 1200w, /assets/img/keyart-right-char-day-2400.webp 2400w" sizes="100vw"><img src="/assets/img/keyart-right-char-day-1200.webp" alt="Solmete in her maid dress, looking up at the falling snow before a castle gate at night." width="2400" height="1350" fetchpriority="high"></picture><picture class="dn blink b1"><source type="image/webp" media="(prefers-color-scheme: dark)" srcset="/assets/img/keyart-right-blink1-night-1200.webp 1200w, /assets/img/keyart-right-blink1-night-2400.webp 2400w" sizes="100vw"><source type="image/webp" srcset="/assets/img/keyart-right-blink1-day-1200.webp 1200w, /assets/img/keyart-right-blink1-day-2400.webp 2400w" sizes="100vw"><img src="/assets/img/keyart-right-blink1-day-1200.webp" alt="" width="2400" height="1350"></picture><picture class="dn blink b2"><source type="image/webp" media="(prefers-color-scheme: dark)" srcset="/assets/img/keyart-right-blink2-night-1200.webp 1200w, /assets/img/keyart-right-blink2-night-2400.webp 2400w" sizes="100vw"><source type="image/webp" srcset="/assets/img/keyart-right-blink2-day-1200.webp 1200w, /assets/img/keyart-right-blink2-day-2400.webp 2400w" sizes="100vw"><img src="/assets/img/keyart-right-blink2-day-1200.webp" alt="" width="2400" height="1350"></picture></div></div>
+  <div class="hero-inner"><div class="hero-copy">
+    <p class="eyebrow">Independent studio · Taiwan</p>
+    <h1>Worlds that keep you company.</h1>
+    <p class="lede">We make living characters and the light, weather and water around them — first on your desktop, then in games.</p>
+    <div class="actions">
+      <a class="btn" href="/lade/">Discover LADE</a>
+      <a class="btn btn-ghost" href="#studio">About the studio</a>
     </div>
-  </div>
+  </div></div>
 </header>
-
-<!-- ⚠ id="main" 是 skip-link 的目標，【兩處要一起改】。 -->
 <main id="main">
-
-  <section class="hero">
-    <h1>The P-index Framework</h1>
-    <p class="lede">
-      Whether a crowd can be compressed to the point of harm is decided by the shape of the space it occupies, and the shape is fixed at design stage. This framework reads that question off the drawing.
-    </p>
-    <p>
-      Density does not answer it. Tokyo's Yamanote Line operates routinely at 6&ndash;7 persons/m<sup>2</sup> without recorded compressive-asphyxia incidents, while fatal crowd compressions have occurred at the same densities and at lower ones. The quantity that separates the two cases is not how many people are present.
-    </p>
-    <p>
-      It is how many directions of travel the region admits. A run bounded on both flanks supplies an alignment that an open region divides among several directions, and the difference is large enough to carry a crowd across the threshold at which load begins to accumulate &mdash; with no one exerting themselves any harder. That property is set by the built form and by nothing else.
-    </p>
-  </section>
-
-  <!-- ==========================================================
-       圖面區（骨架）—— 2026-07-31
-       ==========================================================
-       ⚠⚠ 圖已就位（2026-07-31）：assets/site_plan.svg。
-         .plan-placeholder 已從 HTML 與 CSS 移除。
-
-       ⚠ alt 已實寫 —— 螢幕閱讀器與關掉圖片的人靠它。
-         它描述【圖上有什麼】，不做判定。
-
-       ⚠⚠ 【圖上的重疊已修】site_plan.tex 裡
-         South Terrace 的標註已下移至 y=-15，
-         且「Pitch access ×4」那一行加了 text width 換行、
-         下移至 y=-7，不再壓到入口方格 ——
-         而那一行正是下方 03 要點引用的。
-
-       ⚠ 圖上的場地是【虛構】的（T01 案例，Meadowfield
-         Stadium，英國標準場館尺寸）—— figcaption 已寫明，
-         否則有人會去找這個場館。
-
-       ⚠⚠ 【已辦：圖已改為橫式】2026-07-31。
-         site_plan.tex 的圖例由平面圖下方兩欄改為
-         右側單欄，比例尺上移。
-         379.66 × 462.12（直式 0.82）
-           → 553.98 × 397.58（橫式 1.393）
-         → 滿版 1020px 時圖高由 1241px 降到 732px，
-           少了四成，且標註大得多。
-         ⚠ 交付 PDF 裡的那一張也一併改善了。
-         ⚠⚠ 日後再改圖時，【style.css 的 aspect-ratio
-           必須跟著改】—— 對不上會預留錯的版位。
-       ========================================================== -->
-  <section class="overview" id="plan">
-    <h2>What a complete assessment reads</h2>
-
-    <!-- ⚠⚠ 2026-07-31：商業定位。
-         這兩段要說的是【demo 是開放場館，
-         而這裡可以處理更複雜的】。
-         ⚠ 複雜度不是尺寸問題，是【元件種類數】問題 ——
-           那才是為什麼需要服務而不是範本。 -->
-    <p>
-      The demonstration is an open venue: one kind of surface, no seats, and
-      nothing that interrupts a run. Most venues are not like that.
-    </p>
-    <p>
-      This is a stadium in concert configuration &mdash; the same geometry
-      that holds a football fixture, rearranged so that a standing audience
-      occupies the pitch. It carries six kinds of element and they do not
-      behave alike. Seating partitions. An egress lane partitions only while
-      it is kept clear. A refuge node is checked against the population
-      routed to it and never added to another. Circulation moves people and
-      holds none. A link is neither. And four accesses appear whose form has
-      not been fixed.
-    </p>
-    <p>
-      Complexity here is not a matter of size. It is how many kinds of
-      element the geometry contains and how they interact, and that is what
-      separates a venue that needs an assessment from one that can be read
-      off a sample.
-    </p>
-
-    <figure class="plan-figure">
-      <div class="plan-sheet">
-        <img src="assets/site_plan.svg"
-             alt="Site plan of a fictional stadium in concert configuration. Three standing bands separated by egress lanes face a stage; seated stands enclose them on the east, west and south; a north terrace is held out of sale for production. Two refuge nodes, four concourses, a river-road footway link, and four pitch accesses whose form is recorded as undetermined.">
-      </div>
-      <!-- ⚠⚠ 圖說必須寫明【虛構】，
-           否則有人會去找這個場館。
-           數字取自 T01 的 venue_data.tex。 -->
-      <figcaption>
-        Meadowfield Stadium &mdash; a fictional venue, dimensioned to UK
-        stadium practice, shown in concert configuration: 15,041 seats sold,
-        a standing audience of 9,112 on the pitch, and a north terrace held
-        out of sale for production. The drawing defines the scope of an
-        assessment: what is drawn is what is analysed.
-      </figcaption>
-      <!-- ⚠ 看大圖的出口。圖上的標註在這個寬度下仍然偏小，
-           而 pointer-events: none 把右鍵與點擊都關掉了 ——
-           沒這一行就沒有路。
-           ⚠ 不削弱複製阻力：SVG 網址本來就在 <img src> 裡。 -->
-      <p class="plan-open">
-        <a href="assets/site_plan.svg" target="_blank" rel="noopener">Open the drawing</a>
-      </p>
-    </figure>
-
-    <!-- ⚠⚠ 2026-07-31：role="list" 是必要的。
-         Safari 的 VoiceOver 在清單被移除項目符號
-         （list-style: none）時會把 list 語意一起拿掉，
-         讀者聽不到「共三項」。
-         ⚠ 這是公認的解法，不是冗餘宣告。 -->
-    <ol class="plan-points" role="list">
-      <li>
-        <span class="num">01</span>
-        Seating is a partition. Each seat interrupts a connected run, which
-        is why a seated block and an open standing band of the same area do
-        not carry the same guarantee.
-      </li>
-      <li>
-        <span class="num">02</span>
-        Refuge is checked per node and never summed. Two nodes of a given
-        capacity are not one node of twice that capacity, and the drawing
-        records them separately for that reason.
-      </li>
-      <li>
-        <span class="num">03</span>
-        What is undetermined is recorded as undetermined. Four pitch accesses
-        appear on this drawing without a stated form, because the form has
-        not been fixed &mdash; and an assessment says so rather than assuming
-        one.
-      </li>
-    </ol>
-  </section>
-
-  <section class="overview" id="framework">
-    <h2>Two kinds of safety, equivalent in verdict and not otherwise</h2>
-
-    <p>
-      A configuration can fail to produce the mechanism because its shape does not admit one, or because a measure prevents one. Both satisfy the same criterion. They differ in that the second has an execution rate and the first does not.
-    </p>
-    <p>
-      And a lapse in the second is not recovered by resuming it. Forming a compacted region requires work; maintaining it requires none. What forms during a lapse persists after the measure is restored. An operational measure can be specified at any point in a venue's life; a shape that requires no measure can only be chosen while the shape is still being chosen.
-    </p>
-  </section>
-
-  <section class="overview" id="deliverables">
-    <h2>What an assessment delivers</h2>
-
-    <div class="grid">
-      <div class="grid-item">
-        <h3>A load guarantee</h3>
-        <p>For each region admitting a connected run: the partition spacing adopted, the load that spacing guarantees, and the premise the guarantee rests on. The figure follows from the drawing and the packing limit; apart from a declared exertion, nothing else enters.</p>
-      </div>
-      <div class="grid-item">
-        <h3>A three-state element list</h3>
-        <p>Each element classified as closed by its shape, closable by a measure of stated dimension, or not closable within scope. Its commercial form is a count: how many elements still rest on someone doing something correctly.</p>
-      </div>
-      <div class="grid-item">
-        <h3>The mechanical image of a standard</h3>
-        <p>A density, a width or a timing requirement in the governing guidance implies a per-person load, and the conversion states which. It compares two instruments; it does not determine compliance, which is not this framework's to determine.</p>
+  <section class="section">
+    <div class="split">
+      <a class="frame" href="/lade/" tabindex="-1" aria-hidden="true"><picture class="dn"><source type="image/webp" media="(prefers-color-scheme: dark)" srcset="/assets/img/portrait-night-720.webp"><img src="/assets/img/portrait-day-720.webp" alt="" width="720" height="900" loading="lazy"></picture></a>
+      <div>
+        <p class="eyebrow">Our first release · Coming soon</p>
+        <h2>LADE — a living wallpaper for macOS</h2>
+        <p class="intro">Solmete lives on your desktop. The light follows the hours of your day, the weather follows the sky outside, and when you need the screen, she steps aside.</p>
+        <div class="actions"><a class="btn" href="/lade/">See LADE</a></div>
       </div>
     </div>
-
-    <p>
-      The design variable that follows is a partition spacing rather than a headcount. None of the load relations contains a number of people: two hundred occupants at a given spacing and two hundred thousand at the same spacing carry the same guarantee, because what the relation bounds is the length of a connected run.
-    </p>
   </section>
-
-  <section class="overview" id="limits">
-    <h2>Where the framework stops</h2>
-
-    <p>
-      Three quantities are missing &mdash; the per-contributor exertion, the residual a standing body absorbs, and the rate at which a region fills &mdash; and all three fall on the force and time axes. The space axis, the one a building controls, is complete. Three of the missing quantities are properties of bodies rather than of any site: measured once, and thereafter available to everyone.
-    </p>
-    <p>
-      The framework also adopts no threshold. It establishes what load a configuration can produce and how that load accumulates; it does not establish what load injures a person, and it catalogues external values for the reader's selection rather than selecting among them. A client adopting a different value obtains different figures from the same analysis, and the analysis is unchanged in form.
-    </p>
-    <p>
-      Four questions are outside the scope of an assessment and are stated in its terms rather than in a footnote: when a region will fill; the density at which to act; the quantitative treatment of intersecting streams; and whether a venue is safe. Nothing in an assessment permits a configuration to be occupied or withholds permission.
-    </p>
+  <div class="band">
+    <section class="section">
+      <p class="eyebrow">What we make</p>
+      <h2>Small worlds, built to run all day.</h2>
+      <div class="grid"><div class="card"><span class="num">01</span><h3>Characters that live with you</h3><p>Artwork layered so that hair, expressions and light move on their own — rendered in real time, and quiet enough to leave running.</p></div><div class="card"><span class="num">02</span><h3>Light, weather and water</h3><p>Our own renderer: hand-painted light for each part of the day, rain on the glass, snow and frost, and caustics when you dive.</p></div><div class="card"><span class="num">03</span><h3>Games next</h3><p>A game set in LADE’s world is in early design, built on our own real-time simulation.</p></div></div>
+    </section>
+  </div>
+  <section class="section" id="studio">
+    <p class="eyebrow">Studio</p>
+    <h2>One person, one world.</h2>
+    <div class="intro"><p>PneumaTheorem, Inc. is a Delaware company run from Taiwan by its founder, Kevin Tao. The renderer, the tools and the character pipeline behind LADE are made here.</p><p>LADE pays for its own road: each sales milestone funds the next step — notarization, free outfits, Steam and Windows, widgets chosen by supporters, and a second character.</p><p>Press, collaboration or anything else: <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a></p></div>
   </section>
-
-  <section class="overview" id="products">
-    <h2>Assessment products</h2>
-
-    <div class="grid">
-      <div class="grid-item">
-        <h3>Pre-event geometric assessment</h3>
-        <p>Closed form; no model is run. Load bounds, grouping and partition dimensions, and the three-state classification, from the drawing and a declared exertion &mdash; by arithmetic a reader can check by hand. A sample deliverable covering the built-form row is <a href="#documents">available below</a>.</p>
-      </div>
-      <div class="grid-item">
-        <h3>Retrospective backtrack analysis</h3>
-        <p>Closed form; retrospective. Whether a geometry, as built and occupied, suffices to produce a stated load. Reported as a lower bound rather than a fitted value.</p>
-      </div>
-      <div class="grid-item">
-        <h3>Venue P-report</h3>
-        <p>A model is run, and the trajectory and magnitude of <em>P</em> are computed. <em>P</em> takes a positive value only in reconstruction, so this is the one product that computes it. No instance has yet been produced.</p>
-      </div>
-    </div>
-
-    <p>
-      The dividing line between the first two and the third is whether a model is run, and it is not a difference of depth. They differ in price and in delivery time by an order of magnitude, which is why the line is drawn here rather than left as a matter of scope.
-    </p>
-  </section>
-
-  <!--
-    【文件區】四張卡片，順序是理論 → 設計應用
-      → 歷史驗證 → 產品樣本。（2026-07-29）
-
-    ⚠⚠ AGA 樣本是【免費、開放散布】的，授權寫在 PDF 第 2 頁。
-      卡片上【必須】寫明是九格中的三格 ——
-      不寫的話讀者會以為樣本等於完整產品。
-
-    ⚠⚠ 2026-07-30：下載檔核對完成，三個連結全部對得上：
-        assets/B01_P-index_v5.pdf                 ✓
-        assets/W04_ArchitecturalIntegration_v1.pdf ✓
-        assets/AGA_AccessGeometry_Rivergate_v1.pdf ✓
-      （舊警語「W04 與 LPB 尚未放進 assets/，放進去之前
-        不要 push」—— W04 已放入，LPB 仍未放，
-        但 LP 卡片【本來就沒有下載鈕】，故不構成死連結。）
-
-    ⚠ LP 回溯：卡片先上、【標八月上架、不放下載連結】。
-      理由（Kevin 2026-07-29）：報告描述了 Still 的鑑定，
-      信已寄出讓他先看；但不等回覆 ——
-      他的回覆是【加分項不是前置條件】，而商業活動要開始了。
-      → 標八月同時做到兩件事：給了他時間、也不受制於他。
-      ⚠ 上架時要做三件：放 PDF、換回下載鈕、
-        把 doc-label 的「— August 2026」拿掉。
-  -->
-  <section class="documents" id="documents">
-    <h2>Documents</h2>
-
-    <div class="doc-card">
-      <div class="doc-label">Academic manuscript</div>
-      <h3>A Physical Quantification Framework for Crowd Compression Risk</h3>
-      <p class="doc-sub">The P-index System and Its Contact-Mechanical Foundation</p>
-      <p class="doc-meta">Version 5. Open access. The Zenodo record is a concept DOI and resolves to the current version.</p>
-      <p>
-        <a class="btn" href="assets/B01_P-index_v5.pdf" target="_blank" rel="noopener">Download (PDF, v5)</a>
-      </p>
-      <p>
-        <a class="btn" href="https://doi.org/10.5281/zenodo.21261698" target="_blank" rel="noopener">Read on Zenodo (open access)</a>
-      </p>
-    </div>
-
-    <div class="doc-card">
-      <div class="doc-label">White paper</div>
-      <h3>Architectural Integration</h3>
-      <p class="doc-sub">Reading the onset condition off the access geometry at design stage</p>
-      <p class="doc-meta">Written for architects, engineering consultancies, and landmark-project clients. What the framework asks of a drawing, and at what point in a design it can still be answered cheaply.</p>
-      <p>
-        <a class="btn" href="assets/W04_ArchitecturalIntegration_v1.pdf" target="_blank" rel="noopener">Download (PDF)</a>
-      </p>
-    </div>
-
-    <div class="doc-card">
-      <div class="doc-label">Retrospective analysis &mdash; August 2026</div>
-      <h3>Duisburg, 24 July 2010</h3>
-      <p class="doc-sub">The access route as a validation case</p>
-      <p class="doc-meta">A method worth trusting should give the right answer where the answer is already known. Reported as a lower bound rather than a fitted value, and it assigns responsibility to no person or body. Freely redistributable in full.</p>
-      <p class="doc-pending"><em>Publication August 2026.</em></p>
-    </div>
-
-    <div class="doc-card">
-      <div class="doc-label">Sample deliverable</div>
-      <h3>Access Geometry Assessment</h3>
-      <p class="doc-sub">Rivergate Yard &mdash; a fictional venue</p>
-      <p class="doc-meta">The built-form row of a nine-cell assessment: three cells of nine. The remaining six are named but not assessed, and the report says which. Freely redistributable in full.</p>
-      <p>
-        <a class="btn" href="assets/AGA_AccessGeometry_Rivergate_v1.pdf" target="_blank" rel="noopener">Download (PDF)</a>
-      </p>
-    </div>
-
-    <!--
-      ⚠⚠ 2026-07-30：新增付費示範卡片。
-
-      【位置的理由】緊接在免費樣本之後。
-        讀者剛讀到「九格中的三格，其餘六格未評估」，
-        那正是想要其餘六格的時刻。
-
-      ⚠⚠ 【不寫金額】依 2026-07-29 的決定：站上不寫價格。
-        按鈕文字不帶數字，點進去才看到。
-        ⚠ 但那個決定已經部分失效 —— Terms of Sale 現在從
-          Engagement 段連出去，而它的 §1 有完整的價格表。
-          這一點值得重新決定：要嗎接受價格可見，
-          要嗎把價格從 Terms 拿掉。現狀是兩者中間。
-
-      ⚠ 支付連結是外部網址（buy.stripe.com）。
-        若日後重建連結，網址會變 —— 這裡與 Engagement 段
-        各有一份，【兩處要一起改】。
-      ⚠⚠ 2026-07-31：連結已更新。
-        舊：...4c801｜新：...4c802
-        【為何重建】要開【自動收集稅號】，
-        而那個選項在現有連結上改不了，必須新建。
-        ⚠ 稅號收集不只是便利 —— B2B 逆向收費需要
-          【舉證客戶是企業】，而 VAT 號碼就是那個證據。
-          （具體義務待會計師確認。）
-    -->
-    <div class="doc-card">
-      <div class="doc-label">Full demonstration &mdash; purchase</div>
-      <h3>All Nine Cells</h3>
-      <p class="doc-sub">Rivergate Yard &mdash; the same fictional venue, assessed in full</p>
-      <p class="doc-meta">What the sample above covers in three cells, this covers in nine. It establishes what a complete assessment contains, so that the material required for your own venue can be judged before commissioning one. Half the fee is credited against any later stage, for any venue, with no expiry.</p>
-      <!-- ⚠⚠ 2026-08-01：交付與授權單獨一段。
-
-           【為何拆出來】舊版把「issued by email、licensed to the
-             organisation named at checkout」埋在一大段介紹的尾巴。
-             那兩件事是【買家在結帳前必須知道的】，
-             而不是介紹的一部分。
-
-           【新增兩句，各有實際後果】
-             「appears in the footer of every page」
-               —— 舊版只說 licensed to，沒說名字會【印出來】。
-                  印出來才是嚇阻：轉發追得到。
-             「to the address you give at checkout」
-               —— 2026-08-01 實測發現：Apple Pay 會自動帶入
-                  Apple ID 的信箱，買家根本沒意識到
-                  那就是交付信箱。不說就寄丟。
-
-           ⚠ 不同步改就會漂：Stripe 結帳頁現在有兩個必填欄位
-             （Organisation to be named on the report、
-               Email address for delivery），
-             這一段就是它們在網站上的對應說明。
-             【改其一就要檢查另一個】。
-
-           ⚠⚠ 【最後一句是補救管道】（2026-08-01 新增）
-             交付信箱填錯、押錯字、或進垃圾郵件 ——
-             這三種情形下客戶付了錢卻拿不到東西，
-             而【他不知道要找誰】。
-             ⚠ 提到 Stripe 付款確認信是重點：
-               那封信【一定寄得出去】（它用付款帳戶的信箱），
-               所以客戶手上必定有一個可核對的憑據。
-             ⚠ 「same day」是承諾 —— 只有在文件本來就
-               已經存在的情況下才能寫。demo 是現成的，
-               只需填兩個巨集重編。
-               【對定製報告不得寫這一句】。 -->
-      <p class="doc-meta">Each copy is licensed to an organisation you name at checkout, and that name appears in the footer of every page. It is issued by email to the address you give at checkout &mdash; not to the address on your payment method. If it has not arrived within one business day, write to <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a> with your Stripe payment confirmation and it will be issued the same day.</p>
-      <p>
-        <a class="btn" href="https://buy.stripe.com/9B600bgFTbzggn21WN4c802" target="_blank" rel="noopener">Purchase the full demonstration</a>
-      </p>
-    </div>
-
-  </section>
-
-  <section class="engagement" id="engagement">
-    <h2>Engagement</h2>
-    <p>
-      Two assessment products are in service, both closed-form. Each answers what a geometry permits, from the drawing and a declared exertion, by arithmetic that can be checked by hand rather than taken on trust.
-    </p>
-    <p>
-      The design-stage form of the work &mdash; entering a live design process and being relied upon within it &mdash; is a capability of the framework rather than a service currently offered. The order is deliberate: the assessments above require no qualification to perform and carry the lower risk, and the design-stage engagement is taken up after that work has established a record.
-    </p>
-    <!--
-      ⚠⚠ 2026-07-29 重寫費用段。
-
-      【舊寫法與樣本 PDF 直接衝突】
-        舊：「Scope and fee… Neither is quoted here, because the
-             quantities that determine them are the ones the
-             assessment itself establishes.」
-        而樣本 PDF §7 明列了前三階的固定價。
-        「not quoted here」字面仍成立（價格在 PDF 裡），
-        但 PDF 只有一個點擊的距離，讀起來像在迴避。
-
-      【而舊的理由只適用於後三項】
-        完整三軸、分區、跑模型 —— 工時取決於場地複雜度，
-        那確實是評估本身要建立的。
-        但前三階恰恰是【不需要看案子就能定價】的。
-
-      ⚠⚠ 【不寫數字，Kevin 2026-07-29】
-        需要這種服務的客戶，價格通常不是優先考量。
-        重點是【服務流程、付費模式、以及要跑幾次請款】。
-        大額客戶不比價，比的是這個案子要不要跑三次採購流程。
-        → 所以這一段要講的是【兩次請款】，不是金額。
-        → 金額只寫在樣本 PDF §7（單一來源）。
-          寫在兩處遲早會不一致，而且看價格要下載，
-          正好製造下載動機。
-    -->
-    <p>
-      The work is arranged so that it can be paid for twice. A first purchase covers the demonstration and the assessment of your own access geometry, and returns a quotation for the full assessment together with a list of any further material required. A second covers that assessment. Nothing between the two requires a separate authorisation.
-    </p>
-    <!-- ⚠ 2026-07-30：新增支付連結。
-         ⚠⚠ 文件區的付費卡片也有一份。連結若重建，【兩處要一起改】。
-         ⚠ 2026-07-31：已更新為 ...4c802（開稅號收集而重建）。 -->
-    <p>
-      The first stage &mdash; the full nine-cell demonstration on a fictional
-      venue &mdash; can be
-      <a href="https://buy.stripe.com/9B600bgFTbzggn21WN4c802" target="_blank" rel="noopener">purchased directly</a>.
-      It is issued by email within one business day.
-    </p>
-    <p>
-      Fees for the first stages are fixed and are stated in the sample deliverable, because they can be set without seeing the site: two of them are documents that already exist, and the third is read from drawings. Beyond that, scope and fee are set per configuration, against the extent of the region assessed and the number of scenarios carried &mdash; and the quantities that determine them are the ones the earlier stage establishes, which is why the quotation is delivered with it rather than before it.
-    </p>
-    <p>
-      A quotation carries no expiry, and neither does credit from an earlier stage. If the framework is revised substantially enough to change what a quotation rested on, the quotation is reissued and the difference is met here rather than by the client.
-    </p>
-    <!--
-      ⚠⚠ 2026-07-30：新增條款連結。
-
-      【為何必須有】Stripe 結帳頁賣的是【不可退款】與
-        【具名授權】，那兩件事必須在付款【前】可讀。
-        Stripe 帳戶設定裡的服務條款 URL 只在部分流程顯示，
-        網站上要有一個人找得到的連結。
-
-      ⚠ 檔名為 terms.pdf（無版號）。實際版本識別靠文件內的
-        「Effective 29 July 2026」。
-        ⚠⚠ 條款改版時舊檔會被覆蓋，舊版只留在 git 歷史。
-        律師回覆後動準據法與責任上限時，
-        須重新決定要不要轉成版號制
-        （舊客戶適用的是購買當時那一版）。
-    -->
-    <p>
-      The terms on which reports are sold &mdash; licence, delivery, credit,
-      refunds, and what is not provided &mdash; are set out in full in the
-      <a href="assets/terms.pdf" target="_blank" rel="noopener">Terms of Sale</a>.
-      They apply to assessment reports and not to any licensing of the
-      simulation engine, which is separately agreed.
-    </p>
-
-    <p>
-      Initial inquiry: written technical or commercial communication to
-      <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>.
-      Responded to within five business days.
-    </p>
-  </section>
-
 </main>
-
-<!-- ⚠⚠ 2026-07-31：<footer> 移出 <main>。
-     舊版 </main> 出現在 </footer> 之後，
-     使頁尾成為主內容的子元素 ——
-     語意上它應該是 <main> 的手足。 -->
 <footer>
   <div class="footer-inner">
-    <div class="footer-line">
-      <strong>PneumaTheorem, Inc.</strong> &middot; Delaware C-Corporation, incorporated 2026
+    <div>
+      <p class="footer-head">PneumaTheorem</p>
+      <strong>PneumaTheorem, Inc.</strong><br>
+      Delaware C-Corporation · operated from Taiwan<br>
+      Kevin Tao, Founder · <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
+      <p class="copyright">© 2026 PneumaTheorem, Inc. All rights reserved.</p>
     </div>
-    <!-- ⚠⚠ 2026-07-31：聯絡資訊自橫幅搬到這裡。
-         橫幅是講主張的地方，不是放名片的地方。
-         ⚠ Engagement 段原本寫「the email channel above」，
-           搬家後那句話會指錯方向 —— 已改成直接給位址。 -->
-    <div class="footer-line">
-      Kevin Tao, Founder &amp; CEO &middot;
-      <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
+    <div>
+      <p class="footer-head">Product</p>
+      <ul>
+        <li><a href="/lade/">LADE</a></li>
+        <li><a href="/lade/install/">How to install</a></li>
+        <li><a href="https://x.com/PneumaTheorem" rel="noopener">X</a></li>
+      </ul>
     </div>
-    <div class="footer-line">
-      ORCID: <a href="https://orcid.org/0009-0005-8136-3886" target="_blank" rel="noopener">0009-0005-8136-3886</a>
-    </div>
-    <!-- ⚠⚠ 2026-07-31：條款與隱私改為 chip，與右下角
-         工具座的切換鈕同一個樣式 ——
-         它們都是【功能入口】而不是內文連結。
-         隱私政策必須從首頁找得到 ——
-         Stripe 要的是一個 URL，讀者要的是一個按鈕。 -->
-    <div class="footer-chips">
-      <a class="chip" href="assets/terms.pdf" target="_blank" rel="noopener">Terms of Sale</a>
-      <a class="chip" href="privacy.html">Privacy</a>
-    </div>
-    <div class="footer-copyright">
-      &copy; 2026 PneumaTheorem, Inc. All rights reserved.
+    <div>
+      <p class="footer-head">Legal</p>
+      <ul>
+        <li><a href="/legal/privacy/">Privacy</a></li>
+        <li><a href="/legal/eula/">License (EULA)</a></li>
+        <li><a href="/legal/streaming/">Streaming &amp; videos</a></li>
+        <li><a href="/legal/licenses/">Third-party licences</a></li>
+      </ul>
     </div>
   </div>
 </footer>
-
-<!-- ==========================================================
-     工具座（右下角）
-     ==========================================================
-     【保留】Kevin 2026-07-31：不是 debug，是正式元件。
-       日後可能擴充為彈出清單（客服、語言等）。
-
-     【現行功能】深淺色切換：
-       AUTO（跟隨系統）→ LIGHT → DARK → AUTO
-
-     【實作】只改 documentElement 的 color-scheme，
-       CSS 的 light-dark() 會自己跟著變 ——
-       不需要任何額外的暗色變數。
-
-     ⚠⚠ 【不寫 localStorage】—— 重整回到 AUTO。
-       這是刻意的：privacy.html 寫著本站不儲存任何東西、
-       不設 cookie。加了儲存就要回去改那一段。
-       → 日後若真的要記住選擇，【兩者必須一起改】。
-
-     ⚠ 日後加客服或其他按鈕時，直接放進 .pt-dock 容器，
-       套上 class="chip" 即可 —— 樣式已在 style.css。
-     ⚠ 若日後加入外部客服服務（第三方腳本），
-       privacy.html 的「不作任何第三方請求」必須先改。
-     ========================================================== -->
-<div class="pt-dock">
-  <button id="pt-theme" type="button" class="chip"
-          title="Colour scheme: automatic, light, or dark">AUTO</button>
-</div>
+<div class="pt-dock"><button id="pt-theme" type="button" class="chip">AUTO</button></div>
+<script src="/assets/js/hero.js" defer></script>
 <script>
+/* 日夜：自動（跟系統）→ 白天（淺色、白天的圖）→ 夜（深色、夜的圖）。
+   不寫 localStorage（隱私頁寫了本站不存任何東西），重新整理回到自動。 */
 (function () {
-  var modes = ['light dark', 'light', 'dark'];
-  var names = ['AUTO', 'LIGHT', 'DARK'];
-  var i = 0;
+  var names = ["AUTO", "DAY", "NIGHT"], aria = "Time of day: {name}. Activate to change", modes = ['', 'light', 'dark'], i = 0;
+  var media = { '': '(prefers-color-scheme: dark)', light: 'not all', dark: 'all' };
   var btn = document.getElementById('pt-theme');
-  // ⚠⚠ 2026-07-31：aria-label 必須【包含可見文字】。
-  //   舊版固定寫 Toggle colour scheme，會覆蓋可見的 AUTO/DARK：
-  //   （1）螢幕閱讀器使用者永遠不知道目前是哪一個
-  //   （2）語音控制說「click AUTO」也對不上（WCAG 2.5.3）
-  function sync() {
-    btn.textContent = names[i];
-    btn.setAttribute('aria-label', names[i] + ' colour scheme, activate to change');
-  }
+  function sync() { btn.textContent = names[i]; btn.setAttribute('aria-label', aria.replace('{name}', names[i])); }
   sync();
   btn.addEventListener('click', function () {
-    i = (i + 1) % modes.length;
-    document.documentElement.style.colorScheme = modes[i];
+    i = (i + 1) % 3;
+    if (modes[i]) document.documentElement.setAttribute('data-theme', modes[i]);
+    else document.documentElement.removeAttribute('data-theme');
+    var ss = document.querySelectorAll('picture.dn source[media]');
+    for (var k = 0; k < ss.length; k++) ss[k].setAttribute('media', media[modes[i]]);
     sync();
   });
 })();
 </script>
-
 </body>
 </html>
