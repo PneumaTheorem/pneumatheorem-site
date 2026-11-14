@@ -443,3 +443,14 @@ main table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-s
 main th, main td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
 main th { color: var(--muted); font-weight: 500; }
 @media (max-width: 640px) { main table { font-size: 13px; } main th, main td { padding: 6px 6px; } }
+
+/* 小工具的圖（2026-11-15）：App 裡真正的小工具（點陣，深色底）＋抽屜的系統錶（會動）。
+   圖本身是深色的 —— 白天模式也一樣放深色的框，不然點陣的字看不到。 */
+.wcard { padding-top: 18px; }
+.wshot { background: #0e1420; border-radius: calc(var(--radius) - 4px); overflow: hidden; margin: 0 0 18px; border: 1px solid rgba(255,255,255,0.06); }
+.wshot img { display: block; width: 100%; height: auto; }
+.wlive { display: flex; flex-direction: column; align-items: center; padding: 14px 14px 12px; }
+.wlive canvas { width: min(220px, 100%); aspect-ratio: 1 / 1; display: block; }
+.wlive label { display: flex; align-items: center; gap: 10px; width: 100%; max-width: 260px; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 4px; }
+.wlive input[type=range] { flex: 1; accent-color: #ff7a4d; }
+.card .wsub { font-size: 13px; margin-top: 8px; opacity: 0.8; }

@@ -1,0 +1,14 @@
+{
+ "version": "1.0",
+ "build": 1,
+ "page": {
+  "zh": "https://accounts.booth.pm/library",
+  "en": "https://accounts.booth.pm/library",
+  "ja": "https://accounts.booth.pm/library"
+ },
+ "notes": {
+  "zh": "",
+  "en": "",
+  "ja": ""
+ }
+}

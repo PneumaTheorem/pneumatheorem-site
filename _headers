@@ -4,6 +4,10 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: interest-cohort=()
 
+/version.json
+  Cache-Control: no-cache
+  Access-Control-Allow-Origin: *
+
 /assets/img/*
   Cache-Control: public, max-age=604800
 
