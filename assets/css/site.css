@@ -436,3 +436,10 @@ ul.plain { list-style: none; padding: 0; }
 .tier ul li { margin-bottom: 6px; }
 .tier .btn { margin-top: auto; align-self: flex-start; }
 .btn.is-soon { opacity: 0.6; cursor: default; }
+
+/* 條款頁（2026-11-15）：生效日那一行、第三方的表 */
+main .meta { color: var(--muted); font-size: 14px; }
+main table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 15px; }
+main th, main td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+main th { color: var(--muted); font-weight: 500; }
+@media (max-width: 640px) { main table { font-size: 13px; } main th, main td { padding: 6px 6px; } }
