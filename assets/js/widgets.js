@@ -2,7 +2,7 @@
    抽屜裡的系統錶（App 的 aquarium/status.swift drawTri ＋ flask.swift，照同一個畫法寫一份網頁版）：
      外圈   電量（瀏覽器給得到就用真的 —— navigator.getBattery，Chrome 系才有；沒有就 82%）
      內圈   左半 CPU、右半 GPU，從下面缺口的兩端往頂上夾（網頁拿不到 —— 照拉桿模擬）
-     中間   一扇圓窗，窗外是水：能耗越高水越紅、泡泡飄得越快；很燙的時候缺口裡出現「!」
+     中間   一扇圓窗，窗外是水：配色跟 App 的音量一樣（預設黃綠），能耗越高越往尾端走、泡泡飄得越快；很燙變橘紅發光、缺口裡出現「!」
    拉桿＝能耗（模擬）。沒有第三方、不存任何東西。看不到（捲走、分頁在背景）就不畫；系統設了「減少動態」就只畫一張靜止的。 */
 (function () {
   var boxes = document.querySelectorAll('[data-porthole]');
@@ -17,14 +17,17 @@
   }
 
   function lerp(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; }
+  // 【配色跟 App 的音量一樣】（2026-11-15）—— App 預設的那一組（黃綠）：值低是頭、值高是尾。水 0–0.7 照這一組走，0.7 以上往橘紅、發光。
+  var TINT0 = [0.42, 0.86, 0.40], TINT1 = [0.86, 0.88, 0.32];
+  function tintAt(f) { return lerp(TINT0, TINT1, Math.max(0, Math.min(1, f))); }
   function waterRGB(h, top) {
-    var cold = [0.16, 0.52, 0.98], warm = [0.62, 0.32, 0.95], hot = [1.0, 0.32, 0.18];
-    var c = h < 0.5 ? lerp(cold, warm, h / 0.5) : lerp(warm, hot, (h - 0.5) / 0.5);
-    var s = 0.55 + 0.45 * top;
+    var c = tintAt(h / 0.7);
+    if (h > 0.7) c = lerp(c, [1.0, 0.32, 0.18], (h - 0.7) / 0.3);
+    var s = 0.45 + 0.45 * top;
     return [c[0] * s, c[1] * s, c[2] * s];
   }
   function rgba(c, a) { return 'rgba(' + Math.round(c[0] * 255) + ',' + Math.round(c[1] * 255) + ',' + Math.round(c[2] * 255) + ',' + a + ')'; }
-  var COOL = [0.42, 0.86, 0.94], CPU = [0.98, 0.78, 0.36], GPU = [0.74, 0.58, 1.0], HOT = [1, 0.42, 0.42];
+  var HOT = [1, 0.42, 0.42];
 
   boxes.forEach(function (box) {
     var cv = box.querySelector('canvas'), range = box.querySelector('input[type=range]');
@@ -69,11 +72,12 @@
       var w = W(), c = { x: w / 2, y: w / 2 - 4 };
       ctx.clearRect(0, 0, w, w);
       var rr = w * 0.42, ri = rr - w * 0.075, R = rr - w * 0.13;
-      var h = shown, g = Math.max(0, (h - 0.5) / 0.5);
+      var h = shown, g = Math.max(0, (h - 0.7) / 0.3);
       var hotB = battery <= 15 && !charging;
-      arc(c, rr, 225, 270, true, battery, COOL, hotB ? HOT : COOL, w * 0.035);
-      arc(c, ri, 225, 135, true, cpu, CPU, cpu >= 80 ? HOT : CPU, w * 0.035);
-      arc(c, ri, -45, 135, false, gpu, GPU, gpu >= 80 ? HOT : GPU, w * 0.035);
+      arc(c, rr, 225, 270, true, battery, TINT0, hotB ? HOT : tintAt(battery / 100), w * 0.035);
+      // 使用率高本身不紅 —— 真的熱（能耗 0.85 以上）才紅（2026-11-15，跟 App 一樣）。
+      arc(c, ri, 225, 135, true, cpu, TINT0, (h >= 0.85 && cpu >= 60) ? HOT : tintAt(cpu / 100), w * 0.035);
+      arc(c, ri, -45, 135, false, gpu, TINT0, (h >= 0.85 && gpu >= 60) ? HOT : tintAt(gpu / 100), w * 0.035);
       // 窗外的紅暈
       if (g > 0.01) {
         ctx.save(); ctx.shadowColor = 'rgba(255,90,50,' + (0.85 * g) + ')'; ctx.shadowBlur = 8 + 10 * g;
@@ -122,14 +126,14 @@
       // 缺口裡：很燙、電量低、CPU／GPU 滿 → 「!」；平常寫三個數字
       var gapY = c.y + rr * 0.86;
       ctx.textAlign = 'center';
-      if (hotB || h >= 0.8 || cpu >= 90 || gpu >= 90) {
-        var ac = hotB ? HOT : (h >= 0.8 ? [1, 0.45, 0.25] : CPU);
+      if (hotB || h >= 0.85) {
+        var ac = hotB ? HOT : (h >= 0.8 ? [1, 0.45, 0.25] : [0.98, 0.78, 0.36]);
         ctx.save(); ctx.shadowColor = rgba(ac, 0.8); ctx.shadowBlur = 6;
         ctx.fillStyle = rgba(ac, 1); ctx.font = '700 ' + Math.round(w * 0.085) + 'px system-ui';
         ctx.fillText('!', c.x, gapY + w * 0.05); ctx.restore();
       } else {
         ctx.font = '600 ' + Math.round(w * 0.045) + 'px system-ui';
-        var parts = [[String(battery), COOL], [String(Math.round(cpu)), CPU], [String(Math.round(gpu)), GPU]];
+        var parts = [[String(battery), tintAt(battery / 100)], [String(Math.round(cpu)), tintAt(cpu / 100)], [String(Math.round(gpu)), tintAt(gpu / 100)]];
         var tw = 0, sp = w * 0.02;
         parts.forEach(function (p) { tw += ctx.measureText(p[0]).width; });
         tw += sp * 2;

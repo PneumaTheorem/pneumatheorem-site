@@ -452,5 +452,5 @@ main th { color: var(--muted); font-weight: 500; }
 .wlive { display: flex; flex-direction: column; align-items: center; padding: 14px 14px 12px; }
 .wlive canvas { width: min(220px, 100%); aspect-ratio: 1 / 1; display: block; }
 .wlive label { display: flex; align-items: center; gap: 10px; width: 100%; max-width: 260px; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 4px; }
-.wlive input[type=range] { flex: 1; accent-color: #ff7a4d; }
+.wlive input[type=range] { flex: 1; accent-color: #b5dc4a; }   /* 跟 App 預設的配色（黃綠）一樣 */
 .card .wsub { font-size: 13px; margin-top: 8px; opacity: 0.8; }
