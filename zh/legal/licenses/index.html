@@ -22,14 +22,14 @@
 <link rel="icon" type="image/png" href="/assets/favicon-512.png">
 <link rel="apple-touch-icon" href="/assets/favicon-512.png">
 <link rel="preload" href="/assets/fonts/Cinzel-Variable-latin.woff" as="font" type="font/woff" crossorigin>
-<link rel="stylesheet" href="/assets/css/site.css?v=e8a77ecb">
+<link rel="stylesheet" href="/assets/css/site.css?v=33462de8">
 </head>
 <body>
 <a class="skip-link" href="#main">跳到內容</a>
 <nav class="nav" aria-label="PneumaTheorem">
   <div class="nav-inner">
     <a class="nav-logo" href="/zh/"><img src="/assets/img/ptlogo.svg?v=f0a711f1" alt="" width="26" height="28"><span>PneumaTheorem</span></a>
-    <div class="nav-links"><a href="/zh/lade/">LADE</a><a href="/zh/#studio">工作室</a><a href="/zh/legal/" aria-current="page">條款</a></div>
+    <div class="nav-links"><a href="/zh/lade/">LADE</a><a href="/zh/intense/">Intense</a><a href="/zh/devlog/">日誌</a><a href="/zh/news/">公告</a><a href="/zh/#studio">工作室</a><a href="/zh/legal/" aria-current="page">條款</a></div>
     <div class="nav-lang" aria-label="語言"><a href="/legal/licenses/" hreflang="en" lang="en">EN</a><a href="/zh/legal/licenses/" hreflang="zh-Hant" lang="zh-Hant" aria-current="true">中文</a><a href="/ja/legal/licenses/" hreflang="ja" lang="ja">日本語</a></div>
   </div>
 </nav>
@@ -52,13 +52,18 @@
       獨立工作室<br>
       <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
       <p class="copyright">© 2026 PneumaTheorem 保留所有權利。</p>
+      <p class="bgm-credit">♪ 風の祈り — PneumaTheorem</p>
     </div>
     <div>
       <p class="footer-head">產品</p>
       <ul>
         <li><a href="/zh/lade/">LADE</a></li>
-        <li><a href="/zh/lade/install/">安裝說明</a></li>
         
+        <li><a href="/zh/lade/aquarium/">LADE Aquarium</a></li>
+        <li><a href="/zh/intense/">Intense</a></li>
+        <li><a href="/zh/devlog/">日誌</a></li>
+        <li><a href="/zh/lade/install/">安裝說明</a></li>
+        <li><a href="/zh/news/">公告</a></li>
         <li><a href="https://x.com/PneumaTheorem" rel="noopener">X</a></li><li><a href="https://www.youtube.com/@PneumaTheorem" rel="noopener">YouTube</a></li><li><a href="https://www.reddit.com/user/PneumaTheorem/" rel="noopener">Reddit</a></li>
       </ul>
     </div>
@@ -73,7 +78,11 @@
     </div>
   </div>
 </footer>
-<div class="pt-dock"><button id="pt-theme" type="button" class="chip">自動</button></div>
+<div class="pt-dock">
+  <audio id="pt-bgm-audio" src="/assets/audio/kaze-no-inori.mp3?v=35837b6d" preload="none" loop></audio>
+  <button id="pt-bgm" type="button" class="chip" aria-pressed="false" aria-label="播放音樂" title="♪ 風の祈り — PneumaTheorem"><span aria-hidden="true">♪</span> <span class="bgm-label">背景音樂「風之祈禱」</span></button>
+  <button id="pt-theme" type="button" class="chip">自動</button>
+</div>
 <script src="/assets/js/hero.js?v=39c69950" defer></script>
 <script>
 /* 日夜：自動（跟系統）→ 白天（淺色、白天的圖）→ 夜（深色、夜的圖）。
@@ -92,6 +101,30 @@
     for (var k = 0; k < ss.length; k++) ss[k].setAttribute('media', media[modes[i]]);
     sync();
   });
+})();
+</script>
+<script>
+/* 背景音樂：預設不播放（瀏覽器也會擋自動播放）。不寫 localStorage。音量約一半。 */
+(function () {
+  var audio = document.getElementById('pt-bgm-audio');
+  var btn = document.getElementById('pt-bgm');
+  if (!audio || !btn) return;
+  audio.volume = 0.5;
+  var playLabel = "播放音樂", pauseLabel = "暫停音樂";
+  function sync() {
+    var on = !audio.paused;
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? pauseLabel : playLabel);
+  }
+  btn.addEventListener('click', function () {
+    if (audio.paused) {
+      var p = audio.play();
+      if (p && p.catch) p.catch(function () {});
+    } else audio.pause();
+  });
+  audio.addEventListener('play', sync);
+  audio.addEventListener('pause', sync);
+  sync();
 })();
 </script>
 </body>

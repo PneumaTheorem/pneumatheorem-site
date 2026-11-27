@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Devlog — PneumaTheorem</title>
+<meta name="description" content="Notes on the games and products PneumaTheorem is building. The canonical write-up always lives here.">
+<link rel="canonical" href="https://pneumatheorem.org/devlog/">
+<link rel="alternate" hreflang="en" href="https://pneumatheorem.org/devlog/">
+<link rel="alternate" hreflang="zh-Hant" href="https://pneumatheorem.org/zh/devlog/">
+<link rel="alternate" hreflang="ja" href="https://pneumatheorem.org/ja/devlog/">
+<link rel="alternate" hreflang="x-default" href="https://pneumatheorem.org/devlog/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PneumaTheorem">
+<meta property="og:title" content="Devlog — PneumaTheorem">
+<meta property="og:description" content="Notes on the games and products PneumaTheorem is building. The canonical write-up always lives here.">
+<meta property="og:url" content="https://pneumatheorem.org/devlog/">
+<meta property="og:image" content="https://pneumatheorem.org/assets/img/og-1200x630.jpg?v=99005ca4">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0c0d12">
+<link rel="icon" type="image/png" href="/assets/favicon-512.png">
+<link rel="apple-touch-icon" href="/assets/favicon-512.png">
+<link rel="preload" href="/assets/fonts/Cinzel-Variable-latin.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css?v=33462de8">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="nav" aria-label="PneumaTheorem">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/"><img src="/assets/img/ptlogo.svg?v=f0a711f1" alt="" width="26" height="28"><span>PneumaTheorem</span></a>
+    <div class="nav-links"><a href="/lade/">LADE</a><a href="/intense/">Intense</a><a href="/devlog/" aria-current="page">Devlog</a><a href="/news/">News</a><a href="/#studio">Studio</a><a href="/legal/">Legal</a></div>
+    <div class="nav-lang" aria-label="Language"><a href="/devlog/" hreflang="en" lang="en" aria-current="true">EN</a><a href="/zh/devlog/" hreflang="zh-Hant" lang="zh-Hant">中文</a><a href="/ja/devlog/" hreflang="ja" lang="ja">日本語</a></div>
+  </div>
+</nav>
+
+<header class="page-head">
+  <p class="eyebrow">Devlog</p>
+  <h1>Devlog</h1>
+  <p class="lede">We will post these notes occasionally, when there is something worth showing — games, the world of LADE, and the physical work of INTENSE. The canonical write-up always lives here.</p>
+</header>
+<main id="main" class="doc devlog-index">
+  <div class="devlog-filters" role="group" aria-label="Filter by tag"><button type="button" class="chip is-on" data-filter="all" aria-pressed="true">All</button><span class="devlog-filter-group"><button type="button" class="chip chip-series" data-filter="series_lade" aria-pressed="false">LADE</button><button type="button" class="chip" data-filter="story" aria-pressed="false">Story</button><button type="button" class="chip" data-filter="lore" aria-pressed="false">Lore</button><button type="button" class="chip" data-filter="system" aria-pressed="false">Systems</button><button type="button" class="chip" data-filter="code" aria-pressed="false">Code</button><button type="button" class="chip" data-filter="dev" aria-pressed="false">Development</button></span><span class="devlog-filter-group"><button type="button" class="chip chip-series" data-filter="series_intense" aria-pressed="false">INTENSE</button><button type="button" class="chip" data-filter="research" aria-pressed="false">Research</button><button type="button" class="chip" data-filter="teardown" aria-pressed="false">Teardown</button><button type="button" class="chip" data-filter="design" aria-pressed="false">Design</button><button type="button" class="chip" data-filter="craft" aria-pressed="false">Craft</button></span></div>
+  <ol class="devlog-list plain"></ol>
+  <p class="devlog-empty" hidden>No posts in this tag yet.</p>
+</main>
+<script>
+(function () {
+  var root = document.querySelector('.devlog-index');
+  if (!root) return;
+  var btns = root.querySelectorAll('[data-filter]');
+  var items = root.querySelectorAll('.devlog-list [data-tag]');
+  var empty = root.querySelector('.devlog-empty');
+  root.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-filter]');
+    if (!b || !root.contains(b)) return;
+    var f = b.getAttribute('data-filter');
+    for (var i = 0; i < btns.length; i++) {
+      var on = btns[i] === b;
+      btns[i].classList.toggle('is-on', on);
+      btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    var n = 0;
+    for (var j = 0; j < items.length; j++) {
+      var tag = items[j].getAttribute('data-tag');
+      var series = items[j].getAttribute('data-series') || '';
+      var show = (f === 'all' || tag === f || (f.indexOf('series_') === 0 && series === f.slice(7)));
+      items[j].hidden = !show;
+      if (show) n++;
+    }
+    if (empty) empty.hidden = n > 0;
+  });
+})();
+</script>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="footer-head">PneumaTheorem</p>
+      <strong>PneumaTheorem</strong><br>
+      Independent studio<br>
+      <a href="mailto:kevin@pneumatheorem.org">kevin@pneumatheorem.org</a>
+      <p class="copyright">© 2026 PneumaTheorem. All rights reserved.</p>
+      <p class="bgm-credit">♪ 風の祈り — PneumaTheorem</p>
+    </div>
+    <div>
+      <p class="footer-head">Product</p>
+      <ul>
+        <li><a href="/lade/">LADE</a></li>
+        
+        <li><a href="/lade/aquarium/">LADE Aquarium</a></li>
+        <li><a href="/intense/">Intense</a></li>
+        <li><a href="/devlog/">Devlog</a></li>
+        <li><a href="/lade/install/">How to install</a></li>
+        <li><a href="/news/">News</a></li>
+        <li><a href="https://x.com/PneumaTheorem" rel="noopener">X</a></li><li><a href="https://www.youtube.com/@PneumaTheorem" rel="noopener">YouTube</a></li><li><a href="https://www.reddit.com/user/PneumaTheorem/" rel="noopener">Reddit</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-head">Legal</p>
+      <ul>
+        <li><a href="/legal/privacy/">Privacy</a></li>
+        <li><a href="/legal/eula/">License (EULA)</a></li>
+        <li><a href="/legal/streaming/">Streaming &amp; videos</a></li>
+        <li><a href="/legal/licenses/">Third-party licences</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="pt-dock">
+  <audio id="pt-bgm-audio" src="/assets/audio/kaze-no-inori.mp3?v=35837b6d" preload="none" loop></audio>
+  <button id="pt-bgm" type="button" class="chip" aria-pressed="false" aria-label="Play music" title="♪ 風の祈り — PneumaTheorem"><span aria-hidden="true">♪</span> <span class="bgm-label">Music: Kaze no Inori</span></button>
+  <button id="pt-theme" type="button" class="chip">AUTO</button>
+</div>
+<script src="/assets/js/hero.js?v=39c69950" defer></script>
+<script>
+/* 日夜：自動（跟系統）→ 白天（淺色、白天的圖）→ 夜（深色、夜的圖）。
+   不寫 localStorage（隱私頁寫了本站不存任何東西），重新整理回到自動。 */
+(function () {
+  var names = ["AUTO", "DAY", "NIGHT"], aria = "Time of day: {name}. Activate to change", modes = ['', 'light', 'dark'], i = 0;
+  var media = { '': '(prefers-color-scheme: dark)', light: 'not all', dark: 'all' };
+  var btn = document.getElementById('pt-theme');
+  function sync() { btn.textContent = names[i]; btn.setAttribute('aria-label', aria.replace('{name}', names[i])); }
+  sync();
+  btn.addEventListener('click', function () {
+    i = (i + 1) % 3;
+    if (modes[i]) document.documentElement.setAttribute('data-theme', modes[i]);
+    else document.documentElement.removeAttribute('data-theme');
+    var ss = document.querySelectorAll('picture.dn source[media]');
+    for (var k = 0; k < ss.length; k++) ss[k].setAttribute('media', media[modes[i]]);
+    sync();
+  });
+})();
+</script>
+<script>
+/* 背景音樂：預設不播放（瀏覽器也會擋自動播放）。不寫 localStorage。音量約一半。 */
+(function () {
+  var audio = document.getElementById('pt-bgm-audio');
+  var btn = document.getElementById('pt-bgm');
+  if (!audio || !btn) return;
+  audio.volume = 0.5;
+  var playLabel = "Play music", pauseLabel = "Pause music";
+  function sync() {
+    var on = !audio.paused;
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? pauseLabel : playLabel);
+  }
+  btn.addEventListener('click', function () {
+    if (audio.paused) {
+      var p = audio.play();
+      if (p && p.catch) p.catch(function () {});
+    } else audio.pause();
+  });
+  audio.addEventListener('play', sync);
+  audio.addEventListener('pause', sync);
+  sync();
+})();
+</script>
+</body>
+</html>

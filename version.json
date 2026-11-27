@@ -1,14 +1,14 @@
 {
- "version": "1.0",
- "build": 1,
+ "version": "1.1",
+ "build": 2,
  "page": {
   "zh": "https://accounts.booth.pm/library",
   "en": "https://accounts.booth.pm/library",
   "ja": "https://accounts.booth.pm/library"
  },
  "notes": {
-  "zh": "",
-  "en": "",
-  "ja": ""
+  "zh": "開機更快；凍結時可以放掉記憶體（效能優先）；修正切換場景、解凍時閃一下。",
+  "en": "Faster startup; frees memory while frozen (Performance mode); fixes a flash when switching scenes or thawing.",
+  "ja": "起動が速くなりました。凍結中にメモリを解放（性能優先）。シーン切り替え・解凍時のちらつきを修正。"
  }
 }

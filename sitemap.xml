@@ -2,7 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://pneumatheorem.org/</loc></url>
   <url><loc>https://pneumatheorem.org/lade/</loc></url>
+  <url><loc>https://pneumatheorem.org/lade/aquarium/</loc></url>
   <url><loc>https://pneumatheorem.org/lade/install/</loc></url>
+  <url><loc>https://pneumatheorem.org/devlog/</loc></url>
+  <url><loc>https://pneumatheorem.org/intense/</loc></url>
+  <url><loc>https://pneumatheorem.org/news/</loc></url>
   <url><loc>https://pneumatheorem.org/legal/</loc></url>
   <url><loc>https://pneumatheorem.org/legal/eula/</loc></url>
   <url><loc>https://pneumatheorem.org/legal/privacy/</loc></url>
@@ -10,7 +14,11 @@
   <url><loc>https://pneumatheorem.org/legal/licenses/</loc></url>
   <url><loc>https://pneumatheorem.org/zh/</loc></url>
   <url><loc>https://pneumatheorem.org/zh/lade/</loc></url>
+  <url><loc>https://pneumatheorem.org/zh/lade/aquarium/</loc></url>
   <url><loc>https://pneumatheorem.org/zh/lade/install/</loc></url>
+  <url><loc>https://pneumatheorem.org/zh/devlog/</loc></url>
+  <url><loc>https://pneumatheorem.org/zh/intense/</loc></url>
+  <url><loc>https://pneumatheorem.org/zh/news/</loc></url>
   <url><loc>https://pneumatheorem.org/zh/legal/</loc></url>
   <url><loc>https://pneumatheorem.org/zh/legal/eula/</loc></url>
   <url><loc>https://pneumatheorem.org/zh/legal/privacy/</loc></url>
@@ -18,7 +26,11 @@
   <url><loc>https://pneumatheorem.org/zh/legal/licenses/</loc></url>
   <url><loc>https://pneumatheorem.org/ja/</loc></url>
   <url><loc>https://pneumatheorem.org/ja/lade/</loc></url>
+  <url><loc>https://pneumatheorem.org/ja/lade/aquarium/</loc></url>
   <url><loc>https://pneumatheorem.org/ja/lade/install/</loc></url>
+  <url><loc>https://pneumatheorem.org/ja/devlog/</loc></url>
+  <url><loc>https://pneumatheorem.org/ja/intense/</loc></url>
+  <url><loc>https://pneumatheorem.org/ja/news/</loc></url>
   <url><loc>https://pneumatheorem.org/ja/legal/</loc></url>
   <url><loc>https://pneumatheorem.org/ja/legal/eula/</loc></url>
   <url><loc>https://pneumatheorem.org/ja/legal/privacy/</loc></url>
